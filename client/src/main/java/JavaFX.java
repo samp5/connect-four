@@ -11,7 +11,6 @@ import javafx.stage.Stage;
  */
 public class JavaFX extends Application {
 
-
   public static void main(String[] args) {
     launch(args);
   }
@@ -19,6 +18,6 @@ public class JavaFX extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
     SceneManager.initialize(primaryStage);
-    SceneManager.showScene("Menu.fxml");
+    SceneManager.showScene("main.fxml");
   }
 }

@@ -18,12 +18,15 @@ public class ChatController {
 
   public void initialize() {
     NetworkClient.bindChatController(this);
+    System.out.println("Chat controller initialized");
   }
 
   // when the send button clicked maybe?
   @FXML
-  public void onSend() {}
+  public void onSend() {
+  }
 
   // when we need to display a new message
-  public void appendMessage(String msg) {}
+  public void appendMessage(String msg) {
+  }
 }
