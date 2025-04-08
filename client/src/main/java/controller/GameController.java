@@ -1,14 +1,11 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import javax.swing.text.Position;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
-import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -17,19 +14,11 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import logic.GameLogic;
 import network.NetworkClient;
 
-import javafx.scene.paint.Color;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import javafx.util.Pair;
 
 /**
  * Should bind directly to the main game fxml and provide UI logic
@@ -342,9 +331,10 @@ public class GameController {
     });
 
     chipCanvas.setOnMouseReleased(e -> {
-      draggedPiece.setRowCol(-1, getColumn(e.getSceneX(), e.getSceneY()));
       if (makeMove(getColumn(e.getSceneX(), e.getSceneY()))) {
-        animatePieceDrop(draggedPiece);
+        Piece toAnimate = pieces.getLast();
+        toAnimate.position = new Point(draggedPiece.position.x, draggedPiece.position.y, false);
+        animatePieceDrop(toAnimate);
       }
     });
 
@@ -445,13 +435,17 @@ public class GameController {
 
       @Override
       public void handle(long now) {
+        GraphicsContext gc = overlayCanvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, overlayCanvas.getWidth(), overlayCanvas.getHeight());
         piece.setPosition(x.doubleValue(), y.doubleValue());
-        renderOverlay();
+        piece.render(gc);
       }
-
     };
 
     timeline.setOnFinished(e -> {
+      timer.stop();
+      piece.setPosition(
+          new Point(piece.column * pieceWidth, (GameLogic.numRows() - piece.row - 1) * pieceHeight, false));
       drawPieces();
       if (gameLogic.checkWin(gameLogic.currentPlayer())) {
         gameOver(gameLogic.currentPlayer());
