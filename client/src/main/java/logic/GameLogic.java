@@ -2,20 +2,26 @@ package logic;
 
 import java.util.Arrays;
 import java.util.Optional;
+import controller.GameController.Player;
 
 /**
  * Utility class for validating game logic and making moves
  */
 public class GameLogic {
+  private Player thisPlayer;
   private static final int ROWS = 6;
   private static final int COLS = 7;
   private final int[][] board = new int[6][7];
-  private int currentPlayer = 1;
+  private Player currentPlayer = Player.PlayerOne;
 
   public GameLogic() {
     for (int[] row : board) {
       Arrays.fill(row, 0);
     }
+  }
+
+  public void setLocalPlayer(Player p) {
+    thisPlayer = p;
   }
 
   public void switchPlayer() {}
@@ -43,14 +49,22 @@ public class GameLogic {
 
 
 
-  public int currentPlayer() {
+  public Player currentPlayer() {
     return currentPlayer;
   };
 
   // apply player move to board
-  public boolean placePiece(int row, int column, int player) {
-    board[row][column] = player;
-    return true;
+  public void placePiece(int row, int column, Player player) {
+    switch (player) {
+      case PlayerOne:
+        board[row][column] = 1;
+        break;
+      case PlayerTwo:
+        board[row][column] = 2;
+        break;
+      default:
+        break;
+    }
   };
 
   // check win
@@ -89,6 +103,6 @@ public class GameLogic {
     for (int[] row : board) {
       Arrays.fill(row, 0);
     }
-    currentPlayer = 1;
+    currentPlayer = Player.PlayerOne;
   }
 }
