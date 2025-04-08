@@ -18,6 +18,9 @@ public class SceneManager {
     try {
       FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/fxml/" + fxmlFile));
       Scene scene = new Scene(loader.load(), 1080, 720);
+      scene.setOnMouseClicked(e -> {
+        System.out.println("Scene coords: " + e.getSceneX() + ", " + e.getScreenY());
+      });
       stage.setScene(scene);
       stage.setResizable(false);
       stage.show();
