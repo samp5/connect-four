@@ -21,6 +21,9 @@ public class SceneManager {
       stage.setScene(scene);
       stage.setResizable(false);
       stage.show();
+      scene.getStylesheets().add("/css/chat.css");
+      scene.getStylesheets().add("/css/game.css");
+      scene.getStylesheets().add("/css/menu.css");
     } catch (IOException e) {
       e.printStackTrace();
     }

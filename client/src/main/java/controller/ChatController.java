@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -10,11 +11,14 @@ import java.util.stream.Collectors;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -25,6 +29,7 @@ import com.gluonhq.emoji.Emoji;
 import com.gluonhq.emoji.EmojiData;
 import com.gluonhq.emoji.util.TextUtils;
 
+import controller.utils.ChatMessage;
 import controller.utils.Markup;
 
 /**
@@ -45,6 +50,8 @@ public class ChatController {
   TextArea chatEditorInput;
   @FXML
   TextFlow chatEditorDisplay;
+  @FXML
+  VBox chatHistory;
 
   @FXML
   // something like this
@@ -61,68 +68,46 @@ public class ChatController {
 
   private void setHandlers() {
     sendButton.setOnAction(e -> {
+      sendMessage();
     });
+
     chatEditorInput.textProperty().addListener(new ChangeListener<String>() {
       @Override
       public void changed(ObservableValue<? extends String> observable, String oldValue,
           String newValue) {
-
         if (newValue != null) {
-          String unicodeText = ChatController.createUnicodeText(newValue);
-          List<Node> flowNodes = TextUtils.convertToTextAndImageNodes(unicodeText);
-          ArrayList<Node> splitFlowNodes = new ArrayList<>();
-
-          flowNodes.stream().forEach(n -> {
-            if (Text.class.isInstance(n) && Markup.containsMarkup(((Text) n).getText())) {
-              splitFlowNodes.addAll(Markup.splitOnMarkup(((Text) n).getText()).stream().map((s) -> {
-                return new Text(s);
-              }).collect(Collectors.toList()));
-            } else {
-              splitFlowNodes.add(n);
-            }
-
-          });
-
-          splitFlowNodes.stream().filter(Text.class::isInstance).forEach(n -> {
-            Text t = (Text) n;
-            if (Markup.isBold(t.getText().strip())) {
-              Font f = t.getFont();
-              t.setText(t.getText().substring(2, t.getText().length() - 2));
-              t.setFont(Font.font(f.getFamily(), FontWeight.BOLD, f.getSize()));
-            } else if (Markup.isItalic(t.getText().strip())) {
-              Font f = t.getFont();
-              t.setText(" " + t.getText().substring(2, t.getText().length() - 2) + " ");
-              t.setFont(Font.font(f.getFamily(), FontPosture.ITALIC, f.getSize()));
-            }
-          });
-          chatEditorDisplay.getChildren().setAll(splitFlowNodes);
+          chatEditorDisplay.getChildren().setAll(Markup.markup(newValue, chatEditorInput.getFont()));
         }
       }
     });
-  }
 
-  private static String createUnicodeText(String nv) {
-    StringBuilder unicodeText = new StringBuilder();
-    String[] words = nv.split(" ");
-    for (String word : words) {
-      if (word.length() > 2 && word.charAt(word.length() - 1) == ':' && word.charAt(0) == ':') {
-        Optional<Emoji> optionalEmoji = EmojiData.emojiFromShortName(word.substring(1, word.length() - 1));
-        unicodeText.append(optionalEmoji.isPresent() ? optionalEmoji.get().character() : word);
-        unicodeText.append(" ");
-      } else {
-        unicodeText.append(word);
-        unicodeText.append(" ");
+    chatEditorInput.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER) {
+        sendMessage();
       }
-    }
-    return unicodeText.toString();
+      e.consume();
+    });
   }
 
-  // when the send button clicked maybe?
-  @FXML
-  public void onSend() {
+  private void sendMessage() {
+    appendMessage(chatEditorInput.getText().trim());
+    chatEditorInput.clear();
+    chatEditorDisplay.getChildren().setAll();
+    // TODO:
+    // Something with NetworkClient
   }
 
-  // when we need to display a new message
+  // // when we need to display a new message
   public void appendMessage(String msg) {
+    try {
+      FXMLLoader loader = new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
+      Region msgBox = loader.load();
+      ChatMessage msgCTL = loader.getController();
+      msgCTL.set("player name", 0, msg, chatEditorInput.getFont(), true);
+      this.chatHistory.getChildren().add(msgBox);
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 }

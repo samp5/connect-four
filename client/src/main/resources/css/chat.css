@@ -1,2 +1,9 @@
-send-button {
+.send-button {
+}
+
+.debug {
+  -fx-border-color: black;
+}
+.text {
+  -fx-font-size: 18.0;
 }
