@@ -10,7 +10,6 @@ package controller;
  *
  */
 public class MenuController {
-  public void onClickConnect() {
-  }
+  public void onClickConnect() {}
 
 }

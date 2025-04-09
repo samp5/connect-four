@@ -20,11 +20,28 @@ public class GameLogic {
     }
   }
 
+  public Player getLocalPlayer() {
+    return thisPlayer;
+  }
+
   public void setLocalPlayer(Player p) {
     thisPlayer = p;
   }
 
-  public void switchPlayer() {}
+  public void switchPlayer() {
+    switch (currentPlayer) {
+      case None:
+        break;
+      case PlayerOne:
+        currentPlayer = Player.PlayerTwo;
+        break;
+      case PlayerTwo:
+        currentPlayer = Player.PlayerOne;
+        break;
+      default:
+        break;
+    }
+  }
 
   public Optional<Integer> getAvailableRow(int col) {
     if (col < 0 || col >= COLS) {
@@ -49,7 +66,7 @@ public class GameLogic {
 
 
 
-  public Player currentPlayer() {
+  public Player getCurrentPlayer() {
     return currentPlayer;
   };
 
@@ -68,10 +85,23 @@ public class GameLogic {
   };
 
   // check win
-  public boolean checkWin(int player) {
+  public boolean checkWin(Player player) {
+    int playerID;
+    switch (player) {
+      case PlayerOne:
+        playerID = 1;
+        break;
+      case PlayerTwo:
+        playerID = 2;
+        break;
+      case None:
+      default:
+        playerID = -1;
+        break;
+    }
     for (int row = 0; row < ROWS; row++) {
       for (int col = 0; col < COLS; col++) {
-        if (board[row][col] == player &&
+        if (board[row][col] == playerID &&
             (checkDirection(row, col, 1, 0) || // horizontal
                 checkDirection(row, col, 0, 1) || // vertical
                 checkDirection(row, col, 1, 1) || // diagonal /
@@ -81,6 +111,18 @@ public class GameLogic {
       }
     }
     return false; // No winner
+  }
+
+  // TODO: Make this a clever algorithm that detects stalemates for non-full boards
+  public boolean staleMate() {
+    for (int[] row : board) {
+      for (int val : row) {
+        if (val == 0) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   // Check if there is a winning line in a given direction
