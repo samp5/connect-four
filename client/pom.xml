@@ -14,6 +14,12 @@
   </properties>
   
  <dependencies>
+
+    <dependency>
+      <groupId>com.gluonhq</groupId>
+      <artifactId>emoji</artifactId>
+      <version>1.0.1</version>
+    </dependency>
     
     <dependency>
         <groupId>org.junit.jupiter</groupId>
