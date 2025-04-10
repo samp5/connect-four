@@ -6,23 +6,36 @@ import java.io.ObjectInputStream;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
+/**
+ * An instance of a connection to a client, based on the server
+ */
 public class ServerClient {
   private final SocketChannel connection;
-  private Player player;
+  private Player player;  // the player corresponding to the connection
 
   public ServerClient(SocketChannel connection) {
     this.connection = connection;
   }
 
+  /**
+   * Send a message to the connection
+   */
   public void sendMessage(Message message) throws IOException {
     this.connection.write(message.asByteBuffer());
   }
 
+  /**
+   * Get all messages from this connection.
+   * Non-Blocking.
+   */
   public ArrayList<Message> getMessages() {
     ArrayList<Message> messages = new ArrayList<>();
     try {
+      // see if data is available
       InputStream inputStream = this.connection.socket().getInputStream();
       int sz = inputStream.available();
+
+      // if there is, convert to a message
       if (sz > 0) {
         ObjectInputStream in = new ObjectInputStream(inputStream);
         Message message = (Message) in.readObject();
@@ -35,6 +48,7 @@ public class ServerClient {
       e.printStackTrace();
       System.out.println("error parsing message");
     }
+
     return messages;
   }
 

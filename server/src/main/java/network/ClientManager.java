@@ -11,10 +11,13 @@ import java.util.Iterator;
 import java.util.Set;
 
 import game.GameManager;
-import network.Message.Type;
 import registry.PlayerRegistry;
 import registry.PlayerRegistry.PlayerRegistrationInfo;
 
+
+/**
+ * Handles connections between server and any number of clients
+ */
 public class ClientManager {
   private static final int PORT = 8000;
   private static Selector selector;
@@ -43,45 +46,20 @@ public class ClientManager {
     selector = Selector.open();
     serverChannel.register(selector, SelectionKey.OP_ACCEPT);
 
-    // animation vars
-    int animationProg = 0;
-    char animationChars[] = {'\\', '|', '/', '-'};
-
-    // wait until both clients are connected
+    // keep accepting clients and getting messages
     while (true) {
-      // get the loading animation's current character
-      char aniChar = animationChars[animationProg];
-
-      // clear console and print the animation
-      // System.out.print("\033[H\033[2J");
-      // System.out.flush();
-      // System.out.printf("Waiting for Players to connect... %c\n", aniChar);
-
-      // update animation
-      animationProg = (animationProg + 1) % 4;
-
       recieveAllMessages();
       acceptClients();
-
-      // sleep for animation to run
-	  	Thread.sleep(150);
     }
-
-    // alert connections made
-    // System.out.print("\033[H\033[2J");
-    // System.out.flush();
-    // System.out.println("All players gathered. launching game...");
-    // for (ServerClient connection : clients) {
-    //   connection.sendMessage(new Message(Type.START));
-    // }
   }
 
   /**
-   * Checks that all clients are connected.
-   * If a client is not connected, sets it to null.
+   * Gathers all messages from all clients connected to the manager.
    */
   private static void recieveAllMessages() {
+    // list of clients to remove, as cannot remove during iteration
     HashSet<ServerClient> toRemove = new HashSet<>();
+
     // get messages, if any, and handle
     for (ServerClient connection : clients) {
       ArrayList<Message> recievedMsgs = connection.getMessages();
@@ -106,6 +84,7 @@ public class ClientManager {
       }
     }
 
+    // remove that which needs removed
     clients.removeAll(toRemove);
   }
 
@@ -127,16 +106,19 @@ public class ClientManager {
           ServerSocketChannel readyChannel = (ServerSocketChannel) key.channel();
           ServerClient connection = new ServerClient(readyChannel.accept());
           clients.add(connection);
-
         }
         keyIterator.remove();
       }
     }
   }
 
+  /**
+   * Communicate with the player registry to handle logging in
+   */
   private static void attemptLogin(ServerClient client, Message msg) {
     // get the player associated with the username/password
     PlayerRegistrationInfo loginInfo = PlayerRegistry.getRegisteredPlayer(msg.getUsername(), msg.getPassword());
+
     try {
       if (loginInfo.isSuccess()) {
         Player p = loginInfo.getPlayer();
@@ -147,6 +129,7 @@ public class ClientManager {
         client.sendMessage(new Message(false, loginInfo.getReason(), null));
       }
     } catch (IOException e) {
+      // if an IOException occurs, the client is disconnected
       clients.remove(client);
     }
   }

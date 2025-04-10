@@ -5,11 +5,23 @@ import java.util.HashMap;
 import game.GameManager;
 import network.Player;
 
+/**
+ * Tracks all players: logged in, playing or not.
+ */
 public class PlayerRegistry {
   private static long nextid = 0;
   private static final HashMap<String, Player> registredPlayers = new HashMap<>();
   private static final HashMap<String, Player> activePlayers = new HashMap<>();
 
+  /**
+   * Get the player registered under this username and password.
+   * If the username doesn't exist, registers automatically.
+   * If the username does exist, and the password matches, returns the user.
+   * If the username exists but the password doesn't match, returns an error to 
+   *    handle in the client.
+   * If the username exists, but is logged in already, returns an error to
+   *    handle in the client.
+   */
   public static PlayerRegistrationInfo getRegisteredPlayer(String username, String password) {
     // check if the player is already active
     if (activePlayers.keySet().contains(username)) {
@@ -33,16 +45,26 @@ public class PlayerRegistry {
     return new PlayerRegistrationInfo(true, newReg);
   }
 
+  /**
+   * Remove a player from the active player list, and the queue if they are in
+   * queue.
+   */
   public static void logoutPlayer(Player player) {
     String name = player.getUsername();
     activePlayers.remove(name);
     GameManager.removeFromQueue(player);
   }
 
+  /**
+   * ID's must be unique, so returns an id, while incrementing.
+   */
   public static long getNextID() {
     return nextid++;
   }
 
+  /**
+   * Info about the player registration status.
+   */
   public static class PlayerRegistrationInfo {
     private boolean success;
     private String reason;

@@ -81,17 +81,18 @@ public class Message implements Serializable {
     this.playerID = playerID;
   }
 
+  /**
+   * Returns the message as a {@code ByteBuffer} representation, for sending
+   * over the network.
+   */
   public ByteBuffer asByteBuffer() throws IOException {
-    ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-    ObjectOutputStream oos = new ObjectOutputStream(byteStream);
-    oos.writeObject(this);
-    oos.flush();
-    oos.close();
-
-    return ByteBuffer.wrap(byteStream.toByteArray());
+    return ByteBuffer.wrap(this.asBytes());
   }
 
-  // returns the message as an array of bytes
+  /**
+   * Returns the message as a byte array representation, for sending over the 
+   * network.
+   */
   public byte[] asBytes() throws IOException {
     ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
     ObjectOutputStream oos = new ObjectOutputStream(byteStream);

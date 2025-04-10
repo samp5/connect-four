@@ -3,9 +3,15 @@ package game;
 import network.Player;
 import network.ServerClient;
 
+/**
+ * Handles active games, game queues, and beginning new games
+ */
 public class GameManager {
   private static ServerClient waiting = null;
 
+  /**
+   * Add a client to the game queue, and if available, starts a new game
+   */
   public static void addToGameQueue(ServerClient client) {
     // if there is nobody waiting, add to wait queue
     if (waiting == null) {
@@ -18,6 +24,10 @@ public class GameManager {
     waiting = null;
   }
 
+  /**
+   * Remove a player from queue if they are in it.
+   * If they arent in queue, you guessed it, nothing happens.
+   */
   public static void removeFromQueue(Player p) {
     if (waiting != null && waiting.getPlayer().getUsername().equals(p.getUsername())) {
       waiting = null;
