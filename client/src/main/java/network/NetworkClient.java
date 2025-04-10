@@ -33,7 +33,6 @@ public class NetworkClient {
   private static GameController gameCTL;
   private static ChatController chatCTL;
 
-
   // connect to a host
   public static boolean connect(String host, int port, String username, String password) throws IOException {
     socket = new Socket(host, port);
@@ -56,8 +55,10 @@ public class NetworkClient {
         ++handled;
       }
     } catch (IOException e) {
+      e.printStackTrace();
       System.out.printf("error on getting stream: %s\n", e.getMessage());
     } catch (ClassNotFoundException e) {
+      e.printStackTrace();
       System.out.println("error parsing message");
     }
     return handled;
@@ -73,18 +74,18 @@ public class NetworkClient {
           System.out.println("Error logging in: " + msg.getChatMessage());
         }
         break;
-		  case CHAT:
-		  	break;
-		  case MOVE:
-		  	break;
-		  case REG:
+      case CHAT:
+        break;
+      case MOVE:
+        break;
+      case REG:
         SceneManager.showScene("loading.fxml");
-		  	break;
+        break;
       case START:
         SceneManager.showScene("main.fxml");
         break;
-		  default:
-		  	break;
+      default:
+        break;
     }
   }
 
@@ -125,7 +126,8 @@ public class NetworkClient {
     try {
       socket.getOutputStream().write(new Message(Type.DISCONNECT).asBytes());
       socket.close();
-    } catch (Exception e) {}
+    } catch (Exception e) {
+    }
   }
 
   private static class NetworkThread extends Thread {

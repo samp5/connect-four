@@ -30,8 +30,10 @@ public class ServerClient {
         messages.add(message);
       }
     } catch (IOException e) {
+      e.printStackTrace();
       System.out.println("error on getting stream");
     } catch (ClassNotFoundException e) {
+      e.printStackTrace();
       System.out.println("error parsing message");
     }
     return messages;
