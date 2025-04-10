@@ -8,11 +8,10 @@ import java.util.ArrayList;
 
 public class ServerClient {
   private final SocketChannel connection;
-  private final int connectionID;
+  private Player player;
 
-  public ServerClient(SocketChannel connection, int connectionID) {
+  public ServerClient(SocketChannel connection) {
     this.connection = connection;
-    this.connectionID = connectionID;
   }
 
   public void sendMessage(Message message) throws IOException {
@@ -39,7 +38,11 @@ public class ServerClient {
     return messages;
   }
 
-  public int getConnectionID() {
-    return this.connectionID;
+  public void setPlayer(Player player) {
+    this.player = player;
+  }
+
+  public Player getPlayer() {
+    return this.player;
   }
 }

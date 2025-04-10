@@ -63,14 +63,8 @@ public class MenuController {
     if (port == null) return;
 
     System.out.printf("Attempting to connect user `%s` to server at %s:%d\n", username, ip, port);
-    boolean connected = false;
     try {
-	    connected = NetworkClient.connect(ip, port, username, password);
-	  } catch (IOException e1) {
-      System.out.println("Error connecting.");
-	  }
-    if (connected) {
-      System.out.println("Sucessfully connected to server.");
-    }
+	    NetworkClient.connect(ip, port, username, password);
+	  } catch (IOException e1) {}
   }
 }

@@ -12,7 +12,6 @@ import java.nio.ByteBuffer;
 public class Message implements Serializable {
   public static enum Type {
     LOGIN,
-    REG,
     START,
     DISCONNECT,
     CHAT,
@@ -23,7 +22,7 @@ public class Message implements Serializable {
   private String username, password;
   private Integer column;
   private String from;
-  private Integer playerID;
+  private Long playerID;
   private Integer winner;
   private String chatMessage;
   private Player player;
@@ -54,19 +53,18 @@ public class Message implements Serializable {
     this.chatMessage = reason;
     this.player = player;
   }
-  // /**
-  //  * For game registration messages
-  //  */
-  // public Message(Player player) {
-  //   this.type = Type.REG;
-  //   this.player = player;
-  //   this.playerID = player.getID();
-  // }
+  /**
+   * For server disconnect messages
+   */
+  public Message(Player player) {
+    this.type = Type.DISCONNECT;
+    this.player = player;
+  }
 
   /**
    * For chat messages
    */
-  public Message(String username, String chatMessage, Integer playerID) {
+  public Message(String username, String chatMessage, Long playerID) {
     this.type = Type.CHAT;
     this.username = username;
     this.chatMessage = chatMessage;
@@ -76,7 +74,7 @@ public class Message implements Serializable {
   /**
    * For move messages
    */
-  public Message(String username, Integer column, Integer playerID) {
+  public Message(String username, Integer column, Long playerID) {
     this.type = Type.MOVE;
     this.username = username;
     this.column = column;
@@ -127,7 +125,7 @@ public class Message implements Serializable {
     return from;
   }
 
-  public Integer getPlayerID() {
+  public Long getPlayerID() {
     return playerID;
   }
 

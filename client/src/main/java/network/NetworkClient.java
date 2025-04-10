@@ -9,7 +9,6 @@ import java.net.Socket;
 import controller.ChatController;
 import controller.GameController;
 import javafx.application.Platform;
-import network.Message.Type;
 import utils.SceneManager;
 
 /**
@@ -25,19 +24,22 @@ import utils.SceneManager;
  */
 public class NetworkClient {
 
-  private static Socket socket;
+  private static Socket socket = null;
   private static ObjectInputStream in;
   private static ObjectOutputStream out;
   private static NetworkThread listener;
 
   private static GameController gameCTL;
   private static ChatController chatCTL;
+  private static Player player;
 
   // connect to a host
   public static boolean connect(String host, int port, String username, String password) throws IOException {
-    socket = new Socket(host, port);
-    listener = new NetworkThread(socket);
-    listener.start();
+    if (socket == null) {
+      socket = new Socket(host, port);
+      listener = new NetworkThread(socket);
+      listener.start();
+    }
     sendMessage(new Message(username, password));
     return socket.isConnected();
   }
@@ -69,6 +71,7 @@ public class NetworkClient {
     switch (msg.getType()) {
       case LOGIN:
         if (msg.isSuccess()) {
+          player = msg.getPlayer();
           SceneManager.showScene("loading.fxml");
         } else {
           System.out.println("Error logging in: " + msg.getChatMessage());
@@ -77,9 +80,6 @@ public class NetworkClient {
       case CHAT:
         break;
       case MOVE:
-        break;
-      case REG:
-        SceneManager.showScene("loading.fxml");
         break;
       case START:
         SceneManager.showScene("main.fxml");
@@ -124,7 +124,7 @@ public class NetworkClient {
 
   public static void disconnect() {
     try {
-      socket.getOutputStream().write(new Message(Type.DISCONNECT).asBytes());
+      socket.getOutputStream().write(new Message(player).asBytes());
       socket.close();
     } catch (Exception e) {
     }
