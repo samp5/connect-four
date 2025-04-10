@@ -7,35 +7,34 @@ import java.io.Serializable;
  */
 public class Message implements Serializable {
   public static enum Type {
-    REG,
-    CHAT,
-    MOVE,
+    REG, CHAT, MOVE,
   };
 
   private Type type;
-  private Integer player;
+  private String username;
   private Integer column;
   private String from;
   private Integer playerID;
   private Integer winner;
   private String chatMessage;
+  private Player player;
 
 
   /**
    * For game registration messages
    */
-  public Message(Integer playerID) {
+  public Message(Player player) {
     this.type = Type.REG;
-    this.playerID = playerID;
+    this.player = player;
+    this.playerID = player.getID();
   }
 
   /**
    * For chat messages
    */
-  public Message(Integer player, String from, String chatMessage, Integer playerID) {
+  public Message(String username, String chatMessage, Integer playerID) {
     this.type = Type.CHAT;
-    this.player = player;
-    this.from = from;
+    this.username = username;
     this.chatMessage = chatMessage;
     this.playerID = playerID;
   }
@@ -43,9 +42,9 @@ public class Message implements Serializable {
   /**
    * For move messages
    */
-  public Message(Integer player, Integer column, Integer playerID) {
+  public Message(String username, Integer column, Integer playerID) {
     this.type = Type.MOVE;
-    this.player = player;
+    this.username = username;
     this.column = column;
     this.playerID = playerID;
   }
@@ -57,11 +56,11 @@ public class Message implements Serializable {
     return type;
   }
 
-  public Integer getPlayer() {
-    return player;
+  public String getUsername() {
+    return username;
   }
 
-  public Integer getColumns() {
+  public Integer getColumn() {
     return column;
   }
 
@@ -79,5 +78,9 @@ public class Message implements Serializable {
 
   public String getChatMessage() {
     return chatMessage;
+  }
+
+  public Player getPlayer() {
+    return player;
   }
 }

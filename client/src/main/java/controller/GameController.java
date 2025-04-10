@@ -1,21 +1,13 @@
 package controller;
 
-import java.util.ArrayList;
-import java.util.Optional;
-import com.sun.prism.paint.Color;
 import controller.utils.Point;
 import controller.utils.CoordSystem;
 import controller.utils.CoordUtils;
 import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
@@ -29,6 +21,8 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import logic.GameLogic;
 import network.NetworkClient;
+import network.Player;
+import network.Player.PlayerRole;
 
 import javafx.util.Duration;
 import javafx.util.Pair;
@@ -64,20 +58,15 @@ public class GameController {
   private Pane chipPane2;
   private GameLogic gameLogic;
 
-  private ArrayList<Piece> pieces;
-
-  public enum Player {
-    PlayerOne, PlayerTwo, None
-  }
 
   private class Piece extends Circle {
     Point position;
 
-    Piece(Player player, Point position) {
+    Piece(PlayerRole player, Point position) {
       super();
 
       this.position = position.copy();
-      if (player == Player.PlayerOne) {
+      if (player == PlayerRole.PlayerOne) {
         super.setFill(new ImagePattern(new Image("/assets/player1chip.png")));
       } else {
         super.setFill(new ImagePattern(new Image("/assets/player2chip.png")));
@@ -102,8 +91,8 @@ public class GameController {
     }
   }
 
-  public void setLocalPlayer(Player local) {
-    gameLogic.setLocalPlayer(local);
+  public void setLocalPlayer(PlayerRole local) {
+    gameLogic.setLocalPlayerRole(local);
   }
 
   /**
@@ -112,10 +101,14 @@ public class GameController {
    */
   public void initialize() {
     gameLogic = new GameLogic();
-    NetworkClient.bindGameController(this);
 
-    gameLogic.setLocalPlayer(Player.PlayerOne);
-    pieces = new ArrayList<>();
+    // HACK: for now hardcode the current player, this call should be made on registration
+    GameLogic.setLocalPlayer(new Player("dummy1", 0));
+    GameLogic.setRemotePlayer(new Player("dummy2", 1));
+    GameLogic.setCurrentPlayer(PlayerRole.PlayerOne);
+    GameLogic.setLocalPlayerRole(PlayerRole.PlayerOne);
+
+    NetworkClient.bindGameController(this);
     foregroundPane.toFront();
     backgroundPane.toBack();
     overlayPane.toFront();
@@ -199,12 +192,14 @@ public class GameController {
           // update our logic
           gameLogic.placePiece(rowCol.getKey(), rowCol.getValue(), gameLogic.getCurrentPlayer());
 
+          // TODO:
+          // NetworkClient.sendMove(rowCol.getValue());
+
           if (gameLogic.checkWin(gameLogic.getCurrentPlayer())) {
             gameOver(gameLogic.getCurrentPlayer());
           } else if (gameLogic.staleMate()) {
             staleMate();
           }
-
           gameLogic.switchPlayer();
         });
       });
@@ -213,13 +208,11 @@ public class GameController {
     }
   }
 
-  private void handleDrag(MouseEvent e, Player player) {
+  private void handleDrag(MouseEvent e, PlayerRole player) {
     if (player != gameLogic.getCurrentPlayer()) {
       return;
     }
-    // if (gameLogic.getCurrentPlayer() != gameLogic.getLocalPlayer()) {
-    // return;
-    // }
+
     if (draggedPiece == null) {
       draggedPiece = new Piece(gameLogic.getCurrentPlayer(),
           new Point(e.getSceneX(), e.getSceneY(), CoordSystem.GamePane));
@@ -260,7 +253,7 @@ public class GameController {
 
   private void setHandlers() {
     chipPane2.setOnMouseDragged(e -> {
-      handleDrag(e, Player.PlayerTwo);
+      handleDrag(e, PlayerRole.PlayerTwo);
     });
 
     chipPane2.setOnMouseReleased(e -> {
@@ -268,7 +261,7 @@ public class GameController {
     });
 
     chipPane1.setOnMouseDragged(e -> {
-      handleDrag(e, Player.PlayerOne);
+      handleDrag(e, PlayerRole.PlayerOne);
     });
 
     chipPane1.setOnMouseReleased(e -> {
@@ -276,7 +269,27 @@ public class GameController {
     });
   }
 
-  private void gameOver(Player winner) {
+  public Player getLocalPlayer() {
+    return GameLogic.getLocalPlayer();
+  }
+
+  public void recieveMove(int col) {
+    gameLogic.getAvailableRow(col).ifPresentOrElse((r) -> {
+      Piece toPlay =
+          new Piece(GameLogic.getRemotePlayer().getRole(), CoordUtils.fromRowCol(r, col));
+      midgroundPane.getChildren().add(toPlay);
+      if (gameLogic.checkWin(gameLogic.getCurrentPlayer())) {
+        gameOver(gameLogic.getCurrentPlayer());
+      } else if (gameLogic.staleMate()) {
+        staleMate();
+      }
+      gameLogic.switchPlayer();
+    }, () -> {
+      System.err.println("Recieved invalid move");
+    });
+  }
+
+  private void gameOver(PlayerRole winner) {
     System.out.println(winner + "wins!");
     midgroundPane.getChildren().setAll();
     gameLogic.reset();

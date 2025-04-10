@@ -21,14 +21,16 @@ import javafx.scene.text.Text;
 public class Markup {
   // [^\*]\*[^\r\n\t\f\v\* ][^\*]+?[^\r\n\t\f\v\* ]\*[^\*]
   private final static String boldRegex = "\\*\\*\\S.+?\\S\\*\\*";
-  private final static String italicRegex = "(?:^|[^\\*])\\*[^\\r\\n\\t\\f\\v\\* ].*?[^\\r\\n\\t\\f\\v\\* ]\\*(?:[^\\*]|$)";
+  private final static String italicRegex =
+      "(?:^|[^\\*])\\*[^\\r\\n\\t\\f\\v\\* ].*?[^\\r\\n\\t\\f\\v\\* ]\\*(?:[^\\*]|$)";
 
   public static boolean isBold(String s) {
     return Pattern.matches("^" + boldRegex + "$", s);
   }
 
   public static boolean containsMarkup(String s) {
-    return Pattern.matches(".*" + boldRegex + ".*", s) || Pattern.matches(".*" + italicRegex + ".*", s);
+    return Pattern.matches(".*" + boldRegex + ".*", s)
+        || Pattern.matches(".*" + italicRegex + ".*", s);
   }
 
   private static Collection<String> splitOn(String s, Pattern p) {
@@ -68,7 +70,8 @@ public class Markup {
 
     String unicodeText = createUnicodeText(s);
 
-    List<Node> flowNodes = TextUtils.convertToTextAndImageNodes(unicodeText, font.getSize() + font.getSize() / 4);
+    List<Node> flowNodes =
+        TextUtils.convertToTextAndImageNodes(unicodeText, font.getSize() + font.getSize() / 4);
 
     ArrayList<Node> splitFlowNodes = new ArrayList<>();
 
@@ -76,12 +79,8 @@ public class Markup {
       if (Text.class.isInstance(n) && Markup.containsMarkup(((Text) n).getText())) {
         splitFlowNodes.addAll(Markup.splitOnMarkup(((Text) n).getText()).stream().map((str) -> {
           Text t = new Text(str);
-          t.setFont(font);
           return t;
         }).collect(Collectors.toList()));
-      } else if (Text.class.isInstance(n)) {
-        ((Text) n).setFont(font);
-        splitFlowNodes.add(n);
       } else {
         splitFlowNodes.add(n);
       }
@@ -95,6 +94,8 @@ public class Markup {
       } else if (Markup.isItalic(t.getText().strip())) {
         t.setText(" " + t.getText().substring(2, t.getText().length() - 2) + " ");
         t.setFont(Font.font(font.getFamily(), FontPosture.ITALIC, font.getSize()));
+      } else {
+        t.setFont(font);
       }
     });
 
@@ -107,7 +108,8 @@ public class Markup {
     String[] words = nv.split(" ");
     for (String word : words) {
       if (word.length() > 2 && word.charAt(word.length() - 1) == ':' && word.charAt(0) == ':') {
-        Optional<Emoji> optionalEmoji = EmojiData.emojiFromShortName(word.substring(1, word.length() - 1));
+        Optional<Emoji> optionalEmoji =
+            EmojiData.emojiFromShortName(word.substring(1, word.length() - 1));
         unicodeText.append(optionalEmoji.isPresent() ? optionalEmoji.get().character() : word);
         unicodeText.append(" ");
       } else {

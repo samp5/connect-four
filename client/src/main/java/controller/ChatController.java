@@ -1,34 +1,21 @@
 package controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import logic.GameLogic;
 import network.NetworkClient;
-import com.gluonhq.emoji.Emoji;
-import com.gluonhq.emoji.EmojiData;
-import com.gluonhq.emoji.util.TextUtils;
-
 import controller.utils.ChatMessage;
 import controller.utils.Markup;
 
@@ -76,7 +63,8 @@ public class ChatController {
       public void changed(ObservableValue<? extends String> observable, String oldValue,
           String newValue) {
         if (newValue != null) {
-          chatEditorDisplay.getChildren().setAll(Markup.markup(newValue, chatEditorInput.getFont()));
+          chatEditorDisplay.getChildren()
+              .setAll(Markup.markup(newValue, chatEditorInput.getFont()));
         }
       }
     });
@@ -90,22 +78,28 @@ public class ChatController {
   }
 
   private void sendMessage() {
-    appendMessage(chatEditorInput.getText().trim());
+    String msg = chatEditorInput.getText().trim();
+    appendMessage(msg, GameLogic.getLocalPlayer().getUsername());
     chatEditorInput.clear();
     chatEditorDisplay.getChildren().setAll();
+
     // TODO:
-    // Something with NetworkClient
+    // NetworkClient.sendChatMessage(msg);
+  }
+
+  public void recieveMessage(String message, String username) {
+    appendMessage(message, username);
   }
 
   // // when we need to display a new message
-  public void appendMessage(String msg) {
+  public void appendMessage(String msg, String username) {
     try {
-      FXMLLoader loader = new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
+      FXMLLoader loader =
+          new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
       Region msgBox = loader.load();
       ChatMessage msgCTL = loader.getController();
-      msgCTL.set("player name", 0, msg, chatEditorInput.getFont(), true);
+      msgCTL.set(username, 0, msg, chatEditorInput.getFont(), true);
       this.chatHistory.getChildren().add(msgBox);
-
     } catch (IOException e) {
       e.printStackTrace();
     }

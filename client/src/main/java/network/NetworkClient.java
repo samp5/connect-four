@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketAddress;
 
 import controller.ChatController;
 import controller.GameController;
@@ -26,7 +25,6 @@ public class NetworkClient {
   private static Socket socket;
   private static ObjectInputStream in;
   private static ObjectOutputStream out;
-  private static Thread listener;
 
   private static GameController gameCTL;
   private static ChatController chatCTL;
@@ -38,8 +36,6 @@ public class NetworkClient {
     return socket.isConnected();
   }
 
-  // listener thread
-  private static void startListener() {}
 
   public static int getMessages() {
     int handled = 0;
@@ -63,23 +59,42 @@ public class NetworkClient {
   // send to proper controller
   private static void handleMessage(Message msg) {
     switch (msg.getType()) {
-		case CHAT:
-			break;
-		case MOVE:
-			break;
-		case REG:
-      System.out.printf("Registered as player %d\n", msg.getPlayerID());
-			break;
-		default:
-			break;
+      case CHAT:
+        chatCTL.recieveMessage(msg.getChatMessage(), msg.getUsername());
+        break;
+      case MOVE:
+        gameCTL.recieveMove(msg.getColumn());
+        break;
+      case REG:
+        System.out.printf("Registered as player %d\n", msg.getPlayerID());
+        break;
+      default:
+        break;
     }
   }
 
   // send move to server
-  public static void sendMove(int column) {}
+  public static void sendMove(int column) {
+    Player localPlayer = gameCTL.getLocalPlayer();
+    Message toSend = new Message(localPlayer.getUsername(), column, localPlayer.getID());
+    sendMessage(toSend);
+  }
 
   // send chat to server
-  public static void sendChatMessage(String message) {}
+  public static void sendChatMessage(String message) {
+    Player localPlayer = gameCTL.getLocalPlayer();
+    Message toSend = new Message(localPlayer.getUsername(), message, localPlayer.getID());
+    sendMessage(toSend);
+  }
+
+  private static void sendMessage(Message m) {
+    try {
+      out = new ObjectOutputStream(socket.getOutputStream());
+      out.writeObject(m);
+    } catch (IOException ioe) {
+      ioe.printStackTrace();
+    }
+  }
 
   // set controllers so that the network client can "message" the ui
   //

@@ -1,8 +1,6 @@
 package controller.utils;
 
 import java.util.Optional;
-import controller.utils.CoordSystem;
-import controller.utils.Point;
 import javafx.util.Pair;
 import logic.GameLogic;
 

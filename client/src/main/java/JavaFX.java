@@ -1,19 +1,5 @@
-import java.util.List;
 import javafx.application.Application;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-// import com.gluonhq.emoji.Emoji;
-// import com.gluonhq.emoji.EmojiData;
-// import com.gluonhq.emoji.EmojiLoaderFactory;
-// import com.gluonhq.emoji.util.TextUtils;
-import java.util.Optional;
 
 /**
  * Main Application Class.

@@ -2,17 +2,40 @@ package logic;
 
 import java.util.Arrays;
 import java.util.Optional;
-import controller.GameController.Player;
+import network.Player;
+import network.Player.PlayerRole;
 
 /**
  * Utility class for validating game logic and making moves
  */
 public class GameLogic {
-  private Player thisPlayer;
+  private static Player localPlayer;
+  private static Player remotePlayer;
   private static final int ROWS = 6;
   private static final int COLS = 7;
   private final int[][] board = new int[6][7];
-  private Player currentPlayer = Player.PlayerOne;
+  private static PlayerRole currentPlayer = PlayerRole.PlayerOne;
+
+  // TODO: Make sure that the registration message initializes this in GameLogic
+  public static void setLocalPlayer(Player p) {
+    localPlayer = p;
+  }
+
+  // TODO: Make sure that the registration message initializes this in GameLogic
+  public static void setCurrentPlayer(PlayerRole p) {
+    currentPlayer = p;
+  }
+
+  // TODO: Make sure that the registration message initializes this in GameLogic
+  public static void setRemotePlayer(Player p) {
+    remotePlayer = p;
+  }
+
+  public static void initialize(Player local, Player remote, PlayerRole startingPlayer) {
+    localPlayer = local;
+    remotePlayer = remote;
+    currentPlayer = startingPlayer;
+  }
 
   public GameLogic() {
     for (int[] row : board) {
@@ -20,12 +43,16 @@ public class GameLogic {
     }
   }
 
-  public Player getLocalPlayer() {
-    return thisPlayer;
+  public static Player getLocalPlayer() {
+    return localPlayer;
   }
 
-  public void setLocalPlayer(Player p) {
-    thisPlayer = p;
+  public static Player getRemotePlayer() {
+    return remotePlayer;
+  }
+
+  public static void setLocalPlayerRole(PlayerRole p) {
+    localPlayer.setRole(p);
   }
 
   public void switchPlayer() {
@@ -33,10 +60,10 @@ public class GameLogic {
       case None:
         break;
       case PlayerOne:
-        currentPlayer = Player.PlayerTwo;
+        currentPlayer = PlayerRole.PlayerTwo;
         break;
       case PlayerTwo:
-        currentPlayer = Player.PlayerOne;
+        currentPlayer = PlayerRole.PlayerOne;
         break;
       default:
         break;
@@ -66,12 +93,12 @@ public class GameLogic {
 
 
 
-  public Player getCurrentPlayer() {
+  public PlayerRole getCurrentPlayer() {
     return currentPlayer;
   };
 
   // apply player move to board
-  public void placePiece(int row, int column, Player player) {
+  public void placePiece(int row, int column, PlayerRole player) {
     switch (player) {
       case PlayerOne:
         board[row][column] = 1;
@@ -85,7 +112,7 @@ public class GameLogic {
   };
 
   // check win
-  public boolean checkWin(Player player) {
+  public boolean checkWin(PlayerRole player) {
     int playerID;
     switch (player) {
       case PlayerOne:
@@ -145,6 +172,7 @@ public class GameLogic {
     for (int[] row : board) {
       Arrays.fill(row, 0);
     }
-    currentPlayer = Player.PlayerOne;
+    currentPlayer = PlayerRole.PlayerOne;
   }
+
 }

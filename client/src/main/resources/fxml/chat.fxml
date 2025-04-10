@@ -36,7 +36,7 @@
                               </TextFlow>
                               <TextArea fx:id="chatEditorInput" wrapText="true">
                                  <font>
-                                    <Font name="Atkinson Hyperlegible" size="16.0" />
+                                    <Font size="18.0" />
                                  </font></TextArea>
                            </children>
                         </StackPane>

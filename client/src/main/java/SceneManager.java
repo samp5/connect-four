@@ -1,5 +1,4 @@
 import java.io.IOException;
-import controller.GameController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

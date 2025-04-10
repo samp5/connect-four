@@ -1,11 +1,7 @@
 package controller.utils;
 
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Date;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -45,6 +41,5 @@ public class ChatMessage {
     timeStampFlow.getChildren().setAll(timestampTxt);
   }
 
-  public void initialize() {
-  }
+  public void initialize() {}
 }
