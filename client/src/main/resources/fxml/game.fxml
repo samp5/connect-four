@@ -15,8 +15,8 @@
             <HBox prefHeight="100.0" prefWidth="200.0" />
             <StackPane fx:id="gamePane">
                <children>
-                  <Pane fx:id="foregroundPane" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="630.0" />
-                  <Pane fx:id="midgroundPane" maxHeight="540.0" maxWidth="630.0" minHeight="540.0" minWidth="640.0" prefHeight="540.0" prefWidth="630.0" />
+                  <Pane fx:id="foregroundPane" maxWidth="632" minHeight="542" minWidth="632" prefHeight="542.0" prefWidth="632.0" />
+                  <Pane fx:id="midgroundPane" maxHeight="540.0" maxWidth="630.0" minHeight="540.0" minWidth="630.0" prefHeight="540.0" prefWidth="630.0" />
                   <Pane fx:id="backgroundPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="630.0" />
                </children>
             </StackPane>

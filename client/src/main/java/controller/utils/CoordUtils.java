@@ -48,7 +48,7 @@ public class CoordUtils {
   }
 
   public static Point fromRowCol(int row, int col) {
-    return new Point(col * (pieceRadius * 2) + pieceRadius + 5,
+    return new Point(col * (pieceRadius * 2) + pieceRadius,
         boardHeight - (row * (pieceRadius * 2) + pieceRadius),
         CoordSystem.GameBoard);
   }

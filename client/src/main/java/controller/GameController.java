@@ -72,9 +72,9 @@ public class GameController {
       super.setCenterY(position.getY());
 
       if (player == PlayerRole.PlayerOne) {
-        super.setFill(new ImagePattern(new Image("/assets/player1chip.png")));
+        super.setFill(new ImagePattern(new Image("/assets/red_chip.png")));
       } else {
-        super.setFill(new ImagePattern(new Image("/assets/player2chip.png")));
+        super.setFill(new ImagePattern(new Image("/assets/blue_chip.png")));
       }
       super.setRadius(45);
     }
@@ -121,15 +121,18 @@ public class GameController {
     foregroundPane
         .setBackground(new Background(
             new BackgroundImage(new Image("/assets/board.png"), BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                new BackgroundSize(632, 542, false, false, false, false))));
 
     chipPane1.setBackground(new Background(
-        new BackgroundImage(new Image("/assets/player1chip.png"), BackgroundRepeat.NO_REPEAT,
-            BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+        new BackgroundImage(new Image("/assets/red_chip.png"), BackgroundRepeat.NO_REPEAT,
+            BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+            new BackgroundSize(90, 90, false, false, false, false))));
     chipPane1.toFront();
     chipPane2.setBackground(new Background(
-        new BackgroundImage(new Image("/assets/player2chip.png"), BackgroundRepeat.NO_REPEAT,
-            BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+        new BackgroundImage(new Image("/assets/blue_chip.png"), BackgroundRepeat.NO_REPEAT,
+            BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+            new BackgroundSize(90, 90, false, false, false, false))));
     chipPane2.toFront();
 
     setHandlers();
@@ -229,10 +232,10 @@ public class GameController {
         String imgString;
         switch (gameLogic.getCurrentPlayerRole()) {
           case PlayerOne:
-            imgString = "/assets/player1chip_ghost.png";
+            imgString = "/assets/red_chip_hint.png";
             break;
           case PlayerTwo:
-            imgString = "/assets/player2chip_ghost.png";
+            imgString = "/assets/blue_chip_hint.png";
             break;
           case None:
           default:
