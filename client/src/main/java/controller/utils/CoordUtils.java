@@ -1,7 +1,6 @@
 package controller.utils;
 
 import java.util.Optional;
-import javafx.util.Pair;
 import logic.GameLogic;
 
 
@@ -54,11 +53,11 @@ public class CoordUtils {
         CoordSystem.GameBoard);
   }
 
-  public static Optional<Pair<Integer, Integer>> toRowCol(Point p) {
+  public static Optional<BoardPosition> toRowCol(Point p) {
     return CoordUtils.onBoard(p).map(point -> {
       int col = (int) point.x / (pieceRadius * 2);
       int row = (int) point.y / (pieceRadius * 2);
-      return new Pair<>(GameLogic.numRows() - row - 1, col);
+      return new BoardPosition(GameLogic.numRows() - row - 1, col);
     });
   }
 }

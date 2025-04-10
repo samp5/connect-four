@@ -1,6 +1,8 @@
 package controller;
 
 import controller.utils.Point;
+import java.util.Optional;
+import controller.utils.BoardPosition;
 import controller.utils.CoordSystem;
 import controller.utils.CoordUtils;
 import javafx.animation.PathTransition;
@@ -25,7 +27,6 @@ import network.Player;
 import network.Player.PlayerRole;
 
 import javafx.util.Duration;
-import javafx.util.Pair;
 
 /**
  * Should bind directly to the main game fxml and provide UI logic
@@ -60,12 +61,16 @@ public class GameController {
 
 
   private class Piece extends Circle {
-    Point position;
+    public Point position;
 
-    Piece(PlayerRole player, Point position) {
+    Piece(PlayerRole player, Point pos) {
       super();
 
-      this.position = position.copy();
+      position = pos.copy();
+
+      super.setCenterX(position.getX());
+      super.setCenterY(position.getY());
+
       if (player == PlayerRole.PlayerOne) {
         super.setFill(new ImagePattern(new Image("/assets/player1chip.png")));
       } else {
@@ -92,7 +97,7 @@ public class GameController {
   }
 
   public void setLocalPlayer(PlayerRole local) {
-    gameLogic.setLocalPlayerRole(local);
+    GameLogic.setLocalPlayerRole(local);
   }
 
   /**
@@ -105,7 +110,7 @@ public class GameController {
     // HACK: for now hardcode the current player, this call should be made on registration
     GameLogic.setLocalPlayer(new Player("dummy1", 0));
     GameLogic.setRemotePlayer(new Player("dummy2", 1));
-    GameLogic.setCurrentPlayer(PlayerRole.PlayerOne);
+    GameLogic.setCurrentPlayerRole(PlayerRole.PlayerOne);
     GameLogic.setLocalPlayerRole(PlayerRole.PlayerOne);
 
     NetworkClient.bindGameController(this);
@@ -131,105 +136,98 @@ public class GameController {
   }
 
   private void handleRelease(MouseEvent e) {
-    if (dropHint != null) {
+    // this means the piece is NOT in a valid position
+    if (dropHint == null) {
+      return;
+    }
 
-      // remove our dragged piece + hint
+    // get the row and column associated with our drop hint
+    BoardPosition rowCol = CoordUtils.toRowCol(dropHint.position).get();
+
+    // calc the point for the top of this column
+    Point topOfCol =
+        CoordUtils.onGameScene(CoordUtils.fromRowCol(0, rowCol.getColumn()));
+
+    // adjust the top y coord
+    topOfCol.setY(
+        (overlayPane.getHeight() - foregroundPane.getHeight()) / 2
+            - draggedPiece.getRadius() * 2);
+
+    // construct a path
+    Path path = new Path();
+    path.getElements().add(new MoveTo(draggedPiece.getCenterX(), draggedPiece.getCenterY()));
+    path.getElements()
+        .add(new LineTo(topOfCol.getX() + draggedPiece.getRadius(), topOfCol.getY()));
+
+    // build the animation
+    PathTransition pathTransition = new PathTransition();
+    pathTransition.setDuration(Duration.millis(1.5 * draggedPiece.position.distanceTo(topOfCol)));
+    pathTransition.setPath(path);
+    pathTransition.setNode(draggedPiece);
+    pathTransition.play();
+
+    pathTransition.setOnFinished(f -> {
       overlayPane.getChildren().remove(draggedPiece);
 
-      // add our piece to play
-      Piece pieceRaise = new Piece(gameLogic.getCurrentPlayer(), draggedPiece.position.copy());
-      overlayPane.getChildren().add(pieceRaise);
+      Point topSlot = CoordUtils.fromRowCol(GameLogic.numRows() - 1, rowCol.getColumn());
+      Piece pieceToDrop = new Piece(gameLogic.getCurrentPlayerRole(), topSlot.copy());
+      midgroundPane.getChildren().add(pieceToDrop);
 
-      // copy the initial posiiton of our dragged piece
-      pieceRaise.setPoint(draggedPiece.position);
 
-      // get the row and column associated with our drop hint
-      Pair<Integer, Integer> rowCol = CoordUtils.toRowCol(dropHint.position).get();
-
-      // calc the point for the top of this column
-      Point topOfCol =
-          CoordUtils.onGameScene(CoordUtils.fromRowCol(rowCol.getKey(), rowCol.getValue()));
-
-      // adjust the top y coord
-      topOfCol.setY(
-          (overlayPane.getHeight() - foregroundPane.getHeight()) / 2
-              - pieceRaise.getRadius() * 2);
-
-      // construct a path
-      Path path = new Path();
-      path.getElements().add(new MoveTo(pieceRaise.getCenterX(), pieceRaise.getCenterY()));
-      path.getElements()
-          .add(new LineTo(topOfCol.getX() + pieceRaise.getRadius(), topOfCol.getY()));
+      Path pth = new Path();
+      pth.getElements().add(new MoveTo(topSlot.getX(), topSlot.getY()));
+      pth.getElements().add(new LineTo(dropHint.getCenterX(),
+          dropHint.getCenterY()));
 
       // build the animation
-      PathTransition pathTransition = new PathTransition();
-      pathTransition.setDuration(Duration.millis(1.5 * pieceRaise.position.distanceTo(topOfCol)));
-      pathTransition.setPath(path);
-      pathTransition.setNode(pieceRaise);
-      pathTransition.play();
+      PathTransition pTrans = new PathTransition();
+      pTrans.setDuration(Duration.millis(1500));
+      pTrans.setPath(pth);
+      pTrans.setNode(pieceToDrop);
 
-      pathTransition.setOnFinished(f -> {
-        overlayPane.getChildren().remove(pieceRaise);
-        Point topSlot = CoordUtils.fromRowCol(GameLogic.numRows() - 1, rowCol.getValue());
-        Piece pieceToDrop = new Piece(gameLogic.getCurrentPlayer(), topSlot.copy());
-        midgroundPane.getChildren().add(pieceToDrop);
+      pTrans.play();
+      dropHint = null;
 
-        Path pth = new Path();
-        pth.getElements().add(new MoveTo(topSlot.getX(), topSlot.getY()));
-        pth.getElements().add(new LineTo(dropHint.getCenterX(),
-            dropHint.getCenterY()));
+      pTrans.setOnFinished(k -> {
+        // update our logic
+        gameLogic.placePiece(rowCol.getRow(), rowCol.getColumn(),
+            gameLogic.getCurrentPlayerRole());
 
-        // build the animation
-        PathTransition pTrans = new PathTransition();
-        pTrans.setDuration(Duration.millis(1500));
-        pTrans.setPath(pth);
-        pTrans.setNode(pieceToDrop);
-        pTrans.play();
-        dropHint = null;
+        // TODO:
+        // NetworkClient.sendMove(rowCol.getValue());
 
-        pTrans.setOnFinished(k -> {
-          // update our logic
-          gameLogic.placePiece(rowCol.getKey(), rowCol.getValue(), gameLogic.getCurrentPlayer());
-
-          // TODO:
-          // NetworkClient.sendMove(rowCol.getValue());
-
-          if (gameLogic.checkWin(gameLogic.getCurrentPlayer())) {
-            gameOver(gameLogic.getCurrentPlayer());
-          } else if (gameLogic.staleMate()) {
-            staleMate();
-          }
+        if (!gameIsOver()) {
           gameLogic.switchPlayer();
-        });
+        }
       });
-
       draggedPiece = null;
-    }
+    });
+
   }
 
   private void handleDrag(MouseEvent e, PlayerRole player) {
-    if (player != gameLogic.getCurrentPlayer()) {
+    if (player != gameLogic.getCurrentPlayerRole()) {
       return;
     }
 
     if (draggedPiece == null) {
-      draggedPiece = new Piece(gameLogic.getCurrentPlayer(),
+      draggedPiece = new Piece(gameLogic.getCurrentPlayerRole(),
           new Point(e.getSceneX(), e.getSceneY(), CoordSystem.GamePane));
       overlayPane.getChildren().addAll(draggedPiece);
     }
 
     draggedPiece.setPoint(e.getSceneX(), e.getSceneY());
 
-    int col = CoordUtils.toRowCol(draggedPiece.position).map(pair -> {
-      return pair.getValue();
+    int col = CoordUtils.toRowCol(draggedPiece.position).map(bp -> {
+      return bp.getColumn();
     }).orElse(-1);
 
     gameLogic.getAvailableRow(col).ifPresentOrElse(row -> {
       if (dropHint == null) {
-        dropHint = new Piece(gameLogic.getCurrentPlayer(),
+        dropHint = new Piece(gameLogic.getCurrentPlayerRole(),
             new Point(e.getSceneX(), e.getSceneY(), CoordSystem.GamePane));
         String imgString;
-        switch (gameLogic.getCurrentPlayer()) {
+        switch (gameLogic.getCurrentPlayerRole()) {
           case PlayerOne:
             imgString = "/assets/player1chip_ghost.png";
             break;
@@ -276,21 +274,46 @@ public class GameController {
     gameLogic.getAvailableRow(col).ifPresentOrElse((r) -> {
       Piece toPlay =
           new Piece(GameLogic.getRemotePlayer().getRole(), CoordUtils.fromRowCol(r, col));
+
+      // TODO: Add animation for remote player move
       midgroundPane.getChildren().add(toPlay);
-      if (gameLogic.checkWin(gameLogic.getCurrentPlayer())) {
-        gameOver(gameLogic.getCurrentPlayer());
-      } else if (gameLogic.staleMate()) {
-        staleMate();
+
+      if (!gameIsOver()) {
+        gameLogic.switchPlayer();
       }
-      gameLogic.switchPlayer();
+
     }, () -> {
       System.err.println("Recieved invalid move");
     });
   }
 
-  private void gameOver(PlayerRole winner) {
+  private boolean gameIsOver() {
+    Optional<BoardPosition[]> winningComboOpt =
+        gameLogic.checkWin(gameLogic.getCurrentPlayerRole());
+
+    if (winningComboOpt.isPresent()) {
+      gameOver(gameLogic.getCurrentPlayerRole(), winningComboOpt.get());
+      return true;
+    } else if (gameLogic.staleMate()) {
+      staleMate();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  private void gameOver(PlayerRole winner, BoardPosition[] winningPositions) {
+    // TODO: Animations for winning combination
+    Piece[] winningPieces = new Piece[4];
+    for (int i = 0; i < 4; i++) {
+      BoardPosition bp = winningPositions[i];
+      System.out.println("bp:" + bp.getRow() + bp.getColumn());
+      winningPieces[i] = new Piece(winner, CoordUtils.fromRowCol(bp.getRow(), bp.getColumn()));
+      System.out.println(
+          "piece loc:" + winningPieces[i].getCenterX() + winningPieces[i].getCenterY());
+    }
     System.out.println(winner + "wins!");
-    midgroundPane.getChildren().setAll();
+    midgroundPane.getChildren().setAll(winningPieces);
     gameLogic.reset();
   }
 

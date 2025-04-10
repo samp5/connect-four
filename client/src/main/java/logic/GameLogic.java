@@ -2,6 +2,7 @@ package logic;
 
 import java.util.Arrays;
 import java.util.Optional;
+import controller.utils.BoardPosition;
 import network.Player;
 import network.Player.PlayerRole;
 
@@ -14,7 +15,8 @@ public class GameLogic {
   private static final int ROWS = 6;
   private static final int COLS = 7;
   private final int[][] board = new int[6][7];
-  private static PlayerRole currentPlayer = PlayerRole.PlayerOne;
+  private static PlayerRole currentPlayerRole = PlayerRole.PlayerOne;
+
 
   // TODO: Make sure that the registration message initializes this in GameLogic
   public static void setLocalPlayer(Player p) {
@@ -22,8 +24,8 @@ public class GameLogic {
   }
 
   // TODO: Make sure that the registration message initializes this in GameLogic
-  public static void setCurrentPlayer(PlayerRole p) {
-    currentPlayer = p;
+  public static void setCurrentPlayerRole(PlayerRole p) {
+    currentPlayerRole = p;
   }
 
   // TODO: Make sure that the registration message initializes this in GameLogic
@@ -34,7 +36,7 @@ public class GameLogic {
   public static void initialize(Player local, Player remote, PlayerRole startingPlayer) {
     localPlayer = local;
     remotePlayer = remote;
-    currentPlayer = startingPlayer;
+    currentPlayerRole = startingPlayer;
   }
 
   public GameLogic() {
@@ -56,14 +58,14 @@ public class GameLogic {
   }
 
   public void switchPlayer() {
-    switch (currentPlayer) {
+    switch (currentPlayerRole) {
       case None:
         break;
       case PlayerOne:
-        currentPlayer = PlayerRole.PlayerTwo;
+        currentPlayerRole = PlayerRole.PlayerTwo;
         break;
       case PlayerTwo:
-        currentPlayer = PlayerRole.PlayerOne;
+        currentPlayerRole = PlayerRole.PlayerOne;
         break;
       default:
         break;
@@ -91,11 +93,17 @@ public class GameLogic {
     return COLS;
   }
 
-
-
-  public PlayerRole getCurrentPlayer() {
-    return currentPlayer;
+  public PlayerRole getCurrentPlayerRole() {
+    return currentPlayerRole;
   };
+
+  public Player getCurrentPlayer() {
+    if (getLocalPlayer().getRole() == currentPlayerRole) {
+      return localPlayer;
+    } else {
+      return remotePlayer;
+    }
+  }
 
   // apply player move to board
   public void placePiece(int row, int column, PlayerRole player) {
@@ -112,7 +120,7 @@ public class GameLogic {
   };
 
   // check win
-  public boolean checkWin(PlayerRole player) {
+  public Optional<BoardPosition[]> checkWin(PlayerRole player) {
     int playerID;
     switch (player) {
       case PlayerOne:
@@ -128,16 +136,40 @@ public class GameLogic {
     }
     for (int row = 0; row < ROWS; row++) {
       for (int col = 0; col < COLS; col++) {
-        if (board[row][col] == playerID &&
-            (checkDirection(row, col, 1, 0) || // horizontal
-                checkDirection(row, col, 0, 1) || // vertical
-                checkDirection(row, col, 1, 1) || // diagonal /
-                checkDirection(row, col, 1, -1))) { // diagonal \
-          return true;
+        if (board[row][col] == playerID) {
+          // horizontal
+          if (checkDirection(row, col, 1, 0)) {
+
+            return Optional.of(buildWinningArray(row, col, 1, 0));
+
+          } else if (checkDirection(row, col, 0, 1)) { // columns
+
+            return Optional.of(buildWinningArray(row, col, 1, 0));
+
+          } else if (checkDirection(row, col, 1, 1)) { // diagonal /
+
+            return Optional.of(buildWinningArray(row, col, 1, 1));
+
+          } else if (checkDirection(row, col, 1, -1)) { // diagonal \
+
+            return Optional.of(buildWinningArray(row, col, 1, -1));
+
+          }
         }
       }
     }
-    return false; // No winner
+    return Optional.empty(); // No winner
+  }
+
+  private BoardPosition[] buildWinningArray(int row, int col, int dRow, int dCol) {
+    BoardPosition[] ret = new BoardPosition[4];
+    for (int i = 0; i < 4; i++) {
+      int r = row + i * dRow;
+      int c = col + i * dCol;
+      ret[i] = new BoardPosition(r, c);
+    }
+    return ret;
+
   }
 
   // TODO: Make this a clever algorithm that detects stalemates for non-full boards
@@ -172,7 +204,7 @@ public class GameLogic {
     for (int[] row : board) {
       Arrays.fill(row, 0);
     }
-    currentPlayer = PlayerRole.PlayerOne;
+    currentPlayerRole = PlayerRole.PlayerOne;
   }
 
 }
