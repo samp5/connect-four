@@ -1,5 +1,7 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
+import network.NetworkClient;
+import utils.SceneManager;
 
 /**
  * Main Application Class.
@@ -8,6 +10,8 @@ import javafx.stage.Stage;
 public class JavaFX extends Application {
 
   public static void main(String[] args) {
+    // add shut down disconnect protection
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> NetworkClient.disconnect()));
     // attempt to connect to localhost server
     launch(args);
   }
@@ -15,6 +19,6 @@ public class JavaFX extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
     SceneManager.initialize(primaryStage);
-    SceneManager.showScene("main.fxml");
+    SceneManager.showScene("menu.fxml");
   }
 }

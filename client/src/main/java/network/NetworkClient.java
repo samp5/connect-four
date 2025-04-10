@@ -8,6 +8,9 @@ import java.net.Socket;
 
 import controller.ChatController;
 import controller.GameController;
+import javafx.application.Platform;
+import network.Message.Type;
+import utils.SceneManager;
 
 /**
  * Connect to server
@@ -25,18 +28,22 @@ public class NetworkClient {
   private static Socket socket;
   private static ObjectInputStream in;
   private static ObjectOutputStream out;
+  private static NetworkThread listener;
 
   private static GameController gameCTL;
   private static ChatController chatCTL;
 
 
   // connect to a host
-  public static boolean connect(String host, int port) throws IOException {
+  public static boolean connect(String host, int port, String username, String password) throws IOException {
     socket = new Socket(host, port);
+    listener = new NetworkThread(socket);
+    listener.start();
+    sendMessage(new Message(username, password));
     return socket.isConnected();
   }
 
-
+  // get then handle all available messages
   public static int getMessages() {
     int handled = 0;
     try {
@@ -45,11 +52,11 @@ public class NetworkClient {
       if (sz > 0) {
         in = new ObjectInputStream(inputStream);
         Message message = (Message) in.readObject();
-        handleMessage(message);
+        Platform.runLater(() -> handleMessage(message));
         ++handled;
       }
     } catch (IOException e) {
-      System.out.println("error on getting stream");
+      System.out.printf("error on getting stream: %s\n", e.getMessage());
     } catch (ClassNotFoundException e) {
       System.out.println("error parsing message");
     }
@@ -59,17 +66,25 @@ public class NetworkClient {
   // send to proper controller
   private static void handleMessage(Message msg) {
     switch (msg.getType()) {
-      case CHAT:
-        chatCTL.recieveMessage(msg.getChatMessage(), msg.getUsername());
+      case LOGIN:
+        if (msg.isSuccess()) {
+          SceneManager.showScene("loading.fxml");
+        } else {
+          System.out.println("Error logging in: " + msg.getChatMessage());
+        }
         break;
-      case MOVE:
-        gameCTL.recieveMove(msg.getColumn());
+		  case CHAT:
+		  	break;
+		  case MOVE:
+		  	break;
+		  case REG:
+        SceneManager.showScene("loading.fxml");
+		  	break;
+      case START:
+        SceneManager.showScene("main.fxml");
         break;
-      case REG:
-        System.out.printf("Registered as player %d\n", msg.getPlayerID());
-        break;
-      default:
-        break;
+		  default:
+		  	break;
     }
   }
 
@@ -106,5 +121,27 @@ public class NetworkClient {
     chatCTL = cc;
   }
 
-  public static void disconnect() {}
+  public static void disconnect() {
+    try {
+      socket.getOutputStream().write(new Message(Type.DISCONNECT).asBytes());
+      socket.close();
+    } catch (Exception e) {}
+  }
+
+  private static class NetworkThread extends Thread {
+    private final Socket socket;
+
+    public NetworkThread(Socket socket) {
+      this.socket = socket;
+    }
+
+    @Override
+    public void run() {
+      System.out.println("NetworkThread began");
+      while (!socket.isClosed()) {
+        getMessages();
+      }
+      System.out.println("NetworkThread ended");
+    }
+  }
 }

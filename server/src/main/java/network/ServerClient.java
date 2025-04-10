@@ -1,10 +1,10 @@
 package network;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.nio.ByteBuffer;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 
 public class ServerClient {
   private final SocketChannel connection;
@@ -16,14 +16,25 @@ public class ServerClient {
   }
 
   public void sendMessage(Message message) throws IOException {
-    ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-    ObjectOutputStream oos = new ObjectOutputStream(byteStream);
-    oos.writeObject(message);
-    oos.flush();
-    oos.close();
+    this.connection.write(message.asByteBuffer());
+  }
 
-    ByteBuffer buf = ByteBuffer.wrap(byteStream.toByteArray());
-    this.connection.write(buf);
+  public ArrayList<Message> getMessages() {
+    ArrayList<Message> messages = new ArrayList<>();
+    try {
+      InputStream inputStream = this.connection.socket().getInputStream();
+      int sz = inputStream.available();
+      if (sz > 0) {
+        ObjectInputStream in = new ObjectInputStream(inputStream);
+        Message message = (Message) in.readObject();
+        messages.add(message);
+      }
+    } catch (IOException e) {
+      System.out.println("error on getting stream");
+    } catch (ClassNotFoundException e) {
+      System.out.println("error parsing message");
+    }
+    return messages;
   }
 
   public int getConnectionID() {

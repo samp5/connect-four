@@ -32,9 +32,9 @@
             </RadialGradient>
          </fill>
       </Text>
-      <TextField fx:id="usernameInput" layoutX="465.0" layoutY="322.0" text="a" />
+      <TextField fx:id="usernameInput" layoutX="460.0" layoutY="203.0" text="a" />
       <TextField fx:id="ipInput" layoutX="465.0" layoutY="398.0" text="127.0.0.1" />
-      <Text layoutX="470.0" layoutY="296.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+      <Text layoutX="460.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
          <font>
             <Font name="Atkinson Hyperlegible Regular" size="35.0" />
          </font>
@@ -55,5 +55,11 @@
             <Font name="Atkinson Hyperlegible Regular" size="28.0" />
          </font>
       </Button>
+      <TextField fx:id="passwordInput" layoutX="460.0" layoutY="307.0" text="a" />
+      <Text layoutX="460.0" layoutY="280.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+         <font>
+            <Font name="Atkinson Hyperlegible Regular" size="35.0" />
+         </font>
+      </Text>
    </children>
 </Pane>

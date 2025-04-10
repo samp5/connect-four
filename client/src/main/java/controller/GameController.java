@@ -128,7 +128,6 @@ public class GameController {
     chipPane2.toFront();
 
     setHandlers();
-    System.out.println("Game Controller initialized");
   }
 
   private void handleRelease(MouseEvent e) {
