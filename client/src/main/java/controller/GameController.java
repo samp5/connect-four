@@ -2,14 +2,19 @@ package controller;
 
 import controller.utils.Point;
 import java.util.Optional;
+
+import controller.GameController.Cloud.CloudType;
 import controller.utils.BoardPosition;
 import controller.utils.CoordSystem;
 import controller.utils.CoordUtils;
+import javafx.animation.Animation;
 import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.ImageCursor;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -17,21 +22,17 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.Rectangle;
 import logic.GameLogic;
 import network.NetworkClient;
 import network.Player;
 import network.Player.PlayerRole;
 
 import javafx.util.Duration;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 
 /**
  * Should bind directly to the main game fxml and provide UI logic
@@ -49,7 +50,9 @@ public class GameController {
   private Piece dropHint = null;
 
   @FXML
-  private StackPane gamePane;
+  private Pane gamePaneBackground;
+  @FXML
+  private AnchorPane gamePane;
   @FXML
   private Pane backgroundPane;
   @FXML
@@ -106,6 +109,62 @@ public class GameController {
     }
   }
 
+  public class Cloud extends Rectangle {
+
+    enum CloudType {
+      Small,
+      Large;
+
+      private final String[] smallClouds = { "cloud1.png", "cloud2.png" };
+      private final String[] largeClouds = { "cloud3.png" };
+
+      public int getWidth() {
+        switch (this) {
+          case Large:
+            return 200;
+          case Small:
+            return 100;
+          default:
+            return 0;
+        }
+      }
+
+      public int getHeight() {
+        switch (this) {
+          case Large:
+            return 100;
+          case Small:
+            return 100;
+          default:
+            return 0;
+        }
+      }
+
+      public Image getImage() {
+        switch (this) {
+          case Large:
+            return new Image("/assets/" + largeClouds[(int) (Math.random() * largeClouds.length)]);
+          case Small:
+            return new Image("/assets/" + smallClouds[(int) (Math.random() * largeClouds.length)]);
+          default:
+            return null;
+        }
+      }
+    }
+
+    CloudType type;
+
+    Cloud(CloudType type) {
+      super();
+      super.setWidth(type.getWidth());
+      super.setHeight(type.getHeight());
+      super.setFill(new ImagePattern(type.getImage()));
+      super.setX(-type.getWidth());
+      super.setY(0);
+      this.type = type;
+    }
+  }
+
   public void setLocalPlayer(PlayerRole local) {
     GameLogic.setLocalPlayerRole(local);
   }
@@ -117,11 +176,25 @@ public class GameController {
   public void initialize() {
     gameLogic = new GameLogic();
 
+    // registration
+    GameLogic.setLocalPlayer(new Player("dummy1", 0));
+    GameLogic.setRemotePlayer(new Player("dummy2", 1));
+    GameLogic.setCurrentPlayerRole(PlayerRole.PlayerOne);
+    GameLogic.setLocalPlayerRole(PlayerRole.PlayerOne);
+
+    setCustomCursors();
+    buildClouds();
+
     NetworkClient.bindGameController(this);
     foregroundPane.toFront();
     backgroundPane.toBack();
+    gamePaneBackground.toBack();
     overlayPane.toFront();
     overlayPane.setMouseTransparent(true);
+    gamePaneBackground.setBackground(
+        new Background(new BackgroundImage(new Image("/assets/game_background.png"), BackgroundRepeat.NO_REPEAT,
+            BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+            new BackgroundSize(720, 720, false, false, false, false))));
     foregroundPane
         .setBackground(new Background(
             new BackgroundImage(new Image("/assets/board.png"), BackgroundRepeat.NO_REPEAT,
@@ -145,6 +218,45 @@ public class GameController {
   private void setCustomCursors() {
     chipPane1.setCursor(new ImageCursor(new Image("/assets/hand_cursor.png")));
     chipPane2.setCursor(new ImageCursor(new Image("/assets/hand_cursor.png")));
+  }
+
+  private void buildClouds() {
+    Cloud[] clouds = {
+        new Cloud(CloudType.Large), new Cloud(CloudType.Small),
+        new Cloud(CloudType.Small), new Cloud(CloudType.Large),
+        new Cloud(CloudType.Large), new Cloud(CloudType.Small),
+        new Cloud(CloudType.Large), new Cloud(CloudType.Large) };
+
+    gamePaneBackground.getChildren().addAll(clouds);
+    buildCloudAnimation(clouds);
+  }
+
+  private void buildCloudAnimation(Cloud[] clouds) {
+    double maxAcceptableCloud = 300;
+    double minAcceptableCloud = 10;
+    double maxTimeAcross = 90;
+    double minTimeAcross = 75;
+
+    for (int i = 0; i < clouds.length; i++) {
+      Cloud c = clouds[i];
+      Path path = new Path();
+
+      double yCoord = minAcceptableCloud + Math.random() * (maxAcceptableCloud - minAcceptableCloud);
+
+      path.getElements().add(new MoveTo(-c.type.getWidth(), yCoord));
+      path.getElements().add(new LineTo(CoordUtils.gamePaneWidth + c.type.getWidth(), yCoord));
+
+      PathTransition pathTransition = new PathTransition();
+      pathTransition.setDuration(Duration.seconds(Math.random() * (maxTimeAcross - minTimeAcross) + minTimeAcross));
+      pathTransition.setPath(path);
+      pathTransition.setNode(c);
+      pathTransition.setDelay(Duration.seconds((maxTimeAcross / clouds.length) * i));
+      pathTransition.play();
+
+      pathTransition.setOnFinished(e -> {
+        pathTransition.playFromStart();
+      });
+    }
   }
 
   private void handleRelease(MouseEvent e) {
@@ -191,10 +303,10 @@ public class GameController {
       pTrans.setNode(pieceToDrop);
 
       pTrans.play();
-      midgroundPane.getChildren().remove(dropHint);
-      dropHint = null;
 
       pTrans.setOnFinished(k -> {
+        midgroundPane.getChildren().remove(dropHint);
+        dropHint = null;
         // update our logic
         gameLogic.placePiece(rowCol.getRow(), rowCol.getColumn(),
             gameLogic.getCurrentPlayerRole());
@@ -206,7 +318,6 @@ public class GameController {
         }
       });
       draggedPiece = null;
-      dropHint = null;
     });
 
   }
@@ -312,7 +423,7 @@ public class GameController {
 
     // TODO: Animations for winning combination
 
-    gameLogic.setCurrentPlayerRole(PlayerRole.None);
+    GameLogic.setCurrentPlayerRole(PlayerRole.None);
 
     Piece[] winningPieces = new Piece[4];
     for (int i = 0; i < 4; i++) {
@@ -320,12 +431,6 @@ public class GameController {
       winningPieces[i] = new Piece(winner, CoordUtils.fromRowCol(bp.getRow(),
           bp.getColumn()));
     }
-    // // midgroundPane.getChildren().setAll(winningPieces);
-    //
-    // Arrays.sort(winningPieces, (p1, p2) -> {
-    // return (int) (p2.position.getY() - p1.position.getY());
-    // });
-
     Object[] pieces = midgroundPane.getChildren().toArray();
     for (Object pi : pieces) {
       Piece p = (Piece) pi;
@@ -349,7 +454,7 @@ public class GameController {
         midgroundPane.getChildren().remove(p);
 
         double retX = p.getPlayer() == PlayerRole.PlayerOne ? p.getRadius() + 10
-            : gamePane.getWidth() - p.getRadius() - 10;
+            : gamePaneBackground.getWidth() - p.getRadius() - 10;
 
         Point returnPoint = new Point(retX, overlayPane.getHeight() - p.getRadius() - 10,
             CoordSystem.GamePane);
@@ -374,9 +479,9 @@ public class GameController {
         });
 
       });
-      System.out.println(winner + "wins!");
-      gameLogic.reset();
     }
+    System.out.println(winner + "wins!");
+    gameLogic.reset();
 
   }
 
