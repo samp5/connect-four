@@ -13,9 +13,6 @@ import com.gluonhq.emoji.EmojiData;
 import com.gluonhq.emoji.util.TextUtils;
 
 import javafx.scene.Node;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class Markup {
@@ -66,12 +63,12 @@ public class Markup {
     return Pattern.matches("^" + italicRegex + "$", s);
   }
 
-  public static List<Node> markup(String s, Font font) {
+  public static List<Node> markup(String s) {
 
     String unicodeText = createUnicodeText(s);
 
     List<Node> flowNodes =
-        TextUtils.convertToTextAndImageNodes(unicodeText, font.getSize() + font.getSize() / 4);
+        TextUtils.convertToTextAndImageNodes(unicodeText);
 
     ArrayList<Node> splitFlowNodes = new ArrayList<>();
 
@@ -89,14 +86,15 @@ public class Markup {
     splitFlowNodes.stream().filter(Text.class::isInstance).forEach(n -> {
       Text t = (Text) n;
       if (Markup.isBold(t.getText().strip())) {
-        t.setText(" " + t.getText().substring(2, t.getText().length() - 2) + " ");
-        t.setFont(Font.font(font.getFamily(), FontWeight.BOLD, font.getSize()));
+        t.setText(t.getText().substring(2, t.getText().length() - 2) + " ");
+        t.getStyleClass().add("text-chat-input-display-bold");
       } else if (Markup.isItalic(t.getText().strip())) {
         t.setText(" " + t.getText().substring(2, t.getText().length() - 2) + " ");
-        t.setFont(Font.font(font.getFamily(), FontPosture.ITALIC, font.getSize()));
+        t.getStyleClass().add("text-chat-input-display-light");
       } else {
-        t.setFont(font);
+        t.getStyleClass().add("text-chat-input-display");
       }
+
     });
 
     return splitFlowNodes;

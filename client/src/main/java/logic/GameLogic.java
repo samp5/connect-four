@@ -17,7 +17,6 @@ public class GameLogic {
   private final int[][] board = new int[6][7];
   private static PlayerRole currentPlayerRole = PlayerRole.PlayerOne;
 
-
   // TODO: Make sure that the registration message initializes this in GameLogic
   public static void setLocalPlayer(Player p) {
     localPlayer = p;
@@ -144,7 +143,7 @@ public class GameLogic {
 
           } else if (checkDirection(row, col, 0, 1)) { // columns
 
-            return Optional.of(buildWinningArray(row, col, 1, 0));
+            return Optional.of(buildWinningArray(row, col, 0, 1));
 
           } else if (checkDirection(row, col, 1, 1)) { // diagonal /
 
@@ -172,7 +171,8 @@ public class GameLogic {
 
   }
 
-  // TODO: Make this a clever algorithm that detects stalemates for non-full boards
+  // TODO: Make this a clever algorithm that detects stalemates for non-full
+  // boards
   public boolean staleMate() {
     for (int[] row : board) {
       for (int val : row) {
@@ -198,7 +198,6 @@ public class GameLogic {
     }
     return count == 4; // If we've found 4 in a row
   }
-
 
   public void reset() {
     for (int[] row : board) {

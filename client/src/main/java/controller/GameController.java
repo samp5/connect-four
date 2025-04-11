@@ -7,6 +7,7 @@ import controller.utils.CoordSystem;
 import controller.utils.CoordUtils;
 import javafx.animation.PathTransition;
 import javafx.fxml.FXML;
+import javafx.scene.ImageCursor;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -27,6 +28,10 @@ import network.Player;
 import network.Player.PlayerRole;
 
 import javafx.util.Duration;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Should bind directly to the main game fxml and provide UI logic
@@ -59,14 +64,19 @@ public class GameController {
   private Pane chipPane2;
   private GameLogic gameLogic;
 
-
   private class Piece extends Circle {
     public Point position;
+    public PlayerRole role;
+
+    public PlayerRole getPlayer() {
+      return role;
+    }
 
     Piece(PlayerRole player, Point pos) {
       super();
 
       position = pos.copy();
+      role = player;
 
       super.setCenterX(position.getX());
       super.setCenterY(position.getY());
@@ -107,11 +117,14 @@ public class GameController {
   public void initialize() {
     gameLogic = new GameLogic();
 
-    // HACK: for now hardcode the current player, this call should be made on registration
+    // HACK: for now hardcode the current player, this call should be made on
+    // registration
     GameLogic.setLocalPlayer(new Player("dummy1", 0));
     GameLogic.setRemotePlayer(new Player("dummy2", 1));
     GameLogic.setCurrentPlayerRole(PlayerRole.PlayerOne);
     GameLogic.setLocalPlayerRole(PlayerRole.PlayerOne);
+
+    setCustomCursors();
 
     NetworkClient.bindGameController(this);
     foregroundPane.toFront();
@@ -138,6 +151,11 @@ public class GameController {
     setHandlers();
   }
 
+  private void setCustomCursors() {
+    chipPane1.setCursor(new ImageCursor(new Image("/assets/hand_cursor.png")));
+    chipPane2.setCursor(new ImageCursor(new Image("/assets/hand_cursor.png")));
+  }
+
   private void handleRelease(MouseEvent e) {
     // this means the piece is NOT in a valid position
     if (dropHint == null) {
@@ -148,13 +166,7 @@ public class GameController {
     BoardPosition rowCol = CoordUtils.toRowCol(dropHint.position).get();
 
     // calc the point for the top of this column
-    Point topOfCol =
-        CoordUtils.onGameScene(CoordUtils.fromRowCol(0, rowCol.getColumn()));
-
-    // adjust the top y coord
-    topOfCol.setY(
-        (overlayPane.getHeight() - foregroundPane.getHeight()) / 2
-            - draggedPiece.getRadius() * 2);
+    Point topOfCol = CoordUtils.topOfColumn(rowCol.getColumn());
 
     // construct a path
     Path path = new Path();
@@ -164,7 +176,7 @@ public class GameController {
 
     // build the animation
     PathTransition pathTransition = new PathTransition();
-    pathTransition.setDuration(Duration.millis(1.5 * draggedPiece.position.distanceTo(topOfCol)));
+    pathTransition.setDuration(Duration.millis(1 * draggedPiece.position.distanceTo(topOfCol)));
     pathTransition.setPath(path);
     pathTransition.setNode(draggedPiece);
     pathTransition.play();
@@ -175,7 +187,6 @@ public class GameController {
       Point topSlot = CoordUtils.fromRowCol(GameLogic.numRows() - 1, rowCol.getColumn());
       Piece pieceToDrop = new Piece(gameLogic.getCurrentPlayerRole(), topSlot.copy());
       midgroundPane.getChildren().add(pieceToDrop);
-
 
       Path pth = new Path();
       pth.getElements().add(new MoveTo(topSlot.getX(), topSlot.getY()));
@@ -189,6 +200,7 @@ public class GameController {
       pTrans.setNode(pieceToDrop);
 
       pTrans.play();
+      midgroundPane.getChildren().remove(dropHint);
       dropHint = null;
 
       pTrans.setOnFinished(k -> {
@@ -204,6 +216,7 @@ public class GameController {
         }
       });
       draggedPiece = null;
+      dropHint = null;
     });
 
   }
@@ -275,8 +288,7 @@ public class GameController {
 
   public void recieveMove(int col) {
     gameLogic.getAvailableRow(col).ifPresentOrElse((r) -> {
-      Piece toPlay =
-          new Piece(GameLogic.getRemotePlayer().getRole(), CoordUtils.fromRowCol(r, col));
+      Piece toPlay = new Piece(GameLogic.getRemotePlayer().getRole(), CoordUtils.fromRowCol(r, col));
 
       // TODO: Add animation for remote player move
       midgroundPane.getChildren().add(toPlay);
@@ -291,8 +303,7 @@ public class GameController {
   }
 
   private boolean gameIsOver() {
-    Optional<BoardPosition[]> winningComboOpt =
-        gameLogic.checkWin(gameLogic.getCurrentPlayerRole());
+    Optional<BoardPosition[]> winningComboOpt = gameLogic.checkWin(gameLogic.getCurrentPlayerRole());
 
     if (winningComboOpt.isPresent()) {
       gameOver(gameLogic.getCurrentPlayerRole(), winningComboOpt.get());
@@ -306,18 +317,75 @@ public class GameController {
   }
 
   private void gameOver(PlayerRole winner, BoardPosition[] winningPositions) {
+
     // TODO: Animations for winning combination
+
+    gameLogic.setCurrentPlayerRole(PlayerRole.None);
+
     Piece[] winningPieces = new Piece[4];
     for (int i = 0; i < 4; i++) {
       BoardPosition bp = winningPositions[i];
-      System.out.println("bp:" + bp.getRow() + bp.getColumn());
-      winningPieces[i] = new Piece(winner, CoordUtils.fromRowCol(bp.getRow(), bp.getColumn()));
-      System.out.println(
-          "piece loc:" + winningPieces[i].getCenterX() + winningPieces[i].getCenterY());
+      winningPieces[i] = new Piece(winner, CoordUtils.fromRowCol(bp.getRow(),
+          bp.getColumn()));
     }
-    System.out.println(winner + "wins!");
-    midgroundPane.getChildren().setAll(winningPieces);
-    gameLogic.reset();
+    // // midgroundPane.getChildren().setAll(winningPieces);
+    //
+    // Arrays.sort(winningPieces, (p1, p2) -> {
+    // return (int) (p2.position.getY() - p1.position.getY());
+    // });
+
+    Object[] pieces = midgroundPane.getChildren().toArray();
+    for (Object pi : pieces) {
+      Piece p = (Piece) pi;
+
+      // calc the point for the top of this column
+      Point topOfCol = CoordUtils.topOfColumn(CoordUtils.toRowCol(p.position).get().getColumn());
+
+      Path path = new Path();
+      path.getElements().add(new MoveTo(p.getCenterX(), p.getCenterY()));
+      path.getElements()
+          .add(new LineTo(topOfCol.getX(), topOfCol.getY()));
+
+      // build the animation
+      PathTransition pathTransition = new PathTransition();
+      pathTransition.setDuration(Duration.millis(1.5 * p.position.distanceTo(topOfCol) + Math.random() * 20));
+      pathTransition.setPath(path);
+      pathTransition.setNode(p);
+      pathTransition.play();
+      pathTransition.setOnFinished(e -> {
+
+        midgroundPane.getChildren().remove(p);
+
+        double retX = p.getPlayer() == PlayerRole.PlayerOne ? p.getRadius() + 10
+            : gamePane.getWidth() - p.getRadius() - 10;
+
+        Point returnPoint = new Point(retX, overlayPane.getHeight() - p.getRadius() - 10,
+            CoordSystem.GamePane);
+
+        Piece pieceToReturn = new Piece(p.getPlayer(), topOfCol);
+        overlayPane.getChildren().add(pieceToReturn);
+
+        Path path2 = new Path();
+        path2.getElements().add(new MoveTo(pieceToReturn.getCenterX(), pieceToReturn.getCenterY()));
+        path2.getElements()
+            .add(new LineTo(returnPoint.getX(), returnPoint.getY()));
+
+        // build the animation
+        PathTransition pathTransition2 = new PathTransition();
+        pathTransition2
+            .setDuration(Duration.millis(1.5 * pieceToReturn.position.distanceTo(returnPoint) + Math.random() * 20));
+        pathTransition2.setPath(path2);
+        pathTransition2.setNode(pieceToReturn);
+        pathTransition2.play();
+        pathTransition2.setOnFinished(g -> {
+          overlayPane.getChildren().remove(pieceToReturn);
+        });
+
+      });
+      System.out.println(winner + "wins!");
+      gameLogic.reset();
+    }
+
   }
 
   private void staleMate() {

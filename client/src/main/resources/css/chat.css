@@ -1,9 +1,52 @@
+@font-face {
+  -fx-font-family: "Mota Pixel Regular";
+  src: url("fonts/MotaPixel-Regular.otf");
+}
+
+@font-face {
+  -fx-font-family: "Mota Pixel Light";
+  src: url("fonts/MotaPixel-Light.otf");
+}
+
+@font-face {
+  -fx-font-family: "Mota Pixel Bold Shadow 4 Long";
+  src: url("fonts/MotaPixel-Bold-Shadow-4-Long.otf");
+}
+
 .send-button {
 }
 
 .debug {
   -fx-border-color: black;
 }
+
 .text {
-  -fx-font-size: 18.0;
+  -fx-font-family:  monospace;
+  -fx-font-size: 20.0;
+}
+
+/* Text that is displayed in the TextFlow for user input */
+.text-chat-input-display {
+  -fx-font-family: "Mota Pixel Regular";
+  -fx-font-weight: normal;
+  -fx-font-size:24.0;
+}
+.text-chat-input-display-bold {
+  -fx-font-family: "Mota Pixel Bold Shadow 4 Long";
+  -fx-font-size: 24.0;
+}
+.text-chat-input-display-light {
+  -fx-font-family: "Mota Pixel Light";
+  -fx-font-size: 24.0;
+}
+
+/* Text that is displayed in chat messages */
+.text-chat-history {
+  -fx-font-family: "Mota Pixel Regular";
+  -fx-font-size: 24.0;
+}
+/* Text that is displayed in chat messages */
+.text-chat-timestamp {
+  -fx-font-family: "Mota Pixel Light";
+  -fx-font-size: 14.0;
 }

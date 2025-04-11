@@ -3,13 +3,23 @@ package controller.utils;
 import java.util.Optional;
 import logic.GameLogic;
 
-
 public class CoordUtils {
   public final static int pieceRadius = 45;
   public final static int gamePaneWidth = 800;
   public final static int gamePaneHeight = 720;
   public final static int boardWidth = 630;
   public final static int boardHeight = 540;
+
+  /**
+   * @param col the desired column
+   * @return A {@code Point} directly above the top slot of the specifed column.
+   *         This point will be relative to the {@code GamePane}
+   */
+  public static Point topOfColumn(int col) {
+    Point top = CoordUtils.onGameScene(CoordUtils.fromRowCol(0, col));
+    top.setY((gamePaneHeight - boardHeight) / 2 - pieceRadius * 2);
+    return top;
+  }
 
   public static Optional<Point> onBoard(Point from) {
     switch (from.relativeTo) {

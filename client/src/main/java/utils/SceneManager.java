@@ -2,7 +2,9 @@ package utils;
 
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class SceneManager {
@@ -22,11 +24,18 @@ public class SceneManager {
       stage.setScene(scene);
       stage.setResizable(false);
       stage.show();
+
+      setCustomCursor(scene);
+
       scene.getStylesheets().add("/css/chat.css");
       scene.getStylesheets().add("/css/game.css");
       scene.getStylesheets().add("/css/menu.css");
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  private static void setCustomCursor(Scene scene) {
+    scene.setCursor(new ImageCursor(new Image("/assets/regular_cursor.png")));
   }
 }

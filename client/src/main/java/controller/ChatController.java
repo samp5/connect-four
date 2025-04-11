@@ -7,6 +7,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
@@ -63,8 +64,9 @@ public class ChatController {
       public void changed(ObservableValue<? extends String> observable, String oldValue,
           String newValue) {
         if (newValue != null) {
+
           chatEditorDisplay.getChildren()
-              .setAll(Markup.markup(newValue, chatEditorInput.getFont()));
+              .setAll(Markup.markup(newValue));
         }
       }
     });
@@ -82,7 +84,6 @@ public class ChatController {
     appendMessage(msg, GameLogic.getLocalPlayer().getUsername());
     chatEditorInput.clear();
     chatEditorDisplay.getChildren().setAll();
-
     // TODO:
     // NetworkClient.sendChatMessage(msg);
   }
@@ -97,8 +98,8 @@ public class ChatController {
       FXMLLoader loader =
           new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
       Region msgBox = loader.load();
-      ChatMessage msgCTL = loader.getController();
-      msgCTL.set(username, 0, msg, chatEditorInput.getFont(), true);
+      ChatMessage newMessageCTL = loader.getController();
+      newMessageCTL.build(username, 0, msg, true);
       this.chatHistory.getChildren().add(msgBox);
     } catch (IOException e) {
       e.printStackTrace();

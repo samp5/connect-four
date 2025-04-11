@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -25,7 +24,7 @@ public class ChatMessage {
   @FXML
   TextFlow senderFlow;
 
-  public void set(String sender, int senderID, String msg, Font f, boolean local) {
+  public void build(String sender, int senderID, String msg, boolean local) {
     this.senderName = sender;
     this.senderID = senderID;
     this.message = msg;
@@ -35,9 +34,9 @@ public class ChatMessage {
     } else {
       rowBox.setAlignment(Pos.CENTER_LEFT);
     }
-    messageFlow.getChildren().setAll(Markup.markup(this.message, f));
+    messageFlow.getChildren().setAll(Markup.markup(this.message));
     Text timestampTxt = new Text(this.sendTime.format(DateTimeFormatter.ofPattern("h:m a")));
-    timestampTxt.setFont(new Font(f.getFamily(), 10.0));
+    timestampTxt.getStyleClass().add("text-chat-timestamp");
     timeStampFlow.getChildren().setAll(timestampTxt);
   }
 

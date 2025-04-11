@@ -34,10 +34,7 @@
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </padding>
                               </TextFlow>
-                              <TextArea fx:id="chatEditorInput" wrapText="true">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font></TextArea>
+                              <TextArea fx:id="chatEditorInput" wrapText="true"> </TextArea>
                            </children>
                         </StackPane>
                      </children>
