@@ -6,6 +6,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 
+import network.Player.PlayerRole;
+
 /**
  * Maybe rework this into an abstract class situation
  */
@@ -26,6 +28,8 @@ public class Message implements Serializable {
   private Integer winner;
   private String chatMessage;
   private Player player;
+  private Player player2;
+  private PlayerRole role;
   private boolean success;
 
 
@@ -59,6 +63,16 @@ public class Message implements Serializable {
   public Message(Player player) {
     this.type = Type.DISCONNECT;
     this.player = player;
+  }
+
+  /**
+   * For game start messages
+   */
+  public Message(Player player1, Player player2, PlayerRole role) {
+    this.type = Type.START;
+    this.player = player1;
+    this.player2 = player2;
+    this.role = role;
   }
 
   /**
@@ -140,6 +154,14 @@ public class Message implements Serializable {
 
   public Player getPlayer() {
     return player;
+  }
+
+  public Player getPlayer2() {
+    return player2;
+  }
+
+  public PlayerRole getRole() {
+    return role;
   }
 
   public boolean isSuccess() {

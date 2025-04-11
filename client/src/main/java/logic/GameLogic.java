@@ -17,25 +17,29 @@ public class GameLogic {
   private final int[][] board = new int[6][7];
   private static PlayerRole currentPlayerRole = PlayerRole.PlayerOne;
 
-  // TODO: Make sure that the registration message initializes this in GameLogic
+
   public static void setLocalPlayer(Player p) {
     localPlayer = p;
   }
 
-  // TODO: Make sure that the registration message initializes this in GameLogic
-  public static void setCurrentPlayerRole(PlayerRole p) {
-    currentPlayerRole = p;
-  }
-
-  // TODO: Make sure that the registration message initializes this in GameLogic
   public static void setRemotePlayer(Player p) {
     remotePlayer = p;
   }
 
-  public static void initialize(Player local, Player remote, PlayerRole startingPlayer) {
+  public static void setCurrentPlayerRole(PlayerRole p) {
+    currentPlayerRole = p;
+  }
+
+  public static void initialize(Player local, Player remote, PlayerRole localRole) {
     localPlayer = local;
     remotePlayer = remote;
-    currentPlayerRole = startingPlayer;
+
+    localPlayer.setRole(localRole);
+    if (localRole == PlayerRole.PlayerOne) {
+      remotePlayer.setRole(PlayerRole.PlayerTwo);
+    } else {
+      remotePlayer.setRole(PlayerRole.PlayerOne);
+    }
   }
 
   public GameLogic() {

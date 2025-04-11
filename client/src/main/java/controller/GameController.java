@@ -117,15 +117,6 @@ public class GameController {
   public void initialize() {
     gameLogic = new GameLogic();
 
-    // HACK: for now hardcode the current player, this call should be made on
-    // registration
-    GameLogic.setLocalPlayer(new Player("dummy1", 0));
-    GameLogic.setRemotePlayer(new Player("dummy2", 1));
-    GameLogic.setCurrentPlayerRole(PlayerRole.PlayerOne);
-    GameLogic.setLocalPlayerRole(PlayerRole.PlayerOne);
-
-    setCustomCursors();
-
     NetworkClient.bindGameController(this);
     foregroundPane.toFront();
     backgroundPane.toBack();
@@ -208,8 +199,7 @@ public class GameController {
         gameLogic.placePiece(rowCol.getRow(), rowCol.getColumn(),
             gameLogic.getCurrentPlayerRole());
 
-        // TODO:
-        // NetworkClient.sendMove(rowCol.getValue());
+        NetworkClient.sendMove(rowCol.getColumn());
 
         if (!gameIsOver()) {
           gameLogic.switchPlayer();
@@ -222,7 +212,7 @@ public class GameController {
   }
 
   private void handleDrag(MouseEvent e, PlayerRole player) {
-    if (player != gameLogic.getCurrentPlayerRole()) {
+    if (GameLogic.getLocalPlayer().getRole() != gameLogic.getCurrentPlayerRole()) {
       return;
     }
 
@@ -288,10 +278,12 @@ public class GameController {
 
   public void recieveMove(int col) {
     gameLogic.getAvailableRow(col).ifPresentOrElse((r) -> {
-      Piece toPlay = new Piece(GameLogic.getRemotePlayer().getRole(), CoordUtils.fromRowCol(r, col));
+      Player player = GameLogic.getRemotePlayer();
+      Piece toPlay = new Piece(player.getRole(), CoordUtils.fromRowCol(r, col));
 
       // TODO: Add animation for remote player move
       midgroundPane.getChildren().add(toPlay);
+      gameLogic.placePiece(gameLogic.getAvailableRow(col).orElse(6), col, player.getRole());
 
       if (!gameIsOver()) {
         gameLogic.switchPlayer();

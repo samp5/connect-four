@@ -22,6 +22,14 @@ public class ClientManager {
   private static final int PORT = 8000;
   private static Selector selector;
   private static HashSet<ServerClient> clients = new HashSet<>();
+  private static HashSet<ServerClient> toStopListening = new HashSet<>();
+
+  /**
+   * Remove a server client from this managed listener.
+   */
+  public static void removeClientListener(ServerClient connection) {
+    toStopListening.add(connection);
+  }
 
   /**
    * Connect to clients, while displaying a loading animation.
@@ -57,9 +65,6 @@ public class ClientManager {
    * Gathers all messages from all clients connected to the manager.
    */
   private static void recieveAllMessages() {
-    // list of clients to remove, as cannot remove during iteration
-    HashSet<ServerClient> toRemove = new HashSet<>();
-
     // get messages, if any, and handle
     for (ServerClient connection : clients) {
       ArrayList<Message> recievedMsgs = connection.getMessages();
@@ -68,7 +73,7 @@ public class ClientManager {
 			    case CHAT:
 			    	break;
 			    case DISCONNECT:
-            toRemove.add(connection);
+            toStopListening.add(connection);
             PlayerRegistry.logoutPlayer(msg.getPlayer());
 			    	break;
 			    case LOGIN:
@@ -85,7 +90,8 @@ public class ClientManager {
     }
 
     // remove that which needs removed
-    clients.removeAll(toRemove);
+    clients.removeAll(toStopListening);
+    toStopListening.clear();
   }
 
   /**

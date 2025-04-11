@@ -50,6 +50,8 @@ public class PlayerRegistry {
    * queue.
    */
   public static void logoutPlayer(Player player) {
+    if (player == null) return;
+
     String name = player.getUsername();
     activePlayers.remove(name);
     GameManager.removeFromQueue(player);

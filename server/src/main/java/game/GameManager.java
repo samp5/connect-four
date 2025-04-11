@@ -2,6 +2,7 @@ package game;
 
 import network.Player;
 import network.ServerClient;
+import network.ClientManager;
 
 /**
  * Handles active games, game queues, and beginning new games
@@ -19,8 +20,13 @@ public class GameManager {
       return;
     }
 
+    // once the game is started, the client manager should not keep watching the
+    // clients, so take listening away
+    ClientManager.removeClientListener(waiting);
+    ClientManager.removeClientListener(client);
+
     // otherwise start game with the waiting player, then clear the wait status
-    new Game(waiting, client).begin();
+    new Game(waiting, client);
     waiting = null;
   }
 

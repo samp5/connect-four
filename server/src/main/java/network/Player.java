@@ -3,11 +3,8 @@ package network;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * An instance of a player
- */
 public class Player implements Serializable {
-  // Which player number this player controls
+
   public enum PlayerRole {
     PlayerOne, PlayerTwo, None
   }

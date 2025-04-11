@@ -10,6 +10,8 @@ import controller.ChatController;
 import controller.GameController;
 import javafx.application.Platform;
 import utils.SceneManager;
+import logic.GameLogic;
+import network.Player.PlayerRole;
 
 /**
  * Connect to server
@@ -80,9 +82,11 @@ public class NetworkClient {
       case CHAT:
         break;
       case MOVE:
+        gameCTL.recieveMove(msg.getColumn());
         break;
       case START:
         SceneManager.showScene("main.fxml");
+        GameLogic.initialize(msg.getPlayer(), msg.getPlayer2(), msg.getRole());
         break;
       default:
         break;
@@ -139,11 +143,9 @@ public class NetworkClient {
 
     @Override
     public void run() {
-      System.out.println("NetworkThread began");
       while (!socket.isClosed()) {
         getMessages();
       }
-      System.out.println("NetworkThread ended");
     }
   }
 }
