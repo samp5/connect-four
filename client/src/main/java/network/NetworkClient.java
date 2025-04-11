@@ -80,6 +80,7 @@ public class NetworkClient {
         }
         break;
       case CHAT:
+        chatCTL.recieveMessage(msg.getChatMessage(), msg.getUsername());
         break;
       case MOVE:
         gameCTL.recieveMove(msg.getColumn());

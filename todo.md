@@ -1,9 +1,10 @@
 ## Client
 
 ### Game Screen
-- [ ] Design background (ART) 
+- [x] Design background (ART) 
 - [ ] Add move effects
 - [ ] Additional animations on overlay layer for *stimulation*
+    - [x] clouds
 
 #### Long-term
 - [ ] Add AI with levels of difficulty

@@ -2,6 +2,7 @@ package controller.utils;
 
 import java.util.Optional;
 import logic.GameLogic;
+import network.Player.PlayerRole;
 
 public class CoordUtils {
   public final static int pieceRadius = 45;
@@ -19,6 +20,23 @@ public class CoordUtils {
     Point top = CoordUtils.onGameScene(CoordUtils.fromRowCol(0, col));
     top.setY((gamePaneHeight - boardHeight) / 2 - pieceRadius * 2);
     return top;
+  }
+
+  public static Point chipHolder(PlayerRole role) {
+    Point p = new Point(0, gamePaneHeight - pieceRadius - 10, CoordSystem.GamePane);
+    switch (role) {
+      case None:
+        break;
+      case PlayerOne:
+        p.setX(pieceRadius + 10);
+        break;
+      case PlayerTwo:
+        p.setX(gamePaneWidth - pieceRadius - 10);
+        break;
+      default:
+        break;
+    }
+    return p;
   }
 
   public static Optional<Point> onBoard(Point from) {

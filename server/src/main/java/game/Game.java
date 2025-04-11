@@ -8,7 +8,6 @@ import network.ServerClient;
 import network.Player.PlayerRole;
 import registry.PlayerRegistry;
 
-
 /**
  * An instance of a connect-4 game with two players
  */
@@ -39,35 +38,42 @@ public class Game {
           handleMessages(player1);
           handleMessages(player2);
         }
-      } catch (IOException e) {}
+      } catch (IOException e) {
+      }
     }
 
     private void handleMessages(ServerClient connection) throws IOException {
       ArrayList<Message> messages = connection.getMessages();
       for (Message msg : messages) {
         switch (msg.getType()) {
-			    case CHAT:
-			    	break;
-          case DISCONNECT:
-            System.out.printf("Client %s disconnected\n", msg.getPlayer().getUsername());
-            PlayerRegistry.logoutPlayer(player1.getPlayer());
-            PlayerRegistry.logoutPlayer(player2.getPlayer());
-            active = false;
-			    	return;
-			    case LOGIN:
-			    	break;
-			    case MOVE:
+          case CHAT:
             // redirect message to other player
             if (connection.getPlayer().getID() == player1.getPlayer().getID()) {
               player2.sendMessage(msg);
             } else {
               player1.sendMessage(msg);
             }
-			    	break;
-			    case START:
-			    	break;
-			    default:
-			    	break;
+            break;
+          case DISCONNECT:
+            System.out.printf("Client %s disconnected\n", msg.getPlayer().getUsername());
+            PlayerRegistry.logoutPlayer(player1.getPlayer());
+            PlayerRegistry.logoutPlayer(player2.getPlayer());
+            active = false;
+            return;
+          case LOGIN:
+            break;
+          case MOVE:
+            // redirect message to other player
+            if (connection.getPlayer().getID() == player1.getPlayer().getID()) {
+              player2.sendMessage(msg);
+            } else {
+              player1.sendMessage(msg);
+            }
+            break;
+          case START:
+            break;
+          default:
+            break;
         }
       }
     }

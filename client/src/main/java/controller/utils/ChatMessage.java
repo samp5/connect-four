@@ -40,5 +40,6 @@ public class ChatMessage {
     timeStampFlow.getChildren().setAll(timestampTxt);
   }
 
-  public void initialize() {}
+  public void initialize() {
+  }
 }

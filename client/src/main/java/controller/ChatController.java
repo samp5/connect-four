@@ -8,6 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -39,6 +40,8 @@ public class ChatController {
   TextFlow chatEditorDisplay;
   @FXML
   VBox chatHistory;
+  @FXML
+  ScrollPane chatHistoryScroll;
 
   @FXML
   // something like this
@@ -51,6 +54,7 @@ public class ChatController {
     chatEditorInput.setOpacity(0);
     chatEditorInput.toBack();
     chatEditorDisplay.toFront();
+    chatHistoryScroll.vvalueProperty().bind(chatHistory.heightProperty());
   }
 
   private void setHandlers() {
@@ -83,8 +87,7 @@ public class ChatController {
     appendMessage(msg, GameLogic.getLocalPlayer().getUsername());
     chatEditorInput.clear();
     chatEditorDisplay.getChildren().setAll();
-    // TODO:
-    // NetworkClient.sendChatMessage(msg);
+    NetworkClient.sendChatMessage(msg);
   }
 
   public void recieveMessage(String message, String username) {
@@ -94,11 +97,10 @@ public class ChatController {
   // // when we need to display a new message
   public void appendMessage(String msg, String username) {
     try {
-      FXMLLoader loader =
-          new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
+      FXMLLoader loader = new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
       Region msgBox = loader.load();
       ChatMessage newMessageCTL = loader.getController();
-      newMessageCTL.build(username, 0, msg, true);
+      newMessageCTL.build(username, 0, msg, GameLogic.getLocalPlayer().getUsername() == username);
       this.chatHistory.getChildren().add(msgBox);
     } catch (IOException e) {
       e.printStackTrace();

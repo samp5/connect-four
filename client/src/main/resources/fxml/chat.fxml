@@ -15,7 +15,7 @@
    <children>
       <VBox prefHeight="540.0" prefWidth="380.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ScrollPane hbarPolicy="NEVER" minViewportHeight="600.0" prefHeight="653.0" prefViewportHeight="600.0" prefWidth="380.0" styleClass="debug">
+            <ScrollPane fx:id="chatHistoryScroll" hbarPolicy="NEVER" minViewportHeight="600.0" prefHeight="653.0" prefViewportHeight="600.0" prefWidth="380.0" styleClass="debug">
                <content>
                   <VBox fx:id="chatHistory" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="380.0" styleClass="debug" />
                </content></ScrollPane>
