@@ -66,7 +66,9 @@ public class PlayerRegistry {
    * ID's must be unique, so returns an id, while incrementing.
    */
   public static long getNextID() {
-    return nextid++;
+    long ret = nextid;
+    nextid += 1;
+    return ret;
   }
 
   /**

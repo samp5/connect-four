@@ -176,10 +176,10 @@ public class GameController {
     gameLogic = new GameLogic();
 
     // registration
-    GameLogic.setLocalPlayer(new Player("dummy1", 0));
-    // GameLogic.setRemotePlayer(new Player("dummy2", 1));
-    GameLogic.setCurrentPlayerRole(PlayerRole.PlayerOne);
-    GameLogic.setLocalPlayerRole(PlayerRole.PlayerOne);
+    // GameLogic.setLocalPlayer(new Player("dummy1", 0));
+    // // GameLogic.setRemotePlayer(new Player("dummy2", 1));
+    // GameLogic.setCurrentPlayerRole(PlayerRole.PlayerOne);
+    // GameLogic.setLocalPlayerRole(PlayerRole.PlayerOne);
 
     setCustomCursors();
     buildClouds();

@@ -9,18 +9,18 @@ public class Player implements Serializable {
     PlayerOne, PlayerTwo, None
   }
 
-  public Player(String username, String password, long id) {
+  public Player(String username, String password, Long id) {
     this.username = username;
     this.password = password;
     this.ID = id;
   }
-  public Player(String userName, long id) {
+  public Player(String userName, Long id) {
     this.username = userName;
     this.ID = id;
   }
 
   // a global unique id for all registered players with the server
-  long ID;
+  Long ID;
 
   // this players username and password
   String username, password;
@@ -43,7 +43,7 @@ public class Player implements Serializable {
     return playerInGame;
   }
 
-  public long getID() {
+  public Long getID() {
     return ID;
   }
 
