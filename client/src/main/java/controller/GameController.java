@@ -112,11 +112,10 @@ public class GameController {
   public class Cloud extends Rectangle {
 
     enum CloudType {
-      Small,
-      Large;
+      Small, Large;
 
-      private final String[] smallClouds = { "cloud1.png", "cloud2.png" };
-      private final String[] largeClouds = { "cloud3.png" };
+      private final String[] smallClouds = {"cloud1.png", "cloud2.png"};
+      private final String[] largeClouds = {"cloud3.png"};
 
       public int getWidth() {
         switch (this) {
@@ -178,7 +177,7 @@ public class GameController {
 
     // registration
     GameLogic.setLocalPlayer(new Player("dummy1", 0));
-    GameLogic.setRemotePlayer(new Player("dummy2", 1));
+    // GameLogic.setRemotePlayer(new Player("dummy2", 1));
     GameLogic.setCurrentPlayerRole(PlayerRole.PlayerOne);
     GameLogic.setLocalPlayerRole(PlayerRole.PlayerOne);
 
@@ -192,7 +191,8 @@ public class GameController {
     overlayPane.toFront();
     overlayPane.setMouseTransparent(true);
     gamePaneBackground.setBackground(
-        new Background(new BackgroundImage(new Image("/assets/game_background.png"), BackgroundRepeat.NO_REPEAT,
+        new Background(new BackgroundImage(new Image("/assets/game_background.png"),
+            BackgroundRepeat.NO_REPEAT,
             BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
             new BackgroundSize(720, 720, false, false, false, false))));
     foregroundPane
@@ -224,8 +224,7 @@ public class GameController {
     Cloud[] clouds = {
         new Cloud(CloudType.Large), new Cloud(CloudType.Small),
         new Cloud(CloudType.Small), new Cloud(CloudType.Large),
-        new Cloud(CloudType.Large), new Cloud(CloudType.Small),
-        new Cloud(CloudType.Large), new Cloud(CloudType.Large) };
+        new Cloud(CloudType.Large), new Cloud(CloudType.Large)};
 
     gamePaneBackground.getChildren().addAll(clouds);
     buildCloudAnimation(clouds);
@@ -241,13 +240,15 @@ public class GameController {
       Cloud c = clouds[i];
       Path path = new Path();
 
-      double yCoord = minAcceptableCloud + Math.random() * (maxAcceptableCloud - minAcceptableCloud);
+      double yCoord =
+          minAcceptableCloud + Math.random() * (maxAcceptableCloud - minAcceptableCloud);
 
       path.getElements().add(new MoveTo(-c.type.getWidth(), yCoord));
       path.getElements().add(new LineTo(CoordUtils.gamePaneWidth + c.type.getWidth(), yCoord));
 
       PathTransition pathTransition = new PathTransition();
-      pathTransition.setDuration(Duration.seconds(Math.random() * (maxTimeAcross - minTimeAcross) + minTimeAcross));
+      pathTransition.setDuration(
+          Duration.seconds(Math.random() * (maxTimeAcross - minTimeAcross) + minTimeAcross));
       pathTransition.setPath(path);
       pathTransition.setNode(c);
       pathTransition.setDelay(Duration.seconds((maxTimeAcross / clouds.length) * i));
@@ -317,7 +318,9 @@ public class GameController {
           gameLogic.switchPlayer();
         }
       });
-      NetworkClient.sendMove(rowCol.getColumn());
+      if (GameLogic.getRemotePlayer() != null) {
+        NetworkClient.sendMove(rowCol.getColumn());
+      }
       draggedPiece = null;
     });
 
@@ -406,8 +409,9 @@ public class GameController {
       path.getElements().addAll(new MoveTo(chipHolder.getX(), chipHolder.getY()),
           new LineTo(topOfCol.getX(), topOfCol.getY()));
 
-      PathTransition pathTransition = new PathTransition(Duration.millis(1.5 * chipHolder.distanceTo(topOfCol)), path,
-          toPlay);
+      PathTransition pathTransition =
+          new PathTransition(Duration.millis(1.5 * chipHolder.distanceTo(topOfCol)), path,
+              toPlay);
       pathTransition.play();
 
       pathTransition.setOnFinished(e -> {
@@ -420,9 +424,10 @@ public class GameController {
 
         Path dropPath = new Path(new MoveTo(topSlot.getX(), topSlot.getY()),
             new LineTo(finalPosition.getX(), finalPosition.getY()));
-        PathTransition dropTransition = new PathTransition(Duration.millis(1.5 * topSlot.distanceTo(finalPosition)),
-            dropPath,
-            toDrop);
+        PathTransition dropTransition =
+            new PathTransition(Duration.millis(1.5 * topSlot.distanceTo(finalPosition)),
+                dropPath,
+                toDrop);
         dropTransition.play();
 
         dropTransition.setOnFinished(f -> {
@@ -442,7 +447,8 @@ public class GameController {
   }
 
   private boolean gameIsOver() {
-    Optional<BoardPosition[]> winningComboOpt = gameLogic.checkWin(gameLogic.getCurrentPlayerRole());
+    Optional<BoardPosition[]> winningComboOpt =
+        gameLogic.checkWin(gameLogic.getCurrentPlayerRole());
 
     if (winningComboOpt.isPresent()) {
       gameOver(gameLogic.getCurrentPlayerRole(), winningComboOpt.get());
@@ -479,7 +485,8 @@ public class GameController {
 
       // build the animation
       PathTransition pathTransition = new PathTransition();
-      pathTransition.setDuration(Duration.millis(1.5 * p.position.distanceTo(topOfCol) + Math.random() * 20));
+      pathTransition
+          .setDuration(Duration.millis(1.5 * p.position.distanceTo(topOfCol) + Math.random() * 20));
       pathTransition.setPath(path);
       pathTransition.setNode(p);
       pathTransition.play();
@@ -500,7 +507,8 @@ public class GameController {
         // build the animation
         PathTransition pathTransition2 = new PathTransition();
         pathTransition2
-            .setDuration(Duration.millis(1.5 * pieceToReturn.position.distanceTo(returnPoint) + Math.random() * 20));
+            .setDuration(Duration
+                .millis(1.5 * pieceToReturn.position.distanceTo(returnPoint) + Math.random() * 20));
         pathTransition2.setPath(path2);
         pathTransition2.setNode(pieceToReturn);
         pathTransition2.play();

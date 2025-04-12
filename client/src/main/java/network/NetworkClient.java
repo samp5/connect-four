@@ -36,7 +36,8 @@ public class NetworkClient {
   private static Player player;
 
   // connect to a host
-  public static boolean connect(String host, int port, String username, String password) throws IOException {
+  public static boolean connect(String host, int port, String username, String password)
+      throws IOException {
     if (socket == null) {
       socket = new Socket(host, port);
       listener = new NetworkThread(socket);

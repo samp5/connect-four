@@ -14,6 +14,8 @@
 }
 
 .send-button {
+  -fx-font-family: monospace;
+  -fx-font-size:24.0;
 }
 
 .debug {
@@ -28,7 +30,6 @@
 /* Text that is displayed in the TextFlow for user input */
 .text-chat-input-display {
   -fx-font-family: "Mota Pixel Regular";
-  -fx-font-weight: normal;
   -fx-font-size:24.0;
 }
 .text-chat-input-display-bold {
@@ -49,4 +50,7 @@
 .text-chat-timestamp {
   -fx-font-family: "Mota Pixel Light";
   -fx-font-size: 14.0;
+}
+.scroll-pane .viewport {
+       -fx-background-color: transparent;
 }

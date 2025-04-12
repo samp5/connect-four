@@ -12,13 +12,13 @@
     - [ ] Display score (big number make brain go brrrr)
 
 ### Chat
-- [ ] Design background (ART) 
+- [x] Design background (ART) 
 - [ ] Design message UI 
-    - [ ] Background images (ART)
+    - [x] Background images (ART)
     - [ ] Message info layout, etc.
 - [ ] Design message UX 
     - [ ] Handle hovers, clicks, etc
-- [ ] Style all control elements with pixel art (ART)
+- [x] Style all control elements with pixel art (ART)
 
 
 ## Server

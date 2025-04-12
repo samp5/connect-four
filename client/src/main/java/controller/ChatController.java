@@ -10,6 +10,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -42,19 +49,28 @@ public class ChatController {
   VBox chatHistory;
   @FXML
   ScrollPane chatHistoryScroll;
-
   @FXML
-  // something like this
-  private Collection<String> message;
+  BorderPane chatPane;
 
   public void initialize() {
     NetworkClient.bindChatController(this);
     System.out.println("Chat controller initialized");
     setHandlers();
+    chatHistory.getStyleClass().add("transparent-bkgd");
     chatEditorInput.setOpacity(0);
     chatEditorInput.toBack();
     chatEditorDisplay.toFront();
     chatHistoryScroll.vvalueProperty().bind(chatHistory.heightProperty());
+    System.out.println(chatHistoryScroll.getStyleClass());
+    chatPane.setBackground(new Background(
+        new BackgroundImage(new Image("/assets/chat_background.png", 360, 720, false, true, false),
+            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+            new BackgroundSize(360, 720, false, false, false, false))));
+
+    sendButton
+        .setBackground(new Background(new BackgroundImage(new Image("/assets/send_button.png"),
+            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+            new BackgroundSize(100, 50, false, false, false, false))));
   }
 
   private void setHandlers() {
@@ -97,7 +113,8 @@ public class ChatController {
   // // when we need to display a new message
   public void appendMessage(String msg, String username) {
     try {
-      FXMLLoader loader = new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
+      FXMLLoader loader =
+          new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
       Region msgBox = loader.load();
       ChatMessage newMessageCTL = loader.getController();
       newMessageCTL.build(username, 0, msg, GameLogic.getLocalPlayer().getUsername() == username);
