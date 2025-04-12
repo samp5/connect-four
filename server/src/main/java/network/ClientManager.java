@@ -19,6 +19,7 @@ import registry.PlayerRegistry.PlayerRegistrationInfo;
  * Handles connections between server and any number of clients
  */
 public class ClientManager {
+  private static ServerSocketChannel socketChannel;
   private static final int PORT = 8000;
   private static Selector selector;
   private static HashSet<ServerClient> clients = new HashSet<>();
@@ -37,6 +38,13 @@ public class ClientManager {
    *    disconnect message.
    */
   public static void connectToClients() {
+    // some base status prints
+    System.out.println("Player Registry tracking 0 players");
+    System.out.println("0 players currently logged in");
+    System.out.println("Currently listening to 0 clients");
+    System.out.println("Currently running 0 games");
+    System.out.println("Connecting to clients -");
+
     try {
       _connectToClients();
     } catch (IOException | InterruptedException e) {
@@ -46,16 +54,17 @@ public class ClientManager {
   }
   private static void _connectToClients() throws IOException, InterruptedException {
     // create a server socket channel
-    ServerSocketChannel serverChannel = ServerSocketChannel.open();
-    serverChannel.bind(new InetSocketAddress("127.0.0.1", PORT));
-    serverChannel.configureBlocking(false);
+    socketChannel = ServerSocketChannel.open();
+    socketChannel.bind(new InetSocketAddress(PORT));
+    socketChannel.configureBlocking(false);
 
     // open the selector for the connection socket
     selector = Selector.open();
-    serverChannel.register(selector, SelectionKey.OP_ACCEPT);
+    socketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
     // keep accepting clients and getting messages
     while (true) {
+      animateStatus();
       recieveAllMessages();
       acceptClients();
     }
@@ -137,6 +146,35 @@ public class ClientManager {
     } catch (IOException e) {
       // if an IOException occurs, the client is disconnected
       clients.remove(client);
+    }
+  }
+
+
+
+  /**
+   *  TERMINAL ANIMATION
+   *  this uses a lot of escape sequences, a good reference is either the link
+   *    below or the wikipedia page
+   *    (ref)[https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797]
+   */
+  private static long lastFrame = System.currentTimeMillis();
+  private static int frametime = 200;  // ms
+  private static int animationState = 0;
+  private static char animationFrames[] = new char[] {'\\', '|', '/', '-'};
+
+  private static void animateStatus() {
+    if (System.currentTimeMillis() >= (lastFrame + frametime)) {
+      // stats..
+      // dont worry about it :)
+      System.out.printf("\033[2;26f\033[32m%d\033[0m players\033[0K\033[E", PlayerRegistry.registeredCount());
+      System.out.printf("\033[32m%d\033[0m players currently logged in\033[0K\033[E", PlayerRegistry.loggedInCount());
+      System.out.printf("\033[23C\033[32m%d\033[0m clients\033[0K\033[E", clients.size());
+      System.out.printf("\033[18C\033[32m%d\033[0m games\033[0K\033[E", GameManager.getActiveGameCount());
+
+      // "loading" animation
+      lastFrame = System.currentTimeMillis();
+      animationState = (animationState + 1) % 4;
+      System.out.printf("\033[6;24f\033[D\033[36m%c\033[0m\033[E", animationFrames[animationState]);
     }
   }
 }

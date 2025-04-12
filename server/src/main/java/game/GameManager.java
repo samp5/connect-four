@@ -8,6 +8,7 @@ import network.ClientManager;
  * Handles active games, game queues, and beginning new games
  */
 public class GameManager {
+  static int gameCount = 0;
   private static ServerClient waiting = null;
 
   /**
@@ -27,16 +28,21 @@ public class GameManager {
 
     // otherwise start game with the waiting player, then clear the wait status
     new Game(waiting, client);
+    ++gameCount;
     waiting = null;
   }
 
   /**
    * Remove a player from queue if they are in it.
-   * If they arent in queue, you guessed it, nothing happens.
+   * If they arent in queue, nothing happens.
    */
   public static void removeFromQueue(Player p) {
     if (waiting != null && waiting.getPlayer().getUsername().equals(p.getUsername())) {
       waiting = null;
     }
+  }
+
+  public static int getActiveGameCount() {
+    return gameCount;
   }
 }

@@ -1,5 +1,10 @@
 package registry;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
 import game.GameManager;
@@ -10,8 +15,8 @@ import network.Player;
  */
 public class PlayerRegistry {
   private static long nextid = 0;
-  private static final HashMap<String, Player> registredPlayers = new HashMap<>();
-  private static final HashMap<String, Player> activePlayers = new HashMap<>();
+  private static HashMap<String, Player> registredPlayers = new HashMap<>();
+  private static HashMap<String, Player> activePlayers = new HashMap<>();
 
   /**
    * Get the player registered under this username and password.
@@ -91,6 +96,45 @@ public class PlayerRegistry {
 
     public Player getPlayer() {
       return player;
+    }
+  }
+
+  public static int loggedInCount() {
+    return activePlayers.size();
+  }
+
+  public static int registeredCount() {
+    return registredPlayers.size();
+  }
+
+  /**
+   * Save the registry to a file
+   */
+  public static void save() {
+    try {
+    FileOutputStream fileout = new FileOutputStream("player.registry");
+    ObjectOutputStream objectout = new ObjectOutputStream(fileout);
+    objectout.writeObject(registredPlayers);
+    objectout.close();
+    } catch (IOException e) {}
+  }
+
+  /**
+   * Load the registry from a file
+   */
+  public static void load() {
+    try {
+      FileInputStream filein = new FileInputStream("player.registry");
+      ObjectInputStream objectin = new ObjectInputStream(filein);
+      Object obj = objectin.readObject();
+      if (obj instanceof HashMap) {
+        registredPlayers = (HashMap<String, Player>) obj;
+      }
+      objectin.close();
+    } catch (IOException e) {
+    } catch (ClassNotFoundException e) {
+      System.out.println("Error loading player registry. class not found:");
+      e.printStackTrace();
     }
   }
 }

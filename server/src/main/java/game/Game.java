@@ -40,6 +40,7 @@ public class Game {
         }
       } catch (IOException e) {
       }
+      GameManager.gameCount--;
     }
 
     private void handleMessages(ServerClient connection) throws IOException {
@@ -55,7 +56,6 @@ public class Game {
             }
             break;
           case DISCONNECT:
-            System.out.printf("Client %s disconnected\n", msg.getPlayer().getUsername());
             PlayerRegistry.logoutPlayer(player1.getPlayer());
             PlayerRegistry.logoutPlayer(player2.getPlayer());
             active = false;
