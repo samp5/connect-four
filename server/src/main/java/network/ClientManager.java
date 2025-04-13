@@ -14,7 +14,6 @@ import game.GameManager;
 import registry.PlayerRegistry;
 import registry.PlayerRegistry.PlayerRegistrationInfo;
 
-
 /**
  * Handles connections between server and any number of clients
  */
@@ -34,8 +33,8 @@ public class ClientManager {
 
   /**
    * Connect to clients, while displaying a loading animation.
-   * Ensures that all clients are connected, assuming they terminate with a 
-   *    disconnect message.
+   * Ensures that all clients are connected, assuming they terminate with a
+   * disconnect message.
    */
   public static void connectToClients() {
     // some base status prints
@@ -52,6 +51,7 @@ public class ClientManager {
       System.exit(1);
     }
   }
+
   private static void _connectToClients() throws IOException, InterruptedException {
     // create a server socket channel
     socketChannel = ServerSocketChannel.open();
@@ -79,21 +79,21 @@ public class ClientManager {
       ArrayList<Message> recievedMsgs = connection.getMessages();
       for (Message msg : recievedMsgs) {
         switch (msg.getType()) {
-			    case CHAT:
-			    	break;
-			    case DISCONNECT:
+          case CHAT:
+            break;
+          case DISCONNECT:
             toStopListening.add(connection);
             PlayerRegistry.logoutPlayer(msg.getPlayer());
-			    	break;
-			    case LOGIN:
+            break;
+          case LOGIN:
             attemptLogin(connection, msg);
-			    	break;
-			    case MOVE:
-			    	break;
-			    case START:
-			    	break;
-			    default:
-			    	break;
+            break;
+          case MOVE:
+            break;
+          case START:
+            break;
+          default:
+            break;
         }
       }
     }
@@ -149,18 +149,16 @@ public class ClientManager {
     }
   }
 
-
-
   /**
-   *  TERMINAL ANIMATION
-   *  this uses a lot of escape sequences, a good reference is either the link
-   *    below or the wikipedia page
-   *    (ref)[https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797]
+   * TERMINAL ANIMATION
+   * this uses a lot of escape sequences, a good reference is either the link
+   * below or the wikipedia page
+   * (ref)[https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797]
    */
   private static long lastFrame = System.currentTimeMillis();
-  private static int frametime = 200;  // ms
+  private static int frametime = 200; // ms
   private static int animationState = 0;
-  private static char animationFrames[] = new char[] {'\\', '|', '/', '-'};
+  private static char animationFrames[] = new char[] { '\\', '|', '/', '-' };
 
   private static void animateStatus() {
     if (System.currentTimeMillis() >= (lastFrame + frametime)) {

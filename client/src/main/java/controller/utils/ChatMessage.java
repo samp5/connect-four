@@ -28,6 +28,8 @@ public class ChatMessage {
   @FXML
   TextFlow messageFlow;
   @FXML
+  HBox timeStampBox;
+  @FXML
   TextFlow timeStampFlow;
   @FXML
   TextFlow senderFlow;
@@ -51,6 +53,7 @@ public class ChatMessage {
                   false,
                   false))));
       messageRowBox.setAlignment(Pos.CENTER_RIGHT);
+      timeStampBox.setAlignment(Pos.CENTER_RIGHT);
     } else {
       messageBox.setBackground(
           new Background(new BackgroundImage(new Image("/assets/chat_message_remote.png"),
@@ -60,9 +63,11 @@ public class ChatMessage {
                   false,
                   false))));
       messageRowBox.setAlignment(Pos.CENTER_LEFT);
+      timeStampBox.setAlignment(Pos.CENTER_LEFT);
     }
 
   }
 
-  public void initialize() {}
+  public void initialize() {
+  }
 }

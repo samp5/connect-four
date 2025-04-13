@@ -60,12 +60,21 @@ public class ChatController {
     chatEditorInput.setOpacity(0);
     chatEditorInput.toBack();
     chatEditorDisplay.toFront();
+
+    chatEditorDisplay.setBackground(
+        new Background(new BackgroundImage(new Image("/assets/chat_message_local.png"),
+            BackgroundRepeat.NO_REPEAT,
+            BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+            new BackgroundSize(100, 100, true, true,
+                false,
+                false))));
+
     chatHistoryScroll.vvalueProperty().bind(chatHistory.heightProperty());
     System.out.println(chatHistoryScroll.getStyleClass());
     chatPane.setBackground(new Background(
         new BackgroundImage(new Image("/assets/chat_background.png", 360, 720, false, true, false),
             BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            new BackgroundSize(360, 720, false, false, false, false))));
+            new BackgroundSize(360, 718, false, false, false, false))));
 
     sendButton
         .setBackground(new Background(new BackgroundImage(new Image("/assets/send_button.png"),
@@ -100,6 +109,9 @@ public class ChatController {
 
   private void sendMessage() {
     String msg = chatEditorInput.getText().trim();
+    if (msg.length() == 0) {
+      return;
+    }
     appendMessage(msg, GameLogic.getLocalPlayer().getUsername());
     chatEditorInput.clear();
     chatEditorDisplay.getChildren().setAll();
@@ -113,8 +125,7 @@ public class ChatController {
   // // when we need to display a new message
   public void appendMessage(String msg, String username) {
     try {
-      FXMLLoader loader =
-          new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
+      FXMLLoader loader = new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
       Region msgBox = loader.load();
       ChatMessage newMessageCTL = loader.getController();
       newMessageCTL.build(username, 0, msg, GameLogic.getLocalPlayer().getUsername() == username);

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<HBox fx:id="messageRowBox" maxHeight="-Infinity" maxWidth="360.0" minWidth="360.0" prefWidth="360.0" styleClass="debug" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.utils.ChatMessage">
+<HBox fx:id="messageRowBox" maxHeight="-Infinity" maxWidth="340.0" minWidth="340.0" prefWidth="340.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.utils.ChatMessage">
    <children>
       <HBox fx:id="messageBox">
          <children>
@@ -17,13 +17,8 @@
                         <Insets />
                      </VBox.margin>
                   </TextFlow>
-                  <HBox alignment="CENTER_RIGHT">
+                  <HBox fx:id="timeStampBox" alignment="CENTER_RIGHT">
                      <children>
-                        <AnchorPane>
-                           <children>
-                              <TextFlow fx:id="senderFlow" />
-                           </children>
-                        </AnchorPane>
                         <AnchorPane>
                            <children>
                               <TextFlow fx:id="timeStampFlow" />
@@ -35,7 +30,7 @@
             </VBox>
          </children>
          <padding>
-            <Insets left="10.0" right="10.0" />
+            <Insets left="20.0" right="20.0" />
          </padding>
       </HBox>
    </children>

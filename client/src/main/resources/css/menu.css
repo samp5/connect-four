@@ -1,0 +1,79 @@
+@font-face {
+  -fx-font-family: "Mota Pixel Regular";
+  src: url("fonts/MotaPixel-Regular.otf");
+}
+@font-face {
+  -fx-font-family: "Mota Pixel Bold Shadow 2 Short";
+  src: url("fonts/MotaPixel-Bold-Shadow-2-Short.otf");
+}
+
+@font-face {
+  -fx-font-family: "Mota Pixel Bold";
+  src: url("fonts/MotaPixel-Bold.otf");
+}
+
+.root{
+}
+
+
+.loading-text {
+  -fx-font-family: "Mota Pixel Regular";
+  -fx-font-size:24.0;
+  -fx-fill: white;
+}
+
+.title-text {
+  -fx-font-family: "Mota Pixel Bold Shadow 2 Short";
+  -fx-font-size:100.0;
+}
+
+.text-field {
+  -fx-font-family: "Mota Pixel Regular";
+  -fx-font-size:24.0;
+  -fx-border-color: #938056;
+  -fx-border-width: 4px;
+  -fx-background-color: #dcd7ba;
+}
+
+.pixel-button {
+  -fx-border-color: #363646;
+  -fx-border-width: 3px;
+  -fx-background-color: #639bff;
+}
+
+.back-button {
+  -fx-border-color: #363646;
+  -fx-border-width: 0px;
+  -fx-background-color: transparent;
+}
+.list-view .list-cell {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: black;
+}
+.list-view .scroll-bar:vertical,
+.list-view .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-padding: 0;
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}
+
+
+.recent-connection-cell {
+  -fx-padding: 10px;
+  -fx-font-family: "Mota Pixel Regular";
+  -fx-font-size: 20px;
+}
+.recent-connection-cell-text {
+  -fx-font-family: "Mota Pixel Regular";
+  -fx-font-size: 20px;
+}
+.recent-connection-cell-text-selected {
+  -fx-font-family: "Mota Pixel Bold";
+  -fx-font-size: 20px;
+}
+.recent-connection-cell-selected {
+  -fx-padding: 10px;
+}

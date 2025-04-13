@@ -21,15 +21,14 @@ public class SceneManager {
     try {
       FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/fxml/" + fxmlFile));
       Scene scene = new Scene(loader.load(), 1080, 720);
+      setCustomCursor(scene);
+      scene.getStylesheets().add("/css/chat.css");
+      scene.getStylesheets().add("/css/game.css");
+      scene.getStylesheets().add("/css/menu.css");
       stage.setScene(scene);
       stage.setResizable(false);
       stage.show();
 
-      setCustomCursor(scene);
-
-      scene.getStylesheets().add("/css/chat.css");
-      scene.getStylesheets().add("/css/game.css");
-      scene.getStylesheets().add("/css/menu.css");
     } catch (IOException e) {
       e.printStackTrace();
     }

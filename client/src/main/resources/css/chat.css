@@ -23,8 +23,8 @@
 }
 
 .text {
-  -fx-font-family:  monospace;
-  -fx-font-size: 20.0;
+  -fx-font-family: "Mota Pixel Regular";
+  -fx-font-size: 20px;
 }
 
 /* Text that is displayed in the TextFlow for user input */
