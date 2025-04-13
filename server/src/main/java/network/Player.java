@@ -14,6 +14,7 @@ public class Player implements Serializable {
     this.password = password;
     this.ID = id;
   }
+
   public Player(String userName, Long id) {
     this.username = userName;
     this.ID = id;

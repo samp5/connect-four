@@ -23,7 +23,7 @@ public class CoordUtils {
   }
 
   public static Point chipHolder(PlayerRole role) {
-    Point p = new Point(0, gamePaneHeight - pieceRadius - 10, CoordSystem.GamePane);
+    Point p = new Point(0, gamePaneHeight - pieceRadius - 50, CoordSystem.GamePane);
     switch (role) {
       case None:
         break;

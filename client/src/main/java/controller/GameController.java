@@ -10,9 +10,13 @@ import controller.utils.BoardPosition;
 import controller.utils.CoordSystem;
 import controller.utils.CoordUtils;
 import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
+import javafx.animation.PauseTransition;
+import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.scene.ImageCursor;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
@@ -114,8 +118,8 @@ public class GameController {
     enum CloudType {
       Small, Large;
 
-      private final String[] smallClouds = {"cloud1.png", "cloud2.png"};
-      private final String[] largeClouds = {"cloud3.png"};
+      private final String[] smallClouds = { "cloud1.png", "cloud2.png" };
+      private final String[] largeClouds = { "cloud3.png" };
 
       public int getWidth() {
         switch (this) {
@@ -168,21 +172,11 @@ public class GameController {
     GameLogic.setLocalPlayerRole(local);
   }
 
-  /**
-   * This function gets called by the FXMLLoader when the fxml gets,, loaded
-   *
-   */
   public void initialize() {
     gameLogic = new GameLogic();
 
-    // registration
-    // GameLogic.setLocalPlayer(new Player("dummy1", 0));
-    // // GameLogic.setRemotePlayer(new Player("dummy2", 1));
-    // GameLogic.setCurrentPlayerRole(PlayerRole.PlayerOne);
-    // GameLogic.setLocalPlayerRole(PlayerRole.PlayerOne);
-
     setCustomCursors();
-    buildClouds();
+    // buildClouds();
 
     NetworkClient.bindGameController(this);
     foregroundPane.toFront();
@@ -191,7 +185,7 @@ public class GameController {
     overlayPane.toFront();
     overlayPane.setMouseTransparent(true);
     gamePaneBackground.setBackground(
-        new Background(new BackgroundImage(new Image("/assets/game_background.png"),
+        new Background(new BackgroundImage(new Image("/assets/game_background2.png"),
             BackgroundRepeat.NO_REPEAT,
             BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
             new BackgroundSize(720, 720, false, false, false, false))));
@@ -224,7 +218,7 @@ public class GameController {
     Cloud[] clouds = {
         new Cloud(CloudType.Large), new Cloud(CloudType.Small),
         new Cloud(CloudType.Small), new Cloud(CloudType.Large),
-        new Cloud(CloudType.Large), new Cloud(CloudType.Large)};
+        new Cloud(CloudType.Large), new Cloud(CloudType.Large) };
 
     gamePaneBackground.getChildren().addAll(clouds);
     buildCloudAnimation(clouds);
@@ -238,19 +232,13 @@ public class GameController {
 
     for (int i = 0; i < clouds.length; i++) {
       Cloud c = clouds[i];
-      Path path = new Path();
 
-      double yCoord =
-          minAcceptableCloud + Math.random() * (maxAcceptableCloud - minAcceptableCloud);
+      double yCoord = minAcceptableCloud + Math.random() * (maxAcceptableCloud - minAcceptableCloud);
+      Path path = new Path(new MoveTo(-c.type.getWidth(), yCoord),
+          new LineTo(CoordUtils.gamePaneWidth + c.type.getWidth(), yCoord));
 
-      path.getElements().add(new MoveTo(-c.type.getWidth(), yCoord));
-      path.getElements().add(new LineTo(CoordUtils.gamePaneWidth + c.type.getWidth(), yCoord));
-
-      PathTransition pathTransition = new PathTransition();
-      pathTransition.setDuration(
-          Duration.seconds(Math.random() * (maxTimeAcross - minTimeAcross) + minTimeAcross));
-      pathTransition.setPath(path);
-      pathTransition.setNode(c);
+      PathTransition pathTransition = new PathTransition(
+          Duration.seconds(Math.random() * (maxTimeAcross - minTimeAcross) + minTimeAcross), path, c);
       pathTransition.setDelay(Duration.seconds((maxTimeAcross / clouds.length) * i));
       pathTransition.play();
 
@@ -261,6 +249,7 @@ public class GameController {
   }
 
   private void handleRelease(MouseEvent e) {
+
     // this means the piece is NOT in a valid position
     if (dropHint == null) {
       overlayPane.getChildren().remove(draggedPiece);
@@ -419,9 +408,8 @@ public class GameController {
       path.getElements().addAll(new MoveTo(chipHolder.getX(), chipHolder.getY()),
           new LineTo(topOfCol.getX(), topOfCol.getY()));
 
-      PathTransition pathTransition =
-          new PathTransition(Duration.millis(1.5 * chipHolder.distanceTo(topOfCol)), path,
-              toPlay);
+      PathTransition pathTransition = new PathTransition(Duration.millis(1.5 * chipHolder.distanceTo(topOfCol)), path,
+          toPlay);
       pathTransition.play();
 
       pathTransition.setOnFinished(e -> {
@@ -434,15 +422,14 @@ public class GameController {
 
         Path dropPath = new Path(new MoveTo(topSlot.getX(), topSlot.getY()),
             new LineTo(finalPosition.getX(), finalPosition.getY()));
-        PathTransition dropTransition =
-            new PathTransition(Duration.millis(1.5 * topSlot.distanceTo(finalPosition)),
-                dropPath,
-                toDrop);
+        PathTransition dropTransition = new PathTransition(Duration.millis(1.5 * topSlot.distanceTo(finalPosition)),
+            dropPath,
+            toDrop);
         dropTransition.play();
       });
 
       gameLogic.placePiece(gameLogic.getAvailableRow(col).orElse(6), col, role);
- 
+
       if (!gameIsOver()) {
         gameLogic.switchPlayer();
       }
@@ -452,8 +439,7 @@ public class GameController {
   }
 
   private boolean gameIsOver() {
-    Optional<BoardPosition[]> winningComboOpt =
-        gameLogic.checkWin(gameLogic.getCurrentPlayerRole());
+    Optional<BoardPosition[]> winningComboOpt = gameLogic.checkWin(gameLogic.getCurrentPlayerRole());
 
     if (winningComboOpt.isPresent()) {
       gameOver(gameLogic.getCurrentPlayerRole(), winningComboOpt.get());
@@ -489,12 +475,9 @@ public class GameController {
           .add(new LineTo(topOfCol.getX(), topOfCol.getY()));
 
       // build the animation
-      PathTransition pathTransition = new PathTransition();
-      pathTransition
-          .setDuration(Duration.millis(1.5 * p.position.distanceTo(topOfCol) + Math.random() * 20));
-      pathTransition.setPath(path);
-      pathTransition.setNode(p);
-      pathTransition.play();
+      PathTransition pathTransition = new PathTransition(
+          Duration.millis(1.5 * p.position.distanceTo(topOfCol) + Math.random() * 20), path, p);
+
       pathTransition.setOnFinished(e -> {
 
         midgroundPane.getChildren().remove(p);
@@ -510,18 +493,32 @@ public class GameController {
             .add(new LineTo(returnPoint.getX(), returnPoint.getY()));
 
         // build the animation
-        PathTransition pathTransition2 = new PathTransition();
-        pathTransition2
-            .setDuration(Duration
-                .millis(1.5 * pieceToReturn.position.distanceTo(returnPoint) + Math.random() * 20));
-        pathTransition2.setPath(path2);
-        pathTransition2.setNode(pieceToReturn);
-        pathTransition2.play();
+        PathTransition pathTransition2 = new PathTransition(Duration
+            .millis(1.5 * pieceToReturn.position.distanceTo(returnPoint) + Math.random() * 20), path2, pieceToReturn);
+
         pathTransition2.setOnFinished(g -> {
           overlayPane.getChildren().remove(pieceToReturn);
-        });
 
+        });
+        pathTransition2.play();
+
+        ImageView winnerImg = new ImageView(new Image(
+            "/assets/" + (winner == PlayerRole.PlayerOne ? "red" : "blue") + "-wins.png",
+            CoordUtils.gamePaneWidth - 40, 0, true, false));
+
+        overlayPane.getChildren().add(winnerImg);
+
+        winnerImg.setX(20);
+        winnerImg.setY(100);
+
+        PauseTransition pt = new PauseTransition(Duration.millis(4000));
+        pt.setOnFinished(g -> {
+          overlayPane.getChildren().remove(winnerImg);
+        });
+        pt.play();
       });
+
+      pathTransition.play();
     }
     System.out.println(winner + "wins!");
     gameLogic.reset();
