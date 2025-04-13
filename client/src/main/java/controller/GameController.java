@@ -1,15 +1,15 @@
 package controller;
 
 import controller.utils.Point;
+
+import java.util.ArrayList;
 import java.util.Optional;
 
 import controller.GameController.Cloud.CloudType;
 import controller.utils.BoardPosition;
 import controller.utils.CoordSystem;
 import controller.utils.CoordUtils;
-import javafx.animation.Animation;
 import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.ImageCursor;
 import javafx.scene.image.Image;
@@ -395,13 +395,23 @@ public class GameController {
     return GameLogic.getLocalPlayer();
   }
 
+  public ArrayList<Integer> getMoveHistory() {
+    return this.gameLogic.getMoveHistory();
+  }
+
+  public void restoreGameBoard(ArrayList<Integer> moves) {
+    for (Integer col : moves) {
+      recieveMove(col);
+    }
+  }
+
   public void recieveMove(int col) {
     gameLogic.getAvailableRow(col).ifPresentOrElse((r) -> {
-      Player player = GameLogic.getRemotePlayer();
+      PlayerRole role = gameLogic.getCurrentPlayerRole();
 
       Point topOfCol = CoordUtils.topOfColumn(col);
-      Point chipHolder = CoordUtils.chipHolder(player.getRole());
-      Piece toPlay = new Piece(player.getRole(), chipHolder);
+      Point chipHolder = CoordUtils.chipHolder(role);
+      Piece toPlay = new Piece(role, chipHolder);
 
       overlayPane.getChildren().add(toPlay);
 
@@ -418,7 +428,7 @@ public class GameController {
         overlayPane.getChildren().remove(toPlay);
         Point topSlot = CoordUtils.fromRowCol(GameLogic.numRows() - 1, col);
         Point finalPosition = CoordUtils.fromRowCol(r, col);
-        Piece toDrop = new Piece(player.getRole(), topSlot);
+        Piece toDrop = new Piece(role, topSlot);
 
         midgroundPane.getChildren().add(toDrop);
 
@@ -429,18 +439,13 @@ public class GameController {
                 dropPath,
                 toDrop);
         dropTransition.play();
-
-        dropTransition.setOnFinished(f -> {
-          gameLogic.placePiece(gameLogic.getAvailableRow(col).orElse(6), col, player.getRole());
-
-          if (!gameIsOver()) {
-            gameLogic.switchPlayer();
-          }
-
-        });
-
       });
 
+      gameLogic.placePiece(gameLogic.getAvailableRow(col).orElse(6), col, role);
+ 
+      if (!gameIsOver()) {
+        gameLogic.switchPlayer();
+      }
     }, () -> {
       System.err.println("Recieved invalid move");
     });

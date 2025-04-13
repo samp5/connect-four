@@ -1,5 +1,6 @@
 package logic;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 import controller.utils.BoardPosition;
@@ -15,6 +16,7 @@ public class GameLogic {
   private static final int ROWS = 6;
   private static final int COLS = 7;
   private final int[][] board = new int[6][7];
+  private final ArrayList<Integer> moveHistory = new ArrayList<>();
   private static PlayerRole currentPlayerRole = PlayerRole.PlayerOne;
 
 
@@ -88,6 +90,10 @@ public class GameLogic {
     return Optional.empty();
   }
 
+  public ArrayList<Integer> getMoveHistory() {
+    return this.moveHistory;
+  }
+
   public static int numRows() {
     return ROWS;
   }
@@ -120,6 +126,7 @@ public class GameLogic {
       default:
         break;
     }
+    moveHistory.add(column);
   };
 
   // check win
@@ -208,6 +215,7 @@ public class GameLogic {
       Arrays.fill(row, 0);
     }
     currentPlayerRole = PlayerRole.PlayerOne;
+    moveHistory.clear();
   }
 
 }

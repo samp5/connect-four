@@ -3,6 +3,7 @@ package game;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import network.ClientManager;
 import network.Message;
 import network.ServerClient;
 import network.Player.PlayerRole;
@@ -12,15 +13,24 @@ import registry.PlayerRegistry;
  * An instance of a connect-4 game with two players
  */
 public class Game {
+  GameThread thread;
   public Game(ServerClient p1, ServerClient p2) {
-    new GameThread(p1, p2).start();
+    thread = new GameThread(p1, p2, this);
+    thread.start();
+  }
+
+  void reconnectPlayer(ServerClient connection) {
+    this.thread.reconnectPlayer(connection);
   }
 
   private class GameThread extends Thread {
+    private Game game;
     private ServerClient player1, player2;
+    private Long disconnectID = null;
     private boolean active = true;
 
-    public GameThread(ServerClient player1, ServerClient player2) {
+    public GameThread(ServerClient player1, ServerClient player2, Game game) {
+      this.game = game;
       this.player1 = player1;
       this.player2 = player2;
     }
@@ -47,22 +57,25 @@ public class Game {
       ArrayList<Message> messages = connection.getMessages();
       for (Message msg : messages) {
         switch (msg.getType()) {
-          case CHAT:
-            // redirect message to other player
-            if (connection.getPlayer().getID() == player1.getPlayer().getID()) {
-              player2.sendMessage(msg);
-            } else {
-              player1.sendMessage(msg);
-            }
-            break;
           case DISCONNECT:
-            PlayerRegistry.logoutPlayer(player1.getPlayer());
-            PlayerRegistry.logoutPlayer(player2.getPlayer());
+            if (disconnectID == null) {
+              PlayerRegistry.logoutPlayer(connection.getPlayer());
+              disconnectID = connection.getPlayer().getID();
+              GameManager.dcGames.put(disconnectID, game);
+              return;
+            }
+            PlayerRegistry.logoutPlayer(connection.getPlayer());
+            GameManager.dcGames.remove(disconnectID);
             active = false;
             return;
           case LOGIN:
             break;
+          case CHAT:
           case MOVE:
+          case RECONNECT:
+            // don't redirect if there was a DC
+            if (this.disconnectID != null) return;
+
             // redirect message to other player
             if (connection.getPlayer().getID() == player1.getPlayer().getID()) {
               player2.sendMessage(msg);
@@ -76,6 +89,23 @@ public class Game {
             break;
         }
       }
+    }
+
+    private void reconnectPlayer(ServerClient connection) {
+      try {
+        if (disconnectID == player1.getPlayer().getID()) {
+          player1 = connection;
+          player1.sendMessage(new Message(player1.getPlayer(), player2.getPlayer(), PlayerRole.PlayerOne));
+          player2.sendMessage(new Message((ArrayList<Integer>)null));
+        } else {
+          player2 = connection;
+          player2.sendMessage(new Message(player2.getPlayer(), player1.getPlayer(), PlayerRole.PlayerTwo));
+          player1.sendMessage(new Message((ArrayList<Integer>)null));
+        }
+        ClientManager.removeClientListener(connection);
+        GameManager.dcGames.remove(disconnectID);
+        disconnectID = null;
+      } catch (IOException e) {}
     }
   }
 }

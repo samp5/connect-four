@@ -2,6 +2,9 @@ package game;
 
 import network.Player;
 import network.ServerClient;
+
+import java.util.HashMap;
+
 import network.ClientManager;
 
 /**
@@ -9,12 +12,19 @@ import network.ClientManager;
  */
 public class GameManager {
   static int gameCount = 0;
+  static HashMap<Long, Game> dcGames = new HashMap<>();
   private static ServerClient waiting = null;
 
   /**
    * Add a client to the game queue, and if available, starts a new game
    */
   public static void addToGameQueue(ServerClient client) {
+    // check if this player was dc'd from a game first
+    if (dcGames.keySet().contains(client.getPlayer().getID())) {
+      dcGames.get(client.getPlayer().getID()).reconnectPlayer(client);
+      return;
+    }
+
     // if there is nobody waiting, add to wait queue
     if (waiting == null) {
       waiting = client;

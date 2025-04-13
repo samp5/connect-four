@@ -5,13 +5,13 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import controller.ChatController;
 import controller.GameController;
 import javafx.application.Platform;
 import utils.SceneManager;
 import logic.GameLogic;
-import network.Player.PlayerRole;
 
 /**
  * Connect to server
@@ -90,6 +90,15 @@ public class NetworkClient {
         SceneManager.showScene("main.fxml");
         GameLogic.initialize(msg.getPlayer(), msg.getPlayer2(), msg.getRole());
         break;
+      case RECONNECT:
+        ArrayList<Integer> restoredMoves = msg.getRestoredMoves();
+        if (restoredMoves == null) {
+          // get moves to send to other player
+          sendMessage(new Message(gameCTL.getMoveHistory()));
+        } else {
+          // restore moves from other player
+          gameCTL.restoreGameBoard(restoredMoves);
+        }
       default:
         break;
     }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 import network.Player.PlayerRole;
 
@@ -15,6 +16,7 @@ public class Message implements Serializable {
   public static enum Type {
     LOGIN,
     START,
+    RECONNECT,
     DISCONNECT,
     CHAT,
     MOVE,
@@ -31,6 +33,7 @@ public class Message implements Serializable {
   private Player player2;
   private PlayerRole role;
   private boolean success;
+  private ArrayList<Integer> restoredMoves;
 
 
   /**
@@ -56,6 +59,13 @@ public class Message implements Serializable {
     this.success = success;
     this.chatMessage = reason;
     this.player = player;
+  }
+  /**
+   * For server reconnect messages
+   */
+  public Message(ArrayList<Integer> restoredMoves) {
+    this.type = Type.RECONNECT;
+    this.restoredMoves = restoredMoves;
   }
   /**
    * For server disconnect messages
@@ -166,5 +176,9 @@ public class Message implements Serializable {
 
   public boolean isSuccess() {
     return success;
+  }
+
+  public ArrayList<Integer> getRestoredMoves() {
+    return restoredMoves;
   }
 }
