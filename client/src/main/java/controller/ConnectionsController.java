@@ -1,9 +1,13 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import controller.utils.RecentConnection;
+import controller.utils.RecentConnectionRegistry;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.ImageCursor;
 import javafx.scene.control.Button;
@@ -84,14 +88,19 @@ public class ConnectionsController {
     // set our custom cell factory
     connectionListView.setCellFactory(new RecentConnection.ConnectionCellFactory());
 
-    Button[] backButtons = {addConnectionBackButton, loginBackButton, backButton};
-    for (Button b : backButtons){
+    // load recent connections
+    RecentConnectionRegistry.load();
+    connectionListView.setItems(FXCollections.observableArrayList(RecentConnectionRegistry.getConnections()));
+
+    Button[] backButtons = { addConnectionBackButton, loginBackButton, backButton };
+    for (Button b : backButtons) {
       b.setText("\u21AB");
       b.getStyleClass().add("back-button");
     }
 
-    Button[] allButtons = {addNewConnectionButton, addConnectionButton, addConnectionBackButton, connectButton, backButton, loginButton, loginBackButton};
-    for (Button b : allButtons){
+    Button[] allButtons = { addNewConnectionButton, addConnectionButton, addConnectionBackButton, connectButton,
+        backButton, loginButton, loginBackButton };
+    for (Button b : allButtons) {
       b.setCursor(new ImageCursor(new Image("/assets/hand_cursor.png")));
     }
 
@@ -105,8 +114,11 @@ public class ConnectionsController {
     addConnectionButton.setOnAction(e -> {
       try {
         Integer port = Integer.valueOf(portInput.getText());
-        connectionListView.getItems().add(new RecentConnection(ipInput.getText(), port, connectionNameInput.getText()));
+        RecentConnection c = new RecentConnection(ipInput.getText(), port, connectionNameInput.getText());
+        connectionListView.getItems().add(c);
+        RecentConnectionRegistry.add(c);
       } catch (NumberFormatException f) {
+
         // TODO: Add cool format validation on textinput
         return;
       }
@@ -135,11 +147,15 @@ public class ConnectionsController {
     });
 
     backButton.setOnAction(e -> {
+      RecentConnectionRegistry.save();
       SceneManager.showScene("menu.fxml");
     });
   }
 
   private void connectToHost(RecentConnection c, String username, String password) {
+    c.updateLastConnected();
+    RecentConnectionRegistry.save();
+
     System.out.printf("Attempting to connect user `%s` to server at %s:%d\n", username, c.getIp(), c.getPort());
     try {
       NetworkClient.connect(c.getIp(), c.getPort(), username, password);

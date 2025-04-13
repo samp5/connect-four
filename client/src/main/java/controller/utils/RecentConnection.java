@@ -1,22 +1,28 @@
 package controller.utils;
 
+import java.io.Serializable;
+import java.time.LocalTime;
+
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 
-public class RecentConnection {
+public class RecentConnection implements Comparable<RecentConnection>, Serializable {
   String ip;
   int port;
   String name;
+  LocalTime lastConnected = LocalTime.MAX;
 
   public RecentConnection(String ip, int port, String name) {
     this.ip = ip;
     this.port = port;
     this.name = name;
+  }
+
+  public void updateLastConnected() {
+    lastConnected = LocalTime.now();
   }
 
   public static class ConnectionCellFactory
@@ -106,4 +112,16 @@ public class RecentConnection {
     return name;
   }
 
+  // Returns a negative integer, zero, or a positive integer as this object is
+  // less than, equal to, or greater than the specified object.
+  @Override
+  public int compareTo(RecentConnection arg0) {
+    if (this.lastConnected.isBefore(arg0.lastConnected)) {
+      return -1;
+    } else if (this.lastConnected.isAfter(arg0.lastConnected)) {
+      return 1;
+    } else {
+      return this.name.compareTo(arg0.name);
+    }
+  }
 }
