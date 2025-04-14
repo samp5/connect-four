@@ -10,9 +10,7 @@ import controller.utils.BoardPosition;
 import controller.utils.CoordSystem;
 import controller.utils.CoordUtils;
 import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.animation.PauseTransition;
-import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.scene.ImageCursor;
 import javafx.scene.image.Image;
@@ -52,6 +50,7 @@ public class GameController {
 
   private Piece draggedPiece = null;
   private Piece dropHint = null;
+  private boolean canMove = true;
 
   @FXML
   private Pane gamePaneBackground;
@@ -249,7 +248,6 @@ public class GameController {
   }
 
   private void handleRelease(MouseEvent e) {
-
     // this means the piece is NOT in a valid position
     if (dropHint == null) {
       overlayPane.getChildren().remove(draggedPiece);
@@ -257,21 +255,51 @@ public class GameController {
       return;
     }
 
-    // get the row and column associated with our drop hint
+    // get positions and role
     BoardPosition rowCol = CoordUtils.toRowCol(dropHint.position).get();
+    PlayerRole role = getLocalPlayer().getRole();
+    Point startPos = new Point(draggedPiece.getCenterX(), draggedPiece.getCenterY(), CoordSystem.GamePane);
+
+    handleMove(rowCol.getColumn(), role);
+    animateMove(rowCol, startPos, role);
+
+    // send the move to the client
+    if (GameLogic.getRemotePlayer() != null) {
+      NetworkClient.sendMove(rowCol.getColumn());
+    }
+
+    // remove the drop hint
+    midgroundPane.getChildren().remove(dropHint);
+    dropHint = null;
+  }
+
+  private void handleMove(int col, PlayerRole role) {
+    gameLogic.getAvailableRow(col).ifPresentOrElse((r) -> {
+      gameLogic.placePiece(gameLogic.getAvailableRow(col).orElse(6), col, role);
+      gameLogic.switchPlayer();
+    }, () -> {
+      System.err.println("Recieved invalid move");
+    });
+  }
+
+  private void animateMove(BoardPosition rowCol, Point chipPos, PlayerRole role) {
+    // lock playing a move until animation pt 1 is done
+    canMove = false;
 
     // calc the point for the top of this column
     Point topOfCol = CoordUtils.topOfColumn(rowCol.getColumn());
+    double topX = topOfCol.getX();
+    double topY = topOfCol.getY() - draggedPiece.getRadius();
 
     // construct a path
     Path path = new Path();
-    path.getElements().add(new MoveTo(draggedPiece.getCenterX(), draggedPiece.getCenterY()));
-    path.getElements()
-        .add(new LineTo(topOfCol.getX() + draggedPiece.getRadius(), topOfCol.getY()));
+    path.getElements().add(new MoveTo(chipPos.getX(), chipPos.getY()));
+    path.getElements().add(new LineTo(topX + draggedPiece.getRadius(), 
+                                      topY));
 
     // build the animation
     PathTransition pathTransition = new PathTransition();
-    pathTransition.setDuration(Duration.millis(1 * draggedPiece.position.distanceTo(topOfCol)));
+    pathTransition.setDuration(Duration.millis(1 * chipPos.distanceTo(topOfCol)));
     pathTransition.setPath(path);
     pathTransition.setNode(draggedPiece);
     pathTransition.play();
@@ -280,13 +308,13 @@ public class GameController {
       overlayPane.getChildren().remove(draggedPiece);
 
       Point topSlot = CoordUtils.fromRowCol(GameLogic.numRows() - 1, rowCol.getColumn());
-      Piece pieceToDrop = new Piece(gameLogic.getCurrentPlayerRole(), topSlot.copy());
+      Piece pieceToDrop = new Piece(role, topSlot.copy());
+      Point finalPosition = CoordUtils.fromRowCol(rowCol.getRow(), rowCol.getColumn());
       midgroundPane.getChildren().add(pieceToDrop);
 
       Path pth = new Path();
-      pth.getElements().add(new MoveTo(topSlot.getX(), topSlot.getY()));
-      pth.getElements().add(new LineTo(dropHint.getCenterX(),
-          dropHint.getCenterY()));
+      pth.getElements().add(new MoveTo(topX, topY - pieceToDrop.getRadius()));
+      pth.getElements().add(new LineTo(finalPosition.getX(), finalPosition.getY()));
 
       // build the animation
       PathTransition pTrans = new PathTransition();
@@ -297,30 +325,23 @@ public class GameController {
       pTrans.play();
 
       pTrans.setOnFinished(k -> {
-        midgroundPane.getChildren().remove(dropHint);
-        dropHint = null;
-        // update our logic
-        gameLogic.placePiece(rowCol.getRow(), rowCol.getColumn(),
-            gameLogic.getCurrentPlayerRole());
-
-        if (!gameIsOver()) {
-          gameLogic.switchPlayer();
-        }
+        // chack for game over
+        checkGameOver(role);
       });
-      if (GameLogic.getRemotePlayer() != null) {
-        NetworkClient.sendMove(rowCol.getColumn());
-      }
-      draggedPiece = null;
-    });
 
+      draggedPiece = null;
+      canMove = true;
+    });
   }
 
   private void handleDrag(MouseEvent e, PlayerRole player) {
     // stop a player from clicking when it is
     // 1. not their turn
     // 2. not their pile
+    // 3. otherwise blocked
     if (GameLogic.getLocalPlayer().getRole() != gameLogic.getCurrentPlayerRole()
-        || GameLogic.getLocalPlayer().getRole() != player) {
+        || GameLogic.getLocalPlayer().getRole() != player
+        || !canMove) {
       return;
     }
 
@@ -395,67 +416,35 @@ public class GameController {
   }
 
   public void recieveMove(int col) {
-    gameLogic.getAvailableRow(col).ifPresentOrElse((r) -> {
-      PlayerRole role = gameLogic.getCurrentPlayerRole();
-
-      Point topOfCol = CoordUtils.topOfColumn(col);
+    // handle the move logic and animate it
+    gameLogic.getAvailableRow(col).ifPresent((row) -> {
+      // get locations and role
+      BoardPosition rowCol = new BoardPosition(row, col);
+      PlayerRole role = GameLogic.getRemotePlayer().getRole();
       Point chipHolder = CoordUtils.chipHolder(role);
-      Piece toPlay = new Piece(role, chipHolder);
 
-      overlayPane.getChildren().add(toPlay);
+      // add the chip to animate
+      draggedPiece = new Piece(role, chipHolder);
+      overlayPane.getChildren().add(draggedPiece);
 
-      Path path = new Path();
-      path.getElements().addAll(new MoveTo(chipHolder.getX(), chipHolder.getY()),
-          new LineTo(topOfCol.getX(), topOfCol.getY()));
-
-      PathTransition pathTransition = new PathTransition(Duration.millis(1.5 * chipHolder.distanceTo(topOfCol)), path,
-          toPlay);
-      pathTransition.play();
-
-      pathTransition.setOnFinished(e -> {
-        overlayPane.getChildren().remove(toPlay);
-        Point topSlot = CoordUtils.fromRowCol(GameLogic.numRows() - 1, col);
-        Point finalPosition = CoordUtils.fromRowCol(r, col);
-        Piece toDrop = new Piece(role, topSlot);
-
-        midgroundPane.getChildren().add(toDrop);
-
-        Path dropPath = new Path(new MoveTo(topSlot.getX(), topSlot.getY()),
-            new LineTo(finalPosition.getX(), finalPosition.getY()));
-        PathTransition dropTransition = new PathTransition(Duration.millis(1.5 * topSlot.distanceTo(finalPosition)),
-            dropPath,
-            toDrop);
-        dropTransition.play();
-      });
-
-      gameLogic.placePiece(gameLogic.getAvailableRow(col).orElse(6), col, role);
-
-      if (!gameIsOver()) {
-        gameLogic.switchPlayer();
-      }
-    }, () -> {
-      System.err.println("Recieved invalid move");
+      handleMove(rowCol.getColumn(), role);
+      animateMove(rowCol, chipHolder, role);
     });
   }
 
-  private boolean gameIsOver() {
-    Optional<BoardPosition[]> winningComboOpt = gameLogic.checkWin(gameLogic.getCurrentPlayerRole());
+  private void checkGameOver(PlayerRole role) {
+    Optional<BoardPosition[]> winningComboOpt = gameLogic.checkWin(role);
 
     if (winningComboOpt.isPresent()) {
-      gameOver(gameLogic.getCurrentPlayerRole(), winningComboOpt.get());
-      return true;
+      gameOver(role, winningComboOpt.get());
     } else if (gameLogic.staleMate()) {
       staleMate();
-      return true;
-    } else {
-      return false;
     }
   }
 
   private void gameOver(PlayerRole winner, BoardPosition[] winningPositions) {
 
     GameLogic.setCurrentPlayerRole(PlayerRole.None);
-
     Piece[] winningPieces = new Piece[4];
     for (int i = 0; i < 4; i++) {
       BoardPosition bp = winningPositions[i];
