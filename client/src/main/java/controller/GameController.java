@@ -12,6 +12,7 @@ import controller.utils.CoordUtils;
 import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
+import javafx.geometry.Dimension2D;
 import javafx.scene.ImageCursor;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -219,8 +220,16 @@ public class GameController {
   }
 
   private void setCustomCursors() {
-    chipPane1.setCursor(new ImageCursor(new Image("/assets/hand_cursor.png")));
-    chipPane2.setCursor(new ImageCursor(new Image("/assets/hand_cursor.png")));
+
+    Image handCursor = new Image("/assets/hand_cursor.png");
+    Dimension2D dim = ImageCursor.getBestSize(handCursor.getWidth(), handCursor.getHeight());
+    Image handCursorScaled =
+        new Image("/assets/hand_cursor.png", dim.getWidth(), dim.getHeight(), false, false);
+
+    chipPane1.setCursor(new ImageCursor(handCursorScaled, handCursorScaled.getWidth() / 2,
+        handCursorScaled.getHeight() / 2));
+    chipPane2.setCursor(new ImageCursor(handCursorScaled, handCursorScaled.getWidth() / 2,
+        handCursorScaled.getHeight() / 2));
   }
 
   private void buildClouds() {

@@ -2,6 +2,7 @@ package utils;
 
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Dimension2D;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -35,6 +36,10 @@ public class SceneManager {
   }
 
   private static void setCustomCursor(Scene scene) {
-    scene.setCursor(new ImageCursor(new Image("/assets/regular_cursor.png")));
+    Image cursor = new Image("/assets/regular_cursor.png");
+    Dimension2D dim = ImageCursor.getBestSize(cursor.getWidth(), cursor.getHeight());
+    Image cursorScaled =
+        new Image("/assets/regular_cursor.png", dim.getWidth(), dim.getHeight(), false, false);
+    scene.setCursor(new ImageCursor(cursorScaled));
   }
 }
