@@ -18,6 +18,7 @@ public class GameLogic {
   private final int[][] board = new int[6][7];
   private final ArrayList<Integer> moveHistory = new ArrayList<>();
   private static PlayerRole currentPlayerRole = PlayerRole.PlayerOne;
+  private static AI ai = new AI();
 
 
   public static void setLocalPlayer(Player p) {
@@ -42,6 +43,7 @@ public class GameLogic {
     } else {
       remotePlayer.setRole(PlayerRole.PlayerOne);
     }
+    ai.setRole(localRole);
   }
 
   public GameLogic() {
@@ -193,6 +195,10 @@ public class GameLogic {
       }
     }
     return true;
+  }
+
+  public int getBestMove() {
+    return ai.bestColumn(board.clone(), 8);
   }
 
   // Check if there is a winning line in a given direction

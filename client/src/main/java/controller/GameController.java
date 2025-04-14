@@ -13,6 +13,7 @@ import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.ImageCursor;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -30,6 +31,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import logic.GameLogic;
+import logic.AI;
 import network.NetworkClient;
 import network.Player;
 import network.Player.PlayerRole;
@@ -69,6 +71,8 @@ public class GameController {
   @FXML
   private Pane chipPane2;
   private GameLogic gameLogic;
+
+  private Button bestMoveButton;
 
   private class Piece extends Circle {
     public Point position;
@@ -117,8 +121,8 @@ public class GameController {
     enum CloudType {
       Small, Large;
 
-      private final String[] smallClouds = { "cloud1.png", "cloud2.png" };
-      private final String[] largeClouds = { "cloud3.png" };
+      private final String[] smallClouds = {"cloud1.png", "cloud2.png"};
+      private final String[] largeClouds = {"cloud3.png"};
 
       public int getWidth() {
         switch (this) {
@@ -173,9 +177,15 @@ public class GameController {
 
   public void initialize() {
     gameLogic = new GameLogic();
+    bestMoveButton = new Button("Best move");
+    bestMoveButton.setOnAction(e -> {
+      System.out.println(gameLogic.getBestMove());
+    });
+    foregroundPane.getChildren().add(bestMoveButton);
 
     setCustomCursors();
     // buildClouds();
+    //
 
     NetworkClient.bindGameController(this);
     foregroundPane.toFront();
@@ -217,7 +227,7 @@ public class GameController {
     Cloud[] clouds = {
         new Cloud(CloudType.Large), new Cloud(CloudType.Small),
         new Cloud(CloudType.Small), new Cloud(CloudType.Large),
-        new Cloud(CloudType.Large), new Cloud(CloudType.Large) };
+        new Cloud(CloudType.Large), new Cloud(CloudType.Large)};
 
     gamePaneBackground.getChildren().addAll(clouds);
     buildCloudAnimation(clouds);
@@ -232,12 +242,14 @@ public class GameController {
     for (int i = 0; i < clouds.length; i++) {
       Cloud c = clouds[i];
 
-      double yCoord = minAcceptableCloud + Math.random() * (maxAcceptableCloud - minAcceptableCloud);
+      double yCoord =
+          minAcceptableCloud + Math.random() * (maxAcceptableCloud - minAcceptableCloud);
       Path path = new Path(new MoveTo(-c.type.getWidth(), yCoord),
           new LineTo(CoordUtils.gamePaneWidth + c.type.getWidth(), yCoord));
 
       PathTransition pathTransition = new PathTransition(
-          Duration.seconds(Math.random() * (maxTimeAcross - minTimeAcross) + minTimeAcross), path, c);
+          Duration.seconds(Math.random() * (maxTimeAcross - minTimeAcross) + minTimeAcross), path,
+          c);
       pathTransition.setDelay(Duration.seconds((maxTimeAcross / clouds.length) * i));
       pathTransition.play();
 
@@ -258,7 +270,8 @@ public class GameController {
     // get positions and role
     BoardPosition rowCol = CoordUtils.toRowCol(dropHint.position).get();
     PlayerRole role = getLocalPlayer().getRole();
-    Point startPos = new Point(draggedPiece.getCenterX(), draggedPiece.getCenterY(), CoordSystem.GamePane);
+    Point startPos =
+        new Point(draggedPiece.getCenterX(), draggedPiece.getCenterY(), CoordSystem.GamePane);
 
     handleMove(rowCol.getColumn(), role);
     animateMove(rowCol, startPos, role);
@@ -294,8 +307,8 @@ public class GameController {
     // construct a path
     Path path = new Path();
     path.getElements().add(new MoveTo(chipPos.getX(), chipPos.getY()));
-    path.getElements().add(new LineTo(topX + draggedPiece.getRadius(), 
-                                      topY));
+    path.getElements().add(new LineTo(topX + draggedPiece.getRadius(),
+        topY));
 
     // build the animation
     PathTransition pathTransition = new PathTransition();
@@ -483,7 +496,8 @@ public class GameController {
 
         // build the animation
         PathTransition pathTransition2 = new PathTransition(Duration
-            .millis(1.5 * pieceToReturn.position.distanceTo(returnPoint) + Math.random() * 20), path2, pieceToReturn);
+            .millis(1.5 * pieceToReturn.position.distanceTo(returnPoint) + Math.random() * 20),
+            path2, pieceToReturn);
 
         pathTransition2.setOnFinished(g -> {
           overlayPane.getChildren().remove(pieceToReturn);
