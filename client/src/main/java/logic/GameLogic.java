@@ -18,7 +18,47 @@ public class GameLogic {
   private final int[][] board = new int[6][7];
   private final ArrayList<Integer> moveHistory = new ArrayList<>();
   private static PlayerRole currentPlayerRole = PlayerRole.PlayerOne;
-  private static AI ai = new AI();
+  private static GameMode mode = GameMode.None;
+
+  public int[][] getBoard() {
+    return board.clone();
+  }
+
+  public enum GameMode {
+    LocalMultiplayer, LocalAI, Multiplayer, None;
+
+    public boolean canMove(GameLogic currentState, PlayerRole chipPile) {
+      switch (this) {
+        case LocalAI:
+        case LocalMultiplayer:
+          // A player can move in local multiplayer mode or local AI mode when
+          // 1. they are the current player and the chip pile belongs to them
+          return chipPile == currentState.getCurrentPlayerRole();
+        case Multiplayer:
+          // A player can move in multiplayer mode when
+          // 1. they are the local player and,
+          // 2. they are dragging from their pile
+          return GameLogic.getLocalPlayer().getRole() == currentState.getCurrentPlayerRole()
+              && GameLogic.getLocalPlayer().getRole() == chipPile;
+        case None:
+        default:
+          return false;
+      }
+
+    }
+  }
+
+  public static void setGameMode(GameMode mode) {
+    GameLogic.mode = mode;
+    if (mode == GameMode.LocalAI) {
+      AI.setRole(PlayerRole.PlayerTwo);
+      localPlayer = new Player("", 0L);
+    }
+  }
+
+  public static GameMode getGameMode() {
+    return mode;
+  }
 
 
   public static void setLocalPlayer(Player p) {
@@ -43,7 +83,6 @@ public class GameLogic {
     } else {
       remotePlayer.setRole(PlayerRole.PlayerOne);
     }
-    ai.setRole(localRole);
   }
 
   public GameLogic() {
@@ -195,10 +234,6 @@ public class GameLogic {
       }
     }
     return true;
-  }
-
-  public int getBestMove() {
-    return ai.bestColumn(board.clone(), 8);
   }
 
   // Check if there is a winning line in a given direction

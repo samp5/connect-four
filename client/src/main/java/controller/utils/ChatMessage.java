@@ -68,6 +68,5 @@ public class ChatMessage {
 
   }
 
-  public void initialize() {
-  }
+  public void initialize() {}
 }

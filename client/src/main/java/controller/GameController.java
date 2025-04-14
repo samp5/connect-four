@@ -32,6 +32,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import logic.GameLogic;
+import logic.GameLogic.GameMode;
 import logic.AI;
 import network.NetworkClient;
 import network.Player;
@@ -74,6 +75,11 @@ public class GameController {
   private GameLogic gameLogic;
 
   private Button bestMoveButton;
+
+
+  public static void setGameMode(GameMode mode) {
+    GameLogic.setGameMode(mode);
+  }
 
   private class Piece extends Circle {
     public Point position;
@@ -178,11 +184,11 @@ public class GameController {
 
   public void initialize() {
     gameLogic = new GameLogic();
-    bestMoveButton = new Button("Best move");
-    bestMoveButton.setOnAction(e -> {
-      System.out.println(gameLogic.getBestMove());
-    });
-    foregroundPane.getChildren().add(bestMoveButton);
+    // bestMoveButton = new Button("Best move");
+    // bestMoveButton.setOnAction(e -> {
+    // System.out.println(gameLogic.getBestMove());
+    // });
+    // foregroundPane.getChildren().add(bestMoveButton);
 
     setCustomCursors();
     // buildClouds();
@@ -278,7 +284,7 @@ public class GameController {
 
     // get positions and role
     BoardPosition rowCol = CoordUtils.toRowCol(dropHint.position).get();
-    PlayerRole role = getLocalPlayer().getRole();
+    PlayerRole role = gameLogic.getCurrentPlayerRole();
     Point startPos =
         new Point(draggedPiece.getCenterX(), draggedPiece.getCenterY(), CoordSystem.GamePane);
 
@@ -286,7 +292,7 @@ public class GameController {
     animateMove(rowCol, startPos, role);
 
     // send the move to the client
-    if (GameLogic.getRemotePlayer() != null) {
+    if (GameLogic.getGameMode() == GameMode.Multiplayer) {
       NetworkClient.sendMove(rowCol.getColumn());
     }
 
@@ -302,6 +308,18 @@ public class GameController {
     }, () -> {
       System.err.println("Recieved invalid move");
     });
+
+    if (GameLogic.getGameMode() == GameMode.LocalAI
+        && gameLogic.getCurrentPlayerRole() == AI.getRole()) {
+      System.out.println("handling AI Move");
+      int aiCol = AI.bestColumn(gameLogic.getBoard());
+      BoardPosition bp = new BoardPosition(gameLogic.getAvailableRow(aiCol).get(), aiCol);
+      handleMove(AI.bestColumn(gameLogic.getBoard()), AI.getRole());
+      animateMove(bp, CoordUtils.chipHolder(AI.getRole()),
+          AI.getRole());
+      NetworkClient.handleChat("loser", "AI", false);
+    }
+
   }
 
   private void animateMove(BoardPosition rowCol, Point chipPos, PlayerRole role) {
@@ -356,14 +374,8 @@ public class GameController {
     });
   }
 
-  private void handleDrag(MouseEvent e, PlayerRole player) {
-    // stop a player from clicking when it is
-    // 1. not their turn
-    // 2. not their pile
-    // 3. otherwise blocked
-    if (GameLogic.getLocalPlayer().getRole() != gameLogic.getCurrentPlayerRole()
-        || GameLogic.getLocalPlayer().getRole() != player
-        || !canMove) {
+  private void handleDrag(MouseEvent e, PlayerRole playerPile) {
+    if (!canMove || !GameLogic.getGameMode().canMove(gameLogic, playerPile)) {
       return;
     }
 

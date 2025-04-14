@@ -112,23 +112,24 @@ public class ChatController {
     if (msg.length() == 0) {
       return;
     }
-    appendMessage(msg, GameLogic.getLocalPlayer().getUsername());
+    appendMessage(msg, GameLogic.getLocalPlayer().getUsername(), true);
     chatEditorInput.clear();
     chatEditorDisplay.getChildren().setAll();
     NetworkClient.sendChatMessage(msg);
   }
 
-  public void recieveMessage(String message, String username) {
-    appendMessage(message, username);
+  public void recieveMessage(String message, String username, boolean local) {
+    appendMessage(message, username, local);
   }
 
   // // when we need to display a new message
-  public void appendMessage(String msg, String username) {
+  public void appendMessage(String msg, String username, boolean local) {
     try {
-      FXMLLoader loader = new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
+      FXMLLoader loader =
+          new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
       Region msgBox = loader.load();
       ChatMessage newMessageCTL = loader.getController();
-      newMessageCTL.build(username, 0, msg, GameLogic.getLocalPlayer().getUsername() == username);
+      newMessageCTL.build(username, 0, msg, local);
       this.chatHistory.getChildren().add(msgBox);
     } catch (IOException e) {
       e.printStackTrace();

@@ -7,12 +7,21 @@ public class AI {
   private static final int ROWS = 6;
   private static final int COLUMNS = 7;
   private static int playingAs = -1;
+  private static int difficulty = 5;
 
-  public void setRole(PlayerRole role) {
+  public static void setDifficulty(int difficulty) {
+    difficulty = Math.abs(difficulty) % 10;
+  }
+
+  public static void setRole(PlayerRole role) {
     playingAs = role == PlayerRole.PlayerOne ? 1 : 2;
   }
 
-  private class MoveScore {
+  public static PlayerRole getRole() {
+    return playingAs == 1 ? PlayerRole.PlayerOne : PlayerRole.PlayerTwo;
+  }
+
+  private static class MoveScore {
     int move;
     int score;
 
@@ -32,7 +41,7 @@ public class AI {
           {3, 4, 5, 7, 5, 4, 3}
       };
 
-  private void place_piece(int[][] board, int player, int col) {
+  private static void place_piece(int[][] board, int player, int col) {
     for (int row_i = 0; row_i < ROWS; row_i++) {
       if (board[row_i][col] == 0) {
         board[row_i][col] = player;
@@ -41,7 +50,7 @@ public class AI {
     }
   }
 
-  private void remove_piece(int[][] board, int col) {
+  private static void remove_piece(int[][] board, int col) {
     for (int row_i = ROWS - 1; row_i >= 0; row_i--) {
       if (board[row_i][col] != 0) {
         board[row_i][col] = 0;
@@ -50,7 +59,7 @@ public class AI {
     }
   }
 
-  private int switchPlayer(int player) {
+  private static int switchPlayer(int player) {
     if (player == 1) {
       return 2;
     } else {
@@ -58,11 +67,11 @@ public class AI {
     }
   }
 
-  private boolean stalemate(int[][] board) {
+  private static boolean stalemate(int[][] board) {
     return false;
   }
 
-  private int endStateScore(int[][] board) {
+  private static int endStateScore(int[][] board) {
     if (checkWin(board, playingAs)) {
       return 100_000;
     } else if (checkWin(board, switchPlayer(playingAs))) {
@@ -83,7 +92,7 @@ public class AI {
    * TODO: Maybe implement alpha-beta pruning?
    *
    */
-  private MoveScore minMaxDescent(int[][] board, int player, int depth) {
+  private static MoveScore minMaxDescent(int[][] board, int player, int depth) {
     int endScore = endStateScore(board);
     if (endScore != -1) {
       return new MoveScore(-1, endScore);
@@ -144,17 +153,17 @@ public class AI {
     return new MoveScore(bestMove, bestScore);
   }
 
-  public int bestColumn(int[][] board, int depth) {
+  public static int bestColumn(int[][] board) {
     if (playingAs == -1) {
       return -1;
     }
 
-    MoveScore m = minMaxDescent(board, playingAs, depth);
+    MoveScore m = minMaxDescent(board, playingAs, difficulty);
     return m.move;
   }
 
   // check win
-  public boolean checkWin(int[][] board, int player) {
+  public static boolean checkWin(int[][] board, int player) {
     for (int row = 0; row < ROWS; row++) {
       for (int col = 0; col < COLUMNS; col++) {
         if (board[row][col] == player) {
@@ -173,7 +182,7 @@ public class AI {
     return false;
   }
 
-  private boolean checkDirection(int[][] board, int row, int col, int dRow, int dCol) {
+  private static boolean checkDirection(int[][] board, int row, int col, int dRow, int dCol) {
     int count = 0;
     int player = board[row][col];
     for (int i = 0; i < 4; i++) {
@@ -187,7 +196,7 @@ public class AI {
     return count == 4; // If we've found 4 in a row
   }
 
-  private int evaluate_board(int[][] board) {
+  private static int evaluate_board(int[][] board) {
 
     int score = 0;
     int opponent = switchPlayer(playingAs);

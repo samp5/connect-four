@@ -81,7 +81,7 @@ public class NetworkClient {
         }
         break;
       case CHAT:
-        chatCTL.recieveMessage(msg.getChatMessage(), msg.getUsername());
+        handleChat(msg.getChatMessage(), msg.getUsername(), false);
         break;
       case MOVE:
         gameCTL.recieveMove(msg.getColumn());
@@ -102,6 +102,10 @@ public class NetworkClient {
       default:
         break;
     }
+  }
+
+  public static void handleChat(String msg, String username, boolean local) {
+    chatCTL.recieveMessage(msg, username, local);
   }
 
   // send move to server

@@ -22,8 +22,10 @@
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="205.0" spacing="50.0">
                <children>
-                  <Button mnemonicParsing="false" styleClass="pixel-button" text="Settings" />
-                  <Button fx:id="playButton" mnemonicParsing="false" styleClass="pixel-button" text="Play" />
+                  <Button fx:id="playOnlineButton" mnemonicParsing="false" styleClass="pixel-button" text="Play Online" />
+                  <Button fx:id="playLocalButton" mnemonicParsing="false" styleClass="pixel-button" text="Play Locally" />
+                  <Button fx:id="playAIButton" mnemonicParsing="false" styleClass="pixel-button" text="Play v.s AI" />
+                  <Button fx:id="settingsButton" mnemonicParsing="false" styleClass="pixel-button" text="Settings" />
                </children>
             </VBox>
          </children>
