@@ -9,7 +9,7 @@
 ### Game Screen
 - [x] Design background (ART) 
 - [ ] Add move effects
-- [ ] Add on-win animations
+- [x] Add on-win animations
 - [ ] Additional animations on overlay layer for *stimulation*
     - [x] clouds
     - [ ] Rethink cloud animation mechanism
@@ -17,6 +17,8 @@
 #### Long-term
 - [ ] Add AI with levels of difficulty
 - [ ] Add a smarter stalemate detector
+- [ ] Message pane to choose message box from friends
+- [ ] Text emoji drawer
 
 ##### Maybe not
 - [ ] Add some sort of scoring system that rewards blocking moves, increasing connection length?
@@ -29,6 +31,9 @@
     - [x] Message info layout, etc.
 - [ ] Design message UX 
     - [ ] Handle hovers, clicks, etc
+- [ ] Move send to other side
+- [ ] Add buttons for forfeit, offer draw, request forfeit
+    - [ ] with confirmation buttons
 - [x] Style all control elements with pixel art (ART)
 
 
@@ -43,7 +48,7 @@
 - [x] Create FXML scene + Controller
 - [x] Style all control elements with pixel art  (ART)
 - [x] Save connections on load and quit
-- [ ] Add option to play locally (against AI)
+- [x] Add option to play locally (against AI)
 
 ### Loading Screen
 - [x] Create a neat connect-four based animation (ART)

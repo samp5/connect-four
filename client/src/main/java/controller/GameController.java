@@ -12,8 +12,6 @@ import controller.utils.CoordUtils;
 import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
-import javafx.geometry.Dimension2D;
-import javafx.scene.ImageCursor;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -37,6 +35,7 @@ import logic.AI;
 import network.NetworkClient;
 import network.Player;
 import network.Player.PlayerRole;
+import utils.CursorManager;
 
 import javafx.util.Duration;
 
@@ -190,9 +189,8 @@ public class GameController {
     // });
     // foregroundPane.getChildren().add(bestMoveButton);
 
-    setCustomCursors();
+    CursorManager.setHandCursor(chipPane1, chipPane2);
     // buildClouds();
-    //
 
     NetworkClient.bindGameController(this);
     foregroundPane.toFront();
@@ -223,19 +221,6 @@ public class GameController {
     chipPane2.toFront();
 
     setHandlers();
-  }
-
-  private void setCustomCursors() {
-
-    Image handCursor = new Image("/assets/hand_cursor.png");
-    Dimension2D dim = ImageCursor.getBestSize(handCursor.getWidth(), handCursor.getHeight());
-    Image handCursorScaled =
-        new Image("/assets/hand_cursor.png", dim.getWidth(), dim.getHeight(), false, false);
-
-    chipPane1.setCursor(new ImageCursor(handCursorScaled, handCursorScaled.getWidth() / 2,
-        handCursorScaled.getHeight() / 2));
-    chipPane2.setCursor(new ImageCursor(handCursorScaled, handCursorScaled.getWidth() / 2,
-        handCursorScaled.getHeight() / 2));
   }
 
   private void buildClouds() {
