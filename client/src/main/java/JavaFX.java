@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
 import network.NetworkClient;
+import utils.AudioManager;
 import utils.SceneManager;
 
 /**
@@ -16,7 +17,8 @@ public class JavaFX extends Application {
       try {
         Class.forName("network.NetworkClient");
         NetworkClient.disconnect();
-      } catch (ClassNotFoundException e) {}
+      } catch (ClassNotFoundException e) {
+      }
     }));
     // attempt to connect to localhost server
     launch(args);
@@ -26,5 +28,6 @@ public class JavaFX extends Application {
   public void start(Stage primaryStage) throws Exception {
     SceneManager.initialize(primaryStage);
     SceneManager.showScene("menu.fxml");
+    AudioManager.playContinuous("main_theme.mp3");
   }
 }
