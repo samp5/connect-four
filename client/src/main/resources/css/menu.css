@@ -77,3 +77,16 @@
 .recent-connection-cell-selected {
   -fx-padding: 10px;
 }
+.slider .thumb {
+  -fx-background-image: url("../assets/red_chip.png");
+  -fx-background-repeat: no-repeat;
+  -fx-background-size: contain;
+  -fx-background-position: center;
+}
+
+.slider .track {
+  -fx-background-color: #c0a36e; 
+  -fx-border-color: #363646; 
+  -fx-border-style: solid; 
+  -fx-border-width: 2px; 
+}

@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import controller.utils.GameSettings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -53,14 +54,7 @@ public class MenuController {
       GameController.setGameMode(GameMode.LocalAI);
     });
     settingsButton.setOnAction(e -> {
-      try {
-        FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/fxml/settings.fxml"));
-        HBox settings = loader.load();
-        SettingsController settingsCTL = loader.getController();
-        settingsCTL.attach(menuPane, settings);
-      } catch (IOException ioe) {
-        ioe.printStackTrace();
-      }
+      GameSettings.loadOnto(menuPane);
     });
   }
 }

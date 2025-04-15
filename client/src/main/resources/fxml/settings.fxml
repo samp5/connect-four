@@ -9,31 +9,36 @@
 <?import javafx.scene.text.Text?>
 
 
-<HBox alignment="CENTER" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SettingsController">
+<Pane fx:id="settingsPane" maxHeight="-Infinity" maxWidth="500.0" minHeight="500.0" minWidth="500.0" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SettingsController">
    <children>
-      <Pane fx:id="settingsPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0">
+      <VBox layoutY="31.0">
          <children>
-            <VBox layoutY="31.0">
+            <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="500.0">
                <children>
-                  <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="500.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-text" text="Settings" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <VBox spacing="10.0">
-                           <children>
-                              <Label text="Volume" />
-                              <Slider fx:id="volumeSlider" minorTickCount="5" />
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-text" text="Settings" />
                </children>
-            </VBox>
-            <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" styleClass="back-button" text="x" />
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox spacing="10.0">
+                     <children>
+                        <Label text="Volume" />
+                        <Slider fx:id="volumeSlider" minorTickCount="5" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox spacing="10.0">
+                     <children>
+                        <Button fx:id="mainMenuButton" mnemonicParsing="false" styleClass="pixel-button" text="Main Menu" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
          </children>
-      </Pane>
+      </VBox>
+      <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" styleClass="back-button" text="x" />
    </children>
-</HBox>
+</Pane>

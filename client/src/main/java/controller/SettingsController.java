@@ -12,6 +12,8 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import utils.AudioManager;
+import utils.CursorManager;
+import utils.SceneManager;
 
 public class SettingsController {
   @FXML
@@ -21,11 +23,16 @@ public class SettingsController {
   @FXML
   Button backButton;
 
+  @FXML
+  Button mainMenuButton;
+
   private Pane parent;
   private Node root;
 
-  public void attach(Pane parent, Node root) {
+  public void attach(Pane parent, Pane root) {
     parent.getChildren().add(root);
+    root.relocate((parent.getWidth() - 500) / 2,
+        (parent.getHeight() - 500) / 2);
     root.toFront();
     this.parent = parent;
     this.root = root;
@@ -37,12 +44,28 @@ public class SettingsController {
 
 
   public void initialize() {
+    setHandlers();
+    styleElements();
+    volumeSlider.setValue(volumeSlider.getMax() * AudioManager.getVolume());
+
+  }
+
+  public static Background getButtonBackground(int dim) {
+    return new Background(new BackgroundImage(new Image("/assets/settings-button.png"),
+        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+        new BackgroundSize(dim, dim, false, false, false, false)));
+  }
+
+  private void styleElements() {
     settingsPane.setBackground(
         new Background(new BackgroundImage(new Image("/assets/load-background.png"),
             BackgroundRepeat.NO_REPEAT,
             BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
             new BackgroundSize(500, 500, false, false, false, false))));
-    volumeSlider.setValue(volumeSlider.getMax() * AudioManager.getVolume());
+    CursorManager.setHandCursor(volumeSlider);
+  }
+
+  private void setHandlers() {
     volumeSlider.valueProperty().addListener((observable, old, newValue) -> {
       if (newValue != null) {
         AudioManager.setVolume(newValue.doubleValue() / volumeSlider.getMax());
@@ -51,12 +74,8 @@ public class SettingsController {
     backButton.setOnAction(e -> {
       detach();
     });
-
-  }
-
-  public static Background getButtonBackground(int dim) {
-    return new Background(new BackgroundImage(new Image("/assets/settings-button.png"),
-        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-        new BackgroundSize(dim, dim, false, false, false, false)));
+    mainMenuButton.setOnAction(e -> {
+      SceneManager.showScene("menu.fxml");
+    });
   }
 }

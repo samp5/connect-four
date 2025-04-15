@@ -305,7 +305,9 @@ public class GameController {
       handleMove(AI.bestColumn(gameLogic.getBoard()), AI.getRole());
       animateMove(bp, CoordUtils.chipHolder(AI.getRole()),
           AI.getRole());
-      NetworkClient.handleChat("loser", "AI", false);
+      if (Math.random() < 0.4) {
+        NetworkClient.handleChat(AI.getQuip(), "AI", false);
+      }
     }
 
   }
@@ -423,8 +425,7 @@ public class GameController {
     });
 
     settingsButton.setOnMouseClicked(e -> {
-      overlayPane.setMouseTransparent(false);
-      GameSettings.loadSettings(overlayPane);
+      GameSettings.loadOnto(foregroundPane);
     });
   }
 
