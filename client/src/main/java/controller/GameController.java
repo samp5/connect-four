@@ -450,12 +450,12 @@ public class GameController {
   private void gameOver(PlayerRole winner, BoardPosition[] winningPositions) {
 
     GameLogic.setCurrentPlayerRole(PlayerRole.None);
-    Piece[] winningPieces = new Piece[4];
-    for (int i = 0; i < 4; i++) {
-      BoardPosition bp = winningPositions[i];
-      winningPieces[i] = new Piece(winner, CoordUtils.fromRowCol(bp.getRow(),
-          bp.getColumn()));
-    }
+    // Piece[] winningPieces = new Piece[4];
+    // for (int i = 0; i < 4; i++) {
+    //   BoardPosition bp = winningPositions[i];
+    //   winningPieces[i] = new Piece(winner, CoordUtils.fromRowCol(bp.getRow(),
+    //       bp.getColumn()));
+    // }
     Object[] pieces = midgroundPane.getChildren().toArray();
     midgroundPane.getChildren().addAll(winningPieces);
     for (Object pi : pieces) {
@@ -528,6 +528,26 @@ public class GameController {
     }
     gameLogic.reset();
 
+  }
+
+  public void recieveForfeit() {
+    gameOver(GameLogic.getLocalPlayer().getRole(), null);
+    // TODO: add notif or something
+  }
+
+  public void forfeit() {
+    GameMode mode = GameLogic.getGameMode();
+    if (mode == GameMode.Multiplayer) {
+      gameOver(GameLogic.getRemotePlayer().getRole(), null);
+    } else if (mode == GameMode.LocalMultiplayer) {
+      if (gameLogic.getCurrentPlayerRole() == PlayerRole.PlayerOne) {
+        gameOver(PlayerRole.PlayerTwo, null);
+      } else {
+        gameOver(PlayerRole.PlayerOne, null);
+      }
+    } else { // AI
+      gameOver(PlayerRole.PlayerTwo, null);
+    }
   }
 
   private void staleMate() {

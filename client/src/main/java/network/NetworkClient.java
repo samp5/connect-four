@@ -12,6 +12,8 @@ import controller.GameController;
 import javafx.application.Platform;
 import utils.SceneManager;
 import logic.GameLogic;
+import logic.GameLogic.GameMode;
+import network.Message.Type;
 
 /**
  * Connect to server
@@ -99,6 +101,11 @@ public class NetworkClient {
           // restore moves from other player
           gameCTL.restoreGameBoard(restoredMoves);
         }
+      case FORFEIT:
+        gameCTL.recieveForfeit();
+        break;
+      case DRAW_REQUEST:
+        break;
       default:
         break;
     }
@@ -117,14 +124,29 @@ public class NetworkClient {
 
   // send chat to server
   public static void sendChatMessage(String message) {
-    Player localPlayer = gameCTL.getLocalPlayer();
-    Message toSend = new Message(localPlayer.getUsername(), message, localPlayer.getID());
-    sendMessage(toSend);
+    if (GameLogic.getGameMode() == GameMode.Multiplayer) {
+      Player localPlayer = gameCTL.getLocalPlayer();
+      Message toSend = new Message(localPlayer.getUsername(), message, localPlayer.getID());
+      sendMessage(toSend);
+    }
   }
 
   // alert server of game complete
   public static void gameComplete(boolean won) {
     sendMessage(new Message(player, won));
+  }
+
+  // forfeit a match
+  public static void forfeit() {
+    gameCTL.forfeit();
+    if (GameLogic.getGameMode() == GameMode.Multiplayer) {
+      sendMessage(new Message(Type.FORFEIT));
+    }
+  }
+
+  // request a draw
+  public static void drawRequest() {
+    sendMessage(new Message(Type.DRAW_REQUEST));
   }
 
   private static void sendMessage(Message m) {

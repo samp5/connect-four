@@ -3,26 +3,44 @@ package controller;
 import java.io.IOException;
 import java.util.Collection;
 
+import javafx.animation.PauseTransition;
+import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Popup;
+import javafx.stage.Screen;
+import javafx.stage.PopupWindow.AnchorLocation;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+import javafx.util.Duration;
 import logic.GameLogic;
 import logic.GameLogic.GameMode;
 import network.NetworkClient;
@@ -40,6 +58,21 @@ public class ChatController {
 
   @FXML
   Button sendButton;
+  @FXML
+  Button ffButton;
+  @FXML
+  Button drawButton;
+  @FXML
+  Button requestFFButton;
+
+  @FXML
+  Pane confirmPopup;
+  @FXML
+  Button popupCancelButton;
+  @FXML
+  Button popupConfirmButton;
+  @FXML
+  Text popupConfirmText;
 
   @FXML
   HBox chatEditorBox;
@@ -56,28 +89,9 @@ public class ChatController {
 
   public void initialize() {
     NetworkClient.bindChatController(this);
-    System.out.println("Chat controller initialized");
     setHandlers();
-    chatHistory.getStyleClass().add("transparent-bkgd");
-    chatEditorInput.setOpacity(0);
-    chatEditorInput.toBack();
-    chatEditorDisplay.toFront();
 
-    chatEditorDisplay.setBackground(
-        new Background(new BackgroundImage(new Image("/assets/chat_message_local.png"),
-            BackgroundRepeat.NO_REPEAT,
-            BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            new BackgroundSize(100, 100, true, true,
-                false,
-                false))));
-
-    chatHistoryScroll.vvalueProperty().bind(chatHistory.heightProperty());
-    System.out.println(chatHistoryScroll.getStyleClass());
-    chatPane.setBackground(new Background(
-        new BackgroundImage(new Image("/assets/chat_background.png", 360, 720, false, true, false),
-            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            new BackgroundSize(360, 718, false, false, false, false))));
-
+    // can't do this in fxml easily
     sendButton
         .setBackground(new Background(new BackgroundImage(new Image("/assets/send_button.png"),
             BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
@@ -107,6 +121,40 @@ public class ChatController {
       }
       e.consume();
     });
+
+    popupCancelButton.setOnAction(e -> {
+      confirmPopup.visibleProperty().set(false);
+    });
+
+    ffButton.setOnAction(e -> {
+      confirmPopup.visibleProperty().set(true);
+      popupConfirmText.setText("forfeit?");
+
+      popupConfirmButton.setOnAction(e0 -> {
+        confirmPopup.visibleProperty().set(false);
+        NetworkClient.forfeit();
+      });
+    });
+
+    // drawButton.setOnAction(e -> {
+    //   popup.show(ffButton.getScene().getWindow());
+    //   popupConfirmText.setText("request draw?");
+    //
+    //   popupConfirmButton.setOnAction(e0 -> {
+    //     popup.hide();
+    //     NetworkClient.drawRequest();
+    //   });
+    // });
+    //
+    // requestFFButton.setOnAction(e -> {
+    //   popup.show(ffButton.getScene().getWindow());
+    //   popupConfirmText.setText("request forfeit?");
+    //
+    //   popupConfirmButton.setOnAction(e0 -> {
+    //     popup.hide();
+    //     System.out.println("confirmed forfeit request");
+    //   });
+    // });
   }
 
   private void sendMessage() {
@@ -114,12 +162,14 @@ public class ChatController {
     if (msg.length() == 0) {
       return;
     }
-    appendMessage(msg, GameLogic.getLocalPlayer().getUsername(), true);
+    if (GameLogic.getGameMode() == GameMode.Multiplayer) {
+      appendMessage(msg, GameLogic.getLocalPlayer().getUsername(), true);
+      NetworkClient.sendChatMessage(msg);
+    } else {
+      appendMessage(msg, "you", true);
+    }
     chatEditorInput.clear();
     chatEditorDisplay.getChildren().setAll();
-    if (GameLogic.getGameMode() == GameMode.Multiplayer) {
-      NetworkClient.sendChatMessage(msg);
-    }
   }
 
   public void recieveMessage(String message, String username, boolean local) {

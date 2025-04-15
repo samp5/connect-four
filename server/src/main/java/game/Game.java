@@ -74,6 +74,7 @@ public class Game {
           case CHAT:
           case MOVE:
           case RECONNECT:
+          case FORFEIT:
             // don't redirect if there was a DC
             if (this.disconnectID != null) return;
 

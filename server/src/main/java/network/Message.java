@@ -21,6 +21,9 @@ public class Message implements Serializable {
     CHAT,
     MOVE,
     COMPLETE,
+    FORFEIT,
+    DRAW,
+    DRAW_REQUEST,
   };
 
   private Type type;
@@ -74,6 +77,14 @@ public class Message implements Serializable {
   public Message(Player player) {
     this.type = Type.DISCONNECT;
     this.player = player;
+  }
+
+  /**
+   * For responding to a draw request
+   */
+  public Message(boolean accepted) {
+    this.type = Type.DRAW;
+    this.success = accepted;
   }
 
   /**
