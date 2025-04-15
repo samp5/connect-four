@@ -18,7 +18,7 @@
 - [x] Add on-win animations
 - [ ] Additional animations on overlay layer for *stimulation*
     - [x] clouds
-    - [ ] Rethink cloud animation mechanism
+    - [x] Rethink cloud animation mechanism
 
 #### Long-term
 - [x] Add AI with levels of difficulty
@@ -49,6 +49,7 @@
 - [x] Style all control elements with pixel art  (ART)
 - [x] Save connections on load and quit
 - [x] Add option to play locally (against AI)
+- [x] Be able to delete a connection
 
 ### Loading Screen
 - [x] Create a neat connect-four based animation (ART)

@@ -3,8 +3,13 @@ package controller.utils;
 import java.io.Serializable;
 import java.time.LocalTime;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
@@ -54,37 +59,62 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
               Text details = new Text(
                   "\tIP: " + connection.getIp() + "Port:" + String.valueOf(connection.getPort()));
 
+              HBox boxLeft = new HBox(connectionLabel);
+              boxLeft.setAlignment(Pos.CENTER_LEFT);
+              boxLeft.setMinWidth(240);
+
+              BorderPane bp = new BorderPane();
+              bp.setCenter(new ImageView(new Image("/assets/garbage.png", 25, 25, false, false)));
+              HBox boxRight = new HBox(bp);
+              boxRight.setAlignment(Pos.CENTER_RIGHT);
+              boxRight.setMinWidth(25);
+
+              HBox top = new HBox(boxLeft, boxRight);
+              top.setMinWidth(280);
+
+              bp.setOnMouseClicked(e -> {
+                param.getItems().remove(connection);
+              });
+              bp.setOnMouseEntered(e -> {
+                bp.setCenter(new ImageView(new Image("/assets/garbage_opened.png", 25, 25, false, false)));
+              });
+              bp.setOnMouseExited(e -> {
+                bp.setCenter(new ImageView(new Image("/assets/garbage.png", 25, 25, false, false)));
+              });
+
               // construct our HBox and label
-              VBox item = new VBox(connectionLabel, details);
+              VBox info = new VBox(top, details);
 
               // Add the appropriate style classes
               connectionLabel.getStyleClass().add("recent-connection-cell-text-selected");
               details.getStyleClass().add("recent-connection-cell-text-selected");
-              item.getStyleClass().add("recent-connection-cell-selected");
+              info.getStyleClass().add("recent-connection-cell-selected");
 
               // set the graphic for this cell
-              setGraphic(item);
+              setGraphic(info);
 
             } else {
               Text connectionLabel = new Text(
                   connection.name);
               Text details = new Text(
-                  "\tIP: " + connection.getIp() + "Port:" + String.valueOf(connection.getPort()));
+                  "\tIP: " + connection.getIp() + " Port:" + String.valueOf(connection.getPort()));
+              HBox boxLeft = new HBox(connectionLabel);
+              boxLeft.setAlignment(Pos.CENTER_LEFT);
+              boxLeft.setMinWidth(240);
+
+              HBox top = new HBox(boxLeft);
+              top.setMinWidth(280);
+
               // construct our HBox and label
-              VBox item = new VBox(connectionLabel, details);
+              VBox info = new VBox(top, details);
 
               // Add the appropriate style classes
               connectionLabel.getStyleClass().add("recent-connection-cell-text");
               details.getStyleClass().add("recent-connection-cell-text");
-              item.getStyleClass().add("recent-connection-cell");
-
-              item.setOnMouseEntered(e -> {
-              });
-              item.setOnMouseExited(e -> {
-              });
+              info.getStyleClass().add("recent-connection-cell");
 
               // set the graphic for this cell
-              setGraphic(item);
+              setGraphic(info);
             }
           } else {
 
