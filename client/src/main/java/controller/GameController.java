@@ -5,7 +5,6 @@ import controller.utils.Point;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import controller.GameController.Cloud.CloudType;
 import controller.utils.BoardPosition;
 import controller.utils.CoordSystem;
 import controller.utils.CoordUtils;
@@ -18,11 +17,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
@@ -75,6 +69,8 @@ public class GameController {
   private Pane chipPane2;
   @FXML
   private BorderPane settingsButton;
+  @FXML
+  private ImageView clouds;
 
   private GameLogic gameLogic;
 
@@ -126,61 +122,6 @@ public class GameController {
     }
   }
 
-  public class Cloud extends Rectangle {
-
-    enum CloudType {
-      Small, Large;
-
-      private final String[] smallClouds = { "cloud1.png", "cloud2.png" };
-      private final String[] largeClouds = { "cloud3.png" };
-
-      public int getWidth() {
-        switch (this) {
-          case Large:
-            return 200;
-          case Small:
-            return 100;
-          default:
-            return 0;
-        }
-      }
-
-      public int getHeight() {
-        switch (this) {
-          case Large:
-            return 100;
-          case Small:
-            return 100;
-          default:
-            return 0;
-        }
-      }
-
-      public Image getImage() {
-        switch (this) {
-          case Large:
-            return new Image("/assets/" + largeClouds[(int) (Math.random() * largeClouds.length)]);
-          case Small:
-            return new Image("/assets/" + smallClouds[(int) (Math.random() * largeClouds.length)]);
-          default:
-            return null;
-        }
-      }
-    }
-
-    CloudType type;
-
-    Cloud(CloudType type) {
-      super();
-      super.setWidth(type.getWidth());
-      super.setHeight(type.getHeight());
-      super.setFill(new ImagePattern(type.getImage()));
-      super.setX(-type.getWidth());
-      super.setY(0);
-      this.type = type;
-    }
-  }
-
   public void setLocalPlayer(PlayerRole local) {
     GameLogic.setLocalPlayerRole(local);
   }
@@ -189,8 +130,7 @@ public class GameController {
     gameLogic = new GameLogic();
 
     CursorManager.setHandCursor(chipPane1, chipPane2);
-    // buildClouds();
-    //
+    animateClouds();
 
     NetworkClient.bindGameController(this);
     settingsButton.setBackground(SettingsController.getButtonBackground(40));
@@ -198,39 +138,13 @@ public class GameController {
     setHandlers();
   }
 
-  private void buildClouds() {
-    Cloud[] clouds = {
-        new Cloud(CloudType.Large), new Cloud(CloudType.Small),
-        new Cloud(CloudType.Small), new Cloud(CloudType.Large),
-        new Cloud(CloudType.Large), new Cloud(CloudType.Large) };
-
-    gamePaneBackground.getChildren().addAll(clouds);
-    buildCloudAnimation(clouds);
-  }
-
-  private void buildCloudAnimation(Cloud[] clouds) {
-    double maxAcceptableCloud = 300;
-    double minAcceptableCloud = 10;
-    double maxTimeAcross = 90;
-    double minTimeAcross = 75;
-
-    for (int i = 0; i < clouds.length; i++) {
-      Cloud c = clouds[i];
-
-      double yCoord = minAcceptableCloud + Math.random() * (maxAcceptableCloud - minAcceptableCloud);
-      Path path = new Path(new MoveTo(-c.type.getWidth(), yCoord),
-          new LineTo(CoordUtils.gamePaneWidth + c.type.getWidth(), yCoord));
-
-      PathTransition pathTransition = new PathTransition(
-          Duration.seconds(Math.random() * (maxTimeAcross - minTimeAcross) + minTimeAcross), path,
-          c);
-      pathTransition.setDelay(Duration.seconds((maxTimeAcross / clouds.length) * i));
-      pathTransition.play();
-
-      pathTransition.setOnFinished(e -> {
-        pathTransition.playFromStart();
-      });
-    }
+  public void animateClouds() {
+    System.out.println(clouds.getFitWidth());
+    System.out.println(clouds.getFitHeight());
+    Path cloudPath = new Path(new MoveTo(0, 0), new LineTo(720, 0));
+    PathTransition cloudAnimation = new PathTransition(Duration.seconds(65), cloudPath, clouds);
+    cloudAnimation.setCycleCount(PathTransition.INDEFINITE);
+    cloudAnimation.play();
   }
 
   private void handleRelease(MouseEvent e) {
@@ -266,22 +180,6 @@ public class GameController {
     }, () -> {
       System.err.println("Recieved invalid move");
     });
-
-    if (GameLogic.getGameMode() == GameMode.LocalAI
-        && gameLogic.getCurrentPlayerRole() == AI.getRole()) {
-      int aiCol = AI.bestColumn(gameLogic.getBoard());
-      BoardPosition bp = new BoardPosition(gameLogic.getAvailableRow(aiCol).get(), aiCol);
-      handleMove(AI.bestColumn(gameLogic.getBoard()), AI.getRole());
-      PauseTransition pt = new PauseTransition(Duration.millis(1500));
-      if (Math.random() < 0.4) {
-        NetworkClient.handleChat(AI.getQuip(), "AI", false);
-      }
-      pt.setOnFinished(e -> {
-        animateMove(bp, CoordUtils.chipHolder(AI.getRole()),
-            AI.getRole());
-      });
-      pt.play();
-    }
 
   }
 
@@ -334,6 +232,19 @@ public class GameController {
       pTrans.setOnFinished(k -> {
         // chack for game over
         checkGameOver(role);
+
+        // run our AI if we need to
+        if (GameLogic.getGameMode() == GameMode.LocalAI
+            && gameLogic.getCurrentPlayerRole() == AI.getRole()) {
+          int aiCol = AI.bestColumn(gameLogic.getBoard());
+          BoardPosition bp = new BoardPosition(gameLogic.getAvailableRow(aiCol).get(), aiCol);
+          handleMove(AI.bestColumn(gameLogic.getBoard()), AI.getRole());
+          if (Math.random() < 0.4) {
+            NetworkClient.handleChat(AI.getQuip(), "AI", false);
+          }
+          animateMove(bp, CoordUtils.chipHolder(AI.getRole()),
+              AI.getRole());
+        }
       });
 
       draggedPiece = null;
@@ -523,7 +434,7 @@ public class GameController {
       } else {
         NetworkClient.gameComplete(false);
       }
-    } else if (GameLogic.getGameMode() == GameMode.LocalAI) {
+    } else if (GameLogic.getGameMode() == GameMode.LocalAI && AI.getRole() == winner) {
       NetworkClient.handleChat(AI.getWinningQuip(), "AI", false);
     }
     gameLogic.reset();

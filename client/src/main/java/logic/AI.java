@@ -82,7 +82,11 @@ public class AI {
   }
 
   public static void setDifficulty(int difficulty) {
-    difficulty = Math.abs(difficulty) % 10;
+    AI.difficulty = Math.abs(difficulty) % 10;
+  }
+
+  public static int getDifficulty() {
+    return difficulty;
   }
 
   public static void setRole(PlayerRole role) {

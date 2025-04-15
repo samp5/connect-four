@@ -11,6 +11,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
+import logic.AI;
 import utils.AudioManager;
 import utils.CursorManager;
 import utils.SceneManager;
@@ -18,6 +19,8 @@ import utils.SceneManager;
 public class SettingsController {
   @FXML
   Slider volumeSlider;
+  @FXML
+  Slider aiDifficultySlider;
   @FXML
   Pane settingsPane;
   @FXML
@@ -42,12 +45,11 @@ public class SettingsController {
     parent.getChildren().remove(root);
   }
 
-
   public void initialize() {
     setHandlers();
     styleElements();
     volumeSlider.setValue(volumeSlider.getMax() * AudioManager.getVolume());
-
+    aiDifficultySlider.setValue(AI.getDifficulty());
   }
 
   public static Background getButtonBackground(int dim) {
@@ -69,6 +71,11 @@ public class SettingsController {
     volumeSlider.valueProperty().addListener((observable, old, newValue) -> {
       if (newValue != null) {
         AudioManager.setVolume(newValue.doubleValue() / volumeSlider.getMax());
+      }
+    });
+    aiDifficultySlider.valueProperty().addListener((observable, old, newValue) -> {
+      if (newValue != null) {
+        AI.setDifficulty(newValue.intValue());
       }
     });
     backButton.setOnAction(e -> {

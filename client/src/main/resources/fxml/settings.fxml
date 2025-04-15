@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
 <Pane fx:id="settingsPane" maxHeight="-Infinity" maxWidth="500.0" minHeight="500.0" minWidth="500.0" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SettingsController">
    <children>
       <VBox layoutY="31.0">
@@ -24,6 +23,16 @@
                      <children>
                         <Label text="Volume" />
                         <Slider fx:id="volumeSlider" minorTickCount="5" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox spacing="10.0">
+                     <children>
+                        <Label text="AI Difficulty" />
+                        <Slider fx:id="aiDifficultySlider" max="7.0" min="1.0" minorTickCount="5" value="4.0" />
                      </children>
                   </VBox>
                </children>

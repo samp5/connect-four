@@ -1,7 +1,7 @@
 ## FIXES:
 
-- [~] Board dimensions
-- [~] Migrate visuals to scene builder
+- [x] Board dimensions
+- [x] Migrate visuals to scene builder
 - [ ] Username password problem
 
 ## Client
@@ -21,7 +21,7 @@
     - [ ] Rethink cloud animation mechanism
 
 #### Long-term
-- [ ] Add AI with levels of difficulty
+- [x] Add AI with levels of difficulty
 - [ ] Add a smarter stalemate detector
 - [ ] Message pane to choose message box from friends
 - [ ] Text emoji drawer
@@ -56,7 +56,6 @@
 
 
 ## Server
-
- - [ ] Handle main menu
+ - [ ] Handle main menu button in settings
 
 
