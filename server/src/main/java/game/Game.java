@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import network.ClientManager;
 import network.Message;
+import network.Player;
 import network.ServerClient;
 import network.Player.PlayerRole;
 import registry.PlayerRegistry;
@@ -84,6 +85,10 @@ public class Game {
             }
             break;
           case START:
+            break;
+          case COMPLETE:
+            Player p = msg.getPlayer();
+            PlayerRegistry.updatePlayerStats(p, msg.isSuccess());
             break;
           default:
             break;

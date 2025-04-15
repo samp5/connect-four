@@ -122,6 +122,11 @@ public class NetworkClient {
     sendMessage(toSend);
   }
 
+  // alert server of game complete
+  public static void gameComplete(boolean won) {
+    sendMessage(new Message(player, won));
+  }
+
   private static void sendMessage(Message m) {
     try {
       out = new ObjectOutputStream(socket.getOutputStream());

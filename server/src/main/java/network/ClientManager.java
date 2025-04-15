@@ -137,8 +137,8 @@ public class ClientManager {
     try {
       if (loginInfo.isSuccess()) {
         Player p = loginInfo.getPlayer();
-        client.sendMessage(new Message(true, null, p));
         client.setPlayer(p);
+        client.sendMessage(new Message(true, null, p));
         GameManager.addToGameQueue(client);
       } else {
         client.sendMessage(new Message(false, loginInfo.getReason(), null));

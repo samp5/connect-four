@@ -530,6 +530,13 @@ public class GameController {
       pathTransition.play();
     }
     System.out.println(winner + "wins!");
+    if (GameLogic.getGameMode() == GameMode.Multiplayer) {
+      if (winner == GameLogic.getLocalPlayer().getRole()) {
+        NetworkClient.gameComplete(true);
+      } else {
+        NetworkClient.gameComplete(false);
+      }
+    }
     gameLogic.reset();
 
   }

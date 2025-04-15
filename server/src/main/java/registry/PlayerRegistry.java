@@ -14,9 +14,10 @@ import network.Player;
  * Tracks all players: logged in, playing or not.
  */
 public class PlayerRegistry {
-  private static long nextid = 0;
-  private static HashMap<String, Player> registredPlayers = new HashMap<>();
-  private static HashMap<String, Player> activePlayers = new HashMap<>();
+  private static Long nextid = 0l;
+  private static HashMap<String, Long> usernameLookup = new HashMap<>();
+  private static HashMap<Long, RegistryPlayer> registeredPlayers = new HashMap<>();
+  private static HashMap<Long, RegistryPlayer> activePlayers = new HashMap<>();
 
   /**
    * Get the player registered under this username and password.
@@ -28,26 +29,31 @@ public class PlayerRegistry {
    *    handle in the client.
    */
   public static PlayerRegistrationInfo getRegisteredPlayer(String username, String password) {
+    Long id = usernameLookup.get(username);
+
+    // if the username doesn't match with an ID, register the new player
+    if (id == null) {
+      // register the player
+      Long newId = getNextID();
+      RegistryPlayer newReg = new RegistryPlayer(username, password, newId);
+      registeredPlayers.put(newId, newReg);
+      activePlayers.put(newId, newReg);
+      usernameLookup.put(username, newId);
+      return new PlayerRegistrationInfo(true, newReg.getClientPlayer());
+    }
+
     // check if the player is already active
-    if (activePlayers.keySet().contains(username)) {
+    if (activePlayers.keySet().contains(id)) {
       return new PlayerRegistrationInfo(false, "Player already logged in.");
     }
 
     // check if the player is currently registered
-    if (registredPlayers.keySet().contains(username)) {
-      Player p = registredPlayers.get(username);
-      if (p.getPassword().equals(password)) {
-        activePlayers.put(username, p);
-        return new PlayerRegistrationInfo(true, p);
-      }
-      return new PlayerRegistrationInfo(false, "Username and Password do not match.");
+    RegistryPlayer p = registeredPlayers.get(id);
+    if (p.getPassword().equals(password)) {
+      activePlayers.put(id, p);
+      return new PlayerRegistrationInfo(true, p.getClientPlayer());
     }
-
-    // register the player
-    Player newReg = new Player(username, password, getNextID());
-    registredPlayers.put(username, newReg);
-    activePlayers.put(username, newReg);
-    return new PlayerRegistrationInfo(true, newReg);
+    return new PlayerRegistrationInfo(false, "Username and Password do not match.");
   }
 
   /**
@@ -57,18 +63,26 @@ public class PlayerRegistry {
   public static void logoutPlayer(Player player) {
     if (player == null) return;
 
-    String name = player.getUsername();
-    activePlayers.remove(name);
+    activePlayers.remove(player.getID());
     GameManager.removeFromQueue(player);
   }
 
   /**
    * ID's must be unique, so returns an id, while incrementing.
    */
-  public static long getNextID() {
-    long ret = nextid;
+  public static Long getNextID() {
+    Long ret = nextid;
     nextid += 1;
     return ret;
+  }
+
+  /**
+   * Updates a player's stats
+   */
+  public static void updatePlayerStats(Player p, boolean win) {
+    registeredPlayers.get(p.getID()).completeGame(win);
+
+    // TODO: update rank
   }
 
   /**
@@ -106,7 +120,7 @@ public class PlayerRegistry {
   }
 
   public static int registeredCount() {
-    return registredPlayers.size();
+    return registeredPlayers.size();
   }
 
   /**
@@ -116,9 +130,13 @@ public class PlayerRegistry {
     try {
     FileOutputStream fileout = new FileOutputStream("player.registry");
     ObjectOutputStream objectout = new ObjectOutputStream(fileout);
-    objectout.writeObject(registredPlayers);
+    objectout.writeObject(registeredPlayers);
+    objectout.writeObject(usernameLookup);
     objectout.close();
-    } catch (IOException e) {}
+    } catch (IOException e) {
+      e.printStackTrace();
+      System.out.println("error on save");
+    }
   }
 
   /**
@@ -128,10 +146,16 @@ public class PlayerRegistry {
     try {
       FileInputStream filein = new FileInputStream("player.registry");
       ObjectInputStream objectin = new ObjectInputStream(filein);
+
       Object obj = objectin.readObject();
       if (obj instanceof HashMap) {
-        registredPlayers = (HashMap<String, Player>) obj;
+        registeredPlayers = (HashMap<Long, RegistryPlayer>) obj;
       }
+      obj = objectin.readObject();
+      if (obj instanceof HashMap) {
+        usernameLookup = (HashMap<String, Long>) obj;
+      }
+
       objectin.close();
     } catch (IOException e) {
     } catch (ClassNotFoundException e) {

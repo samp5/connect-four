@@ -20,6 +20,7 @@ public class Message implements Serializable {
     DISCONNECT,
     CHAT,
     MOVE,
+    COMPLETE,
   };
 
   private Type type;
@@ -83,6 +84,15 @@ public class Message implements Serializable {
     this.player = player1;
     this.player2 = player2;
     this.role = role;
+  }
+
+  /**
+   * For game complete messages
+   */
+  public Message(Player player, boolean won) {
+    this.type = Type.COMPLETE;
+    this.player = player;
+    this.success = won;
   }
 
   /**
