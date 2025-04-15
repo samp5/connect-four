@@ -13,6 +13,7 @@ public class AudioManager {
               AudioManager.class.getResource("/assets/sounds/" + file).toExternalForm().toString());
       backgroundPlayer = new MediaPlayer(m);
       backgroundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+      backgroundPlayer.setVolume(0.5);
       backgroundPlayer.play();
     } catch (Exception e) {
       e.printStackTrace();
@@ -27,6 +28,23 @@ public class AudioManager {
       player.play();
     } catch (Exception e) {
       e.printStackTrace();
+    }
+  }
+
+  /**
+   * @param volume requested volume needs to be between 0.0 and 1.0
+   */
+  public static void setVolume(double volume) {
+    if (backgroundPlayer != null) {
+      backgroundPlayer.setVolume(volume);
+    }
+  }
+
+  public static double getVolume() {
+    if (backgroundPlayer != null) {
+      return backgroundPlayer.getVolume();
+    } else {
+      return 0.0;
     }
   }
 }

@@ -21,8 +21,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import logic.GameLogic;
+import logic.GameLogic.GameMode;
 import network.NetworkClient;
 import controller.utils.ChatMessage;
 import controller.utils.Markup;
@@ -115,7 +117,9 @@ public class ChatController {
     appendMessage(msg, GameLogic.getLocalPlayer().getUsername(), true);
     chatEditorInput.clear();
     chatEditorDisplay.getChildren().setAll();
-    NetworkClient.sendChatMessage(msg);
+    if (GameLogic.getGameMode() == GameMode.Multiplayer) {
+      NetworkClient.sendChatMessage(msg);
+    }
   }
 
   public void recieveMessage(String message, String username, boolean local) {

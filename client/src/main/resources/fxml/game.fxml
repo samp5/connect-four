@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
@@ -9,13 +10,14 @@
 
 <StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameController">
    <children>
+      <BorderPane fx:id="settingsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" translateX="-335.0" translateY="-335.0" />
       <Pane fx:id="gamePaneBackground" maxHeight="720.0" maxWidth="720.0" minHeight="720.0" minWidth="720.0" prefHeight="720.0" prefWidth="720.0" />
       <AnchorPane fx:id="gamePane" minHeight="-Infinity" minWidth="-Infinity">
          <children>
             <Pane fx:id="overlayPane" prefHeight="720.0" prefWidth="720.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <VBox alignment="CENTER" prefHeight="718.0" prefWidth="719.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0" />
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" />
                   <StackPane>
                      <children>
                         <Pane fx:id="foregroundPane" maxWidth="632" minHeight="542" minWidth="632" prefHeight="542.0" prefWidth="632.0" />

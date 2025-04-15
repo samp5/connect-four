@@ -9,6 +9,7 @@ import controller.GameController.Cloud.CloudType;
 import controller.utils.BoardPosition;
 import controller.utils.CoordSystem;
 import controller.utils.CoordUtils;
+import controller.utils.GameSettings;
 import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -22,6 +23,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -71,6 +73,9 @@ public class GameController {
   private Pane chipPane1;
   @FXML
   private Pane chipPane2;
+  @FXML
+  private BorderPane settingsButton;
+
   private GameLogic gameLogic;
 
   private Button bestMoveButton;
@@ -183,18 +188,16 @@ public class GameController {
 
   public void initialize() {
     gameLogic = new GameLogic();
-    // bestMoveButton = new Button("Best move");
-    // bestMoveButton.setOnAction(e -> {
-    // System.out.println(gameLogic.getBestMove());
-    // });
-    // foregroundPane.getChildren().add(bestMoveButton);
 
     CursorManager.setHandCursor(chipPane1, chipPane2);
     // buildClouds();
+    //
 
     NetworkClient.bindGameController(this);
+    settingsButton.setBackground(SettingsController.getButtonBackground(40));
     foregroundPane.toFront();
     backgroundPane.toBack();
+    settingsButton.toFront();
     gamePaneBackground.toBack();
     overlayPane.toFront();
     overlayPane.setMouseTransparent(true);
@@ -417,6 +420,11 @@ public class GameController {
 
     chipPane1.setOnMouseReleased(e -> {
       handleRelease(e);
+    });
+
+    settingsButton.setOnMouseClicked(e -> {
+      overlayPane.setMouseTransparent(false);
+      GameSettings.loadSettings(overlayPane);
     });
   }
 
