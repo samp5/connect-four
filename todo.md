@@ -2,7 +2,7 @@
 
 - [x] Board dimensions
 - [x] Migrate visuals to scene builder
-- [ ] Username password problem
+- [x] Username password problem
 
 ## Client
 
@@ -33,16 +33,16 @@
     - [x] Background images (ART)
     - [x] Message info layout, etc.
 - [ ] Add sender to chat message
-- [~] Move send to other side
-- [~] Add buttons for forfeit, offer draw, request forfeit
-    - [~] with confirmation buttons
+- [x] Move send to other side
+- [>] Add buttons for forfeit, offer draw, request forfeit
+    - [>] with confirmation buttons
 - [x] Style all control elements with pixel art (ART)
 
 ### Menu Screen
 - [x] Style all control elements with pixel art (ART)
 - [x] Design background (ART) 
 - [x] Make settings controller + UI
-    - [~] AI difficulty in settings
+    - [x] AI difficulty in settings
 
 ### Connections
 - [x] Create FXML scene + Controller

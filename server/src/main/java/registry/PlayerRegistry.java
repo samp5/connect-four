@@ -156,6 +156,8 @@ public class PlayerRegistry {
         usernameLookup = (HashMap<String, Long>) obj;
       }
 
+      nextid = (long) registeredPlayers.size();
+
       objectin.close();
     } catch (IOException e) {
     } catch (ClassNotFoundException e) {
