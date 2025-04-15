@@ -1,7 +1,13 @@
+## FIXES:
+
+- [~] Board dimensions
+- [~] Migrate visuals to scene builder
+- [ ] Username password problem
+
 ## Client
 
 - [ ] Add sound-effects 
-    - [ ] Background music
+    - [x] Background music
     - [ ] Chip on drop
     - [ ] Button on click
     - [ ] Chat on send
@@ -19,30 +25,24 @@
 - [ ] Add a smarter stalemate detector
 - [ ] Message pane to choose message box from friends
 - [ ] Text emoji drawer
-
-##### Maybe not
-- [ ] Add some sort of scoring system that rewards blocking moves, increasing connection length?
-    - [ ] Display score (big number make brain go brrrr)
+- [ ] Art overhaul
 
 ### Chat
 - [x] Design background (ART) 
 - [x] Design message UI 
     - [x] Background images (ART)
     - [x] Message info layout, etc.
-- [ ] Design message UX 
-    - [ ] Handle hovers, clicks, etc
-- [ ] Move send to other side
-- [ ] Add buttons for forfeit, offer draw, request forfeit
-    - [ ] with confirmation buttons
+- [ ] Add sender to chat message
+- [~] Move send to other side
+- [~] Add buttons for forfeit, offer draw, request forfeit
+    - [~] with confirmation buttons
 - [x] Style all control elements with pixel art (ART)
-
-
-## Server
 
 ### Menu Screen
 - [x] Style all control elements with pixel art (ART)
 - [x] Design background (ART) 
-- [ ] Make settings controller + UI
+- [x] Make settings controller + UI
+    - [~] AI difficulty in settings
 
 ### Connections
 - [x] Create FXML scene + Controller
@@ -53,3 +53,10 @@
 ### Loading Screen
 - [x] Create a neat connect-four based animation (ART)
 - [x] Design background (ART) 
+
+
+## Server
+
+ - [ ] Handle main menu
+
+
