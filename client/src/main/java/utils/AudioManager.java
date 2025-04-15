@@ -6,11 +6,20 @@ import javafx.scene.media.MediaPlayer;
 public class AudioManager {
   private static MediaPlayer backgroundPlayer;
 
+  public static enum SoundEffect {
+    ButtonPress,
+    Selection,
+    ChipDrop,
+    ChatSent,
+    ChatRecieved,
+    Win,
+    Loss,
+  }
+
   public static void playContinuous(String file) {
     try {
-      Media m =
-          new Media(
-              AudioManager.class.getResource("/assets/sounds/" + file).toExternalForm().toString());
+      Media m = new Media(
+          AudioManager.class.getResource("/assets/sounds/" + file).toExternalForm().toString());
       backgroundPlayer = new MediaPlayer(m);
       backgroundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
       backgroundPlayer.setVolume(0.5);
@@ -22,12 +31,34 @@ public class AudioManager {
 
   public static void play(String file) {
     try {
-      Media m =
-          new Media(AudioManager.class.getResource("assets/sounds/" + file).toURI().toString());
+      Media m = new Media(AudioManager.class.getResource("assets/sounds/" + file).toURI().toString());
       MediaPlayer player = new MediaPlayer(m);
       player.play();
     } catch (Exception e) {
       e.printStackTrace();
+    }
+  }
+
+  public static void playSoundEffect(SoundEffect effect) {
+    String file = "";
+    switch (effect) {
+      case ButtonPress:
+        break;
+      case ChipDrop:
+        break;
+      case Selection:
+        break;
+      case Win:
+        break;
+      case ChatRecieved:
+        break;
+      case ChatSent:
+        break;
+      case Loss:
+        break;
+    }
+    if (file != "") {
+      play(file);
     }
   }
 
