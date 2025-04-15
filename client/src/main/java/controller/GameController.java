@@ -363,12 +363,12 @@ public class GameController {
     GameLogic.setCurrentPlayerRole(PlayerRole.None);
     // Piece[] winningPieces = new Piece[4];
     // for (int i = 0; i < 4; i++) {
-    //   BoardPosition bp = winningPositions[i];
-    //   winningPieces[i] = new Piece(winner, CoordUtils.fromRowCol(bp.getRow(),
-    //       bp.getColumn()));
+    // BoardPosition bp = winningPositions[i];
+    // winningPieces[i] = new Piece(winner, CoordUtils.fromRowCol(bp.getRow(),
+    // bp.getColumn()));
     // }
     Object[] pieces = midgroundPane.getChildren().toArray();
-    midgroundPane.getChildren().addAll(winningPieces);
+    // midgroundPane.getChildren().addAll(winningPieces);
     for (Object pi : pieces) {
       Piece p = (Piece) pi;
 
