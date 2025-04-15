@@ -60,7 +60,6 @@ public class GameLogic {
     return mode;
   }
 
-
   public static void setLocalPlayer(Player p) {
     localPlayer = p;
   }

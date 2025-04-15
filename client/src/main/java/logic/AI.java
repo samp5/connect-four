@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.ArrayList;
+
 import network.Player.PlayerRole;
 
 public class AI {
@@ -41,10 +43,42 @@ public class AI {
       "congratulations! you've just unlocked a new game mode called \"connect-four-if-you-squint\"",
       "you're out here playing \"connect-four-if-you-close-one-eye\""
   };
+  private static String[] winningQuips = {
+      "you zigged. i zagged.",
+      "connect-four: now with advanced geometry. try again.",
+  };
+
+  // private static class MoveHistory {
+  // private ArrayList<Integer> history;
+  //
+  // MoveHistory(ArrayList<Integer> history) {
+  // this.history = history;
+  // }
+  //
+  // public boolean playerPlayedLast() {
+  // return history.size() % 2 != 0;
+  // }
+  //
+  // public boolean AI_PlayedLast() {
+  // return history.size() % 2 == 0;
+  // }
+  //
+  // }
 
   public static String getQuip() {
+
+    // MoveHistory history = new MoveHistory(gameState.getMoveHistory());
+
     int i = (int) (Math.random() * (generalQuips.length - 1));
     return generalQuips[i];
+  }
+
+  public static String getWinningQuip() {
+
+    // MoveHistory history = new MoveHistory(gameState.getMoveHistory());
+
+    int i = (int) (Math.random() * (winningQuips.length - 1));
+    return winningQuips[i];
   }
 
   public static void setDifficulty(int difficulty) {
@@ -69,15 +103,14 @@ public class AI {
     }
   }
 
-  private static final int[][] scoremap =
-      {
-          {3, 4, 5, 7, 5, 4, 3},
-          {4, 6, 8, 9, 8, 6, 4},
-          {5, 8, 11, 13, 11, 8, 5},
-          {5, 8, 11, 13, 11, 8, 5},
-          {4, 6, 8, 9, 8, 6, 4},
-          {3, 4, 5, 7, 5, 4, 3}
-      };
+  private static final int[][] scoremap = {
+      { 3, 4, 5, 7, 5, 4, 3 },
+      { 4, 6, 8, 9, 8, 6, 4 },
+      { 5, 8, 11, 13, 11, 8, 5 },
+      { 5, 8, 11, 13, 11, 8, 5 },
+      { 4, 6, 8, 9, 8, 6, 4 },
+      { 3, 4, 5, 7, 5, 4, 3 }
+  };
 
   private static void place_piece(int[][] board, int player, int col) {
     for (int row_i = 0; row_i < ROWS; row_i++) {
@@ -125,7 +158,8 @@ public class AI {
    *
    * This cacluates the best move by descending down the move tree
    *
-   * We start with some initial board and the player whose turn we are trying to calculate
+   * We start with some initial board and the player whose turn we are trying to
+   * calculate
    *
    * TODO: Maybe implement alpha-beta pruning?
    *
@@ -160,12 +194,13 @@ public class AI {
       // remove the piece to restore the board
       remove_piece(board, col_i);
 
-
       // for simulating `playingAs`, this will simply take the max
-      // for simulating the opponent we are taking the greatest negative number (the smallest
+      // for simulating the opponent we are taking the greatest negative number (the
+      // smallest
       // positive)
       //
-      // consider a board with only 3 possible columns and our scores for each move are
+      // consider a board with only 3 possible columns and our scores for each move
+      // are
       // 10, 20, 30.
       //
       // 1
@@ -173,7 +208,8 @@ public class AI {
       // 10 20 30
       //
       // In this case if we are playing as 1 we want to travel to max(10,20,30), 30.
-      // If we are not playing as 1, we want to assume that 1 will make the best move and travel to
+      // If we are not playing as 1, we want to assume that 1 will make the best move
+      // and travel to
       // min(10,20,30) = -max(-10,-20,-30) = 10
 
       score = score * sign;
@@ -181,7 +217,6 @@ public class AI {
         bestScore = score;
         bestMove = col_i;
       }
-
 
     }
 

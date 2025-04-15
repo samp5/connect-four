@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -8,21 +10,31 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameController">
    <children>
-      <BorderPane fx:id="settingsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" translateX="-335.0" translateY="-335.0" />
+      <ImageView fitHeight="720.0" fitWidth="720.0">
+         <image>
+            <Image url="@../assets/game_background2.png" />
+         </image>
+      </ImageView>
       <Pane fx:id="gamePaneBackground" maxHeight="720.0" maxWidth="720.0" minHeight="720.0" minWidth="720.0" prefHeight="720.0" prefWidth="720.0" />
       <AnchorPane fx:id="gamePane" minHeight="-Infinity" minWidth="-Infinity">
          <children>
-            <Pane fx:id="overlayPane" prefHeight="720.0" prefWidth="720.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <VBox alignment="CENTER" prefHeight="718.0" prefWidth="719.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" />
-                  <StackPane>
+                  <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="542.0" prefWidth="632.0">
                      <children>
-                        <Pane fx:id="foregroundPane" maxWidth="632" minHeight="542" minWidth="632" prefHeight="542.0" prefWidth="632.0" />
-                        <Pane fx:id="midgroundPane" maxHeight="540.0" maxWidth="630.0" minHeight="540.0" minWidth="630.0" prefHeight="540.0" prefWidth="630.0" />
                         <Pane fx:id="backgroundPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="630.0" />
+                        <Pane fx:id="midgroundPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="630.0" />
+                        <Pane fx:id="foregroundPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="544.0" prefWidth="638.0" translateY="2.0">
+                           <children>
+                              <ImageView fitHeight="544.0" fitWidth="636.0">
+                                 <image>
+                                    <Image url="@../assets/board.png" />
+                                 </image>
+                              </ImageView>
+                           </children></Pane>
                      </children>
                   </StackPane>
                   <HBox prefHeight="100.0" prefWidth="200.0">
@@ -34,7 +46,14 @@
                                     <Insets bottom="50.0" left="10.0" right="10.0" top="10.0" />
                                  </padding>
                                  <children>
-                                    <Pane fx:id="chipPane1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="90.0" />
+                                    <Pane fx:id="chipPane1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="90.0">
+                                       <children>
+                                          <ImageView fitHeight="90.0" fitWidth="90.0">
+                                             <image>
+                                                <Image url="@../assets/red_chip.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children></Pane>
                                  </children>
                               </StackPane>
                            </children>
@@ -46,7 +65,14 @@
                                     <Insets bottom="50.0" left="10.0" right="10.0" top="10.0" />
                                  </padding>
                                  <children>
-                                    <Pane fx:id="chipPane2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="90.0" />
+                                    <Pane fx:id="chipPane2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="90.0">
+                                       <children>
+                                          <ImageView fitHeight="90.0" fitWidth="90.0">
+                                             <image>
+                                                <Image url="@../assets/blue_chip.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children></Pane>
                                  </children>
                               </StackPane>
                            </children>
@@ -55,7 +81,16 @@
                   </HBox>
                </children>
             </VBox>
+            <Pane fx:id="overlayPane" prefHeight="720.0" prefWidth="720.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
+      <BorderPane fx:id="settingsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" translateX="-335.0" translateY="-335.0">
+         <center>
+            <ImageView fitHeight="45.0" fitWidth="45.0" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../assets/settings-button.png" />
+               </image>
+            </ImageView>
+         </center></BorderPane>
    </children>
 </StackPane>

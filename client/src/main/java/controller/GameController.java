@@ -80,7 +80,6 @@ public class GameController {
 
   private Button bestMoveButton;
 
-
   public static void setGameMode(GameMode mode) {
     GameLogic.setGameMode(mode);
   }
@@ -132,8 +131,8 @@ public class GameController {
     enum CloudType {
       Small, Large;
 
-      private final String[] smallClouds = {"cloud1.png", "cloud2.png"};
-      private final String[] largeClouds = {"cloud3.png"};
+      private final String[] smallClouds = { "cloud1.png", "cloud2.png" };
+      private final String[] largeClouds = { "cloud3.png" };
 
       public int getWidth() {
         switch (this) {
@@ -195,34 +194,7 @@ public class GameController {
 
     NetworkClient.bindGameController(this);
     settingsButton.setBackground(SettingsController.getButtonBackground(40));
-    foregroundPane.toFront();
-    backgroundPane.toBack();
-    settingsButton.toFront();
-    gamePaneBackground.toBack();
-    overlayPane.toFront();
     overlayPane.setMouseTransparent(true);
-    gamePaneBackground.setBackground(
-        new Background(new BackgroundImage(new Image("/assets/game_background2.png"),
-            BackgroundRepeat.NO_REPEAT,
-            BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            new BackgroundSize(720, 720, false, false, false, false))));
-    foregroundPane
-        .setBackground(new Background(
-            new BackgroundImage(new Image("/assets/board.png"), BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                new BackgroundSize(632, 542, false, false, false, false))));
-
-    chipPane1.setBackground(new Background(
-        new BackgroundImage(new Image("/assets/red_chip.png"), BackgroundRepeat.NO_REPEAT,
-            BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            new BackgroundSize(90, 90, false, false, false, false))));
-    chipPane1.toFront();
-    chipPane2.setBackground(new Background(
-        new BackgroundImage(new Image("/assets/blue_chip.png"), BackgroundRepeat.NO_REPEAT,
-            BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            new BackgroundSize(90, 90, false, false, false, false))));
-    chipPane2.toFront();
-
     setHandlers();
   }
 
@@ -230,7 +202,7 @@ public class GameController {
     Cloud[] clouds = {
         new Cloud(CloudType.Large), new Cloud(CloudType.Small),
         new Cloud(CloudType.Small), new Cloud(CloudType.Large),
-        new Cloud(CloudType.Large), new Cloud(CloudType.Large)};
+        new Cloud(CloudType.Large), new Cloud(CloudType.Large) };
 
     gamePaneBackground.getChildren().addAll(clouds);
     buildCloudAnimation(clouds);
@@ -245,8 +217,7 @@ public class GameController {
     for (int i = 0; i < clouds.length; i++) {
       Cloud c = clouds[i];
 
-      double yCoord =
-          minAcceptableCloud + Math.random() * (maxAcceptableCloud - minAcceptableCloud);
+      double yCoord = minAcceptableCloud + Math.random() * (maxAcceptableCloud - minAcceptableCloud);
       Path path = new Path(new MoveTo(-c.type.getWidth(), yCoord),
           new LineTo(CoordUtils.gamePaneWidth + c.type.getWidth(), yCoord));
 
@@ -273,8 +244,7 @@ public class GameController {
     // get positions and role
     BoardPosition rowCol = CoordUtils.toRowCol(dropHint.position).get();
     PlayerRole role = gameLogic.getCurrentPlayerRole();
-    Point startPos =
-        new Point(draggedPiece.getCenterX(), draggedPiece.getCenterY(), CoordSystem.GamePane);
+    Point startPos = new Point(draggedPiece.getCenterX(), draggedPiece.getCenterY(), CoordSystem.GamePane);
 
     handleMove(rowCol.getColumn(), role);
     animateMove(rowCol, startPos, role);
@@ -299,32 +269,39 @@ public class GameController {
 
     if (GameLogic.getGameMode() == GameMode.LocalAI
         && gameLogic.getCurrentPlayerRole() == AI.getRole()) {
-      System.out.println("handling AI Move");
       int aiCol = AI.bestColumn(gameLogic.getBoard());
       BoardPosition bp = new BoardPosition(gameLogic.getAvailableRow(aiCol).get(), aiCol);
       handleMove(AI.bestColumn(gameLogic.getBoard()), AI.getRole());
-      animateMove(bp, CoordUtils.chipHolder(AI.getRole()),
-          AI.getRole());
+      PauseTransition pt = new PauseTransition(Duration.millis(1500));
       if (Math.random() < 0.4) {
         NetworkClient.handleChat(AI.getQuip(), "AI", false);
       }
+      pt.setOnFinished(e -> {
+        animateMove(bp, CoordUtils.chipHolder(AI.getRole()),
+            AI.getRole());
+      });
+      pt.play();
     }
 
   }
 
   private void animateMove(BoardPosition rowCol, Point chipPos, PlayerRole role) {
+    if (draggedPiece == null) {
+      draggedPiece = new Piece(role, CoordUtils.chipHolder(role));
+      overlayPane.getChildren().add(draggedPiece);
+    }
     // lock playing a move until animation pt 1 is done
     canMove = false;
 
     // calc the point for the top of this column
     Point topOfCol = CoordUtils.topOfColumn(rowCol.getColumn());
     double topX = topOfCol.getX();
-    double topY = topOfCol.getY() - draggedPiece.getRadius();
+    double topY = topOfCol.getY() - CoordUtils.pieceRadius;
 
     // construct a path
     Path path = new Path();
     path.getElements().add(new MoveTo(chipPos.getX(), chipPos.getY()));
-    path.getElements().add(new LineTo(topX + draggedPiece.getRadius(),
+    path.getElements().add(new LineTo(topX + CoordUtils.pieceRadius,
         topY));
 
     // build the animation
@@ -480,6 +457,7 @@ public class GameController {
           bp.getColumn()));
     }
     Object[] pieces = midgroundPane.getChildren().toArray();
+    midgroundPane.getChildren().addAll(winningPieces);
     for (Object pi : pieces) {
       Piece p = (Piece) pi;
 
@@ -531,6 +509,7 @@ public class GameController {
 
         PauseTransition pt = new PauseTransition(Duration.millis(4000));
         pt.setOnFinished(g -> {
+          midgroundPane.getChildren().setAll();
           overlayPane.getChildren().remove(winnerImg);
         });
         pt.play();
@@ -538,13 +517,14 @@ public class GameController {
 
       pathTransition.play();
     }
-    System.out.println(winner + "wins!");
     if (GameLogic.getGameMode() == GameMode.Multiplayer) {
       if (winner == GameLogic.getLocalPlayer().getRole()) {
         NetworkClient.gameComplete(true);
       } else {
         NetworkClient.gameComplete(false);
       }
+    } else if (GameLogic.getGameMode() == GameMode.LocalAI) {
+      NetworkClient.handleChat(AI.getWinningQuip(), "AI", false);
     }
     gameLogic.reset();
 
