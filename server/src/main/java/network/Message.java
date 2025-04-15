@@ -1,10 +1,6 @@
 package network;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import network.Player.PlayerRole;
@@ -39,117 +35,109 @@ public class Message implements Serializable {
   private boolean success;
   private ArrayList<Integer> restoredMoves;
 
+  private Message() {}
 
-  /**
-   * For sending simple instructions
-   */
-  public Message(Type type) {
-    this.type = type;
-  }
+  public static Message forSimpleInstruction(Type type) {
+    Message toSend = new Message();
 
-  /**
-   * For login with server attempts
-   */
-  public Message(String username, String password) {
-    this.type = Type.LOGIN;
-    this.username = username;
-    this.password = password;
-  }
-  /**
-   * For server login responses
-   */
-  public Message(boolean success, String reason, Player player) {
-    this.type = Type.LOGIN;
-    this.success = success;
-    this.chatMessage = reason;
-    this.player = player;
-  }
-  /**
-   * For server reconnect messages
-   */
-  public Message(ArrayList<Integer> restoredMoves) {
-    this.type = Type.RECONNECT;
-    this.restoredMoves = restoredMoves;
-  }
-  /**
-   * For server disconnect messages
-   */
-  public Message(Player player) {
-    this.type = Type.DISCONNECT;
-    this.player = player;
+    toSend.type = type;
+
+    return toSend;
   }
 
-  /**
-   * For responding to a draw request
-   */
-  public Message(boolean accepted) {
-    this.type = Type.DRAW;
-    this.success = accepted;
+  public static Message forServerLoginAttempt(String username, String password) {
+    Message toSend = new Message();
+
+    toSend.type = Type.LOGIN;
+    toSend.username = username;
+    toSend.password = password;
+
+    return toSend;
   }
 
-  /**
-   * For game start messages
-   */
-  public Message(Player player1, Player player2, PlayerRole role) {
-    this.type = Type.START;
-    this.player = player1;
-    this.player2 = player2;
-    this.role = role;
+  public static Message forServerLoginResponse(boolean success, String reason, Player player) {
+    Message toSend = new Message();
+
+    toSend.type = Type.LOGIN;
+    toSend.success = success;
+    toSend.chatMessage = reason;
+    toSend.player = player;
+
+    return toSend;
   }
 
-  /**
-   * For game complete messages
-   */
-  public Message(Player player, boolean won) {
-    this.type = Type.COMPLETE;
-    this.player = player;
-    this.success = won;
+  public static Message forServerReconnect(ArrayList<Integer> restoredMoves) {
+    Message toSend = new Message();
+
+    toSend.type = Type.RECONNECT;
+    toSend.restoredMoves = restoredMoves;
+
+    return toSend;
   }
 
-  /**
-   * For chat messages
-   */
-  public Message(String username, String chatMessage, Long playerID) {
-    this.type = Type.CHAT;
-    this.username = username;
-    this.chatMessage = chatMessage;
-    this.playerID = playerID;
+  public static Message forServerDisconnect(Player player) {
+    Message toSend = new Message();
+
+    toSend.type = Type.DISCONNECT;
+    toSend.player = player;
+
+    return toSend;
   }
 
-  /**
-   * For move messages
-   */
-  public Message(String username, Integer column, Long playerID) {
-    this.type = Type.MOVE;
-    this.username = username;
-    this.column = column;
-    this.playerID = playerID;
+  public static Message forDrawResponse(boolean accepted) {
+    Message toSend = new Message();
+
+    toSend.type = Type.DRAW;
+    toSend.success = accepted;
+
+    return toSend;
   }
 
-  /**
-   * Returns the message as a {@code ByteBuffer} representation, for sending
-   * over the network.
-   */
-  public ByteBuffer asByteBuffer() throws IOException {
-    return ByteBuffer.wrap(this.asBytes());
+  public static Message forGameStart(Player player1, Player player2, PlayerRole role) {
+    Message toSend = new Message();
+
+    toSend.type = Type.START;
+    toSend.player = player1;
+    toSend.player2 = player2;
+    toSend.role = role;
+
+    return toSend;
   }
 
-  /**
-   * Returns the message as a byte array representation, for sending over the 
-   * network.
-   */
-  public byte[] asBytes() throws IOException {
-    ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-    ObjectOutputStream oos = new ObjectOutputStream(byteStream);
-    oos.writeObject(this);
-    oos.flush();
-    oos.close();
+  public static Message forGameComplete(Player player, boolean won) {
+    Message toSend = new Message();
 
-    return byteStream.toByteArray();
+    toSend.type = Type.COMPLETE;
+    toSend.player = player;
+    toSend.success = won;
+
+    return toSend;
+  }
+
+  public static Message forChat(String username, String chatMessage, Long playerID) {
+    Message toSend = new Message();
+
+    toSend.type = Type.CHAT;
+    toSend.username = username;
+    toSend.chatMessage = chatMessage;
+    toSend.playerID = playerID;
+
+    return toSend;
+  }
+
+  public static Message forMove(String username, Integer column, Long playerID) {
+    Message toSend = new Message();
+
+    toSend.type = Type.MOVE;
+    toSend.username = username;
+    toSend.column = column;
+    toSend.playerID = playerID;
+
+    return toSend;
   }
 
   /**
-   * autogen by LSP
+   * getters
    */
   public Type getType() {
     return type;

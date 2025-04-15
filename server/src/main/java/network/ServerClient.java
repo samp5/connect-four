@@ -3,6 +3,7 @@ package network;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
@@ -21,7 +22,8 @@ public class ServerClient {
    * Send a message to the connection
    */
   public void sendMessage(Message message) throws IOException {
-    this.connection.write(message.asByteBuffer());
+    ObjectOutputStream out = new ObjectOutputStream(connection.socket().getOutputStream());
+    out.writeObject(message);
   }
 
   /**

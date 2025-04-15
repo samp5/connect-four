@@ -45,7 +45,7 @@ public class NetworkClient {
       listener = new NetworkThread(socket);
       listener.start();
     }
-    sendMessage(new Message(username, password));
+    sendMessage(Message.forServerLoginAttempt(username, password));
     return socket.isConnected();
   }
 
@@ -96,7 +96,7 @@ public class NetworkClient {
         ArrayList<Integer> restoredMoves = msg.getRestoredMoves();
         if (restoredMoves == null) {
           // get moves to send to other player
-          sendMessage(new Message(gameCTL.getMoveHistory()));
+          sendMessage(Message.forServerReconnect(gameCTL.getMoveHistory()));
         } else {
           // restore moves from other player
           gameCTL.restoreGameBoard(restoredMoves);
@@ -118,7 +118,7 @@ public class NetworkClient {
   // send move to server
   public static void sendMove(int column) {
     Player localPlayer = gameCTL.getLocalPlayer();
-    Message toSend = new Message(localPlayer.getUsername(), column, localPlayer.getID());
+    Message toSend = Message.forMove(localPlayer.getUsername(), column, localPlayer.getID());
     sendMessage(toSend);
   }
 
@@ -126,27 +126,27 @@ public class NetworkClient {
   public static void sendChatMessage(String message) {
     if (GameLogic.getGameMode() == GameMode.Multiplayer) {
       Player localPlayer = gameCTL.getLocalPlayer();
-      Message toSend = new Message(localPlayer.getUsername(), message, localPlayer.getID());
+      Message toSend = Message.forChat(localPlayer.getUsername(), message, localPlayer.getID());
       sendMessage(toSend);
     }
   }
 
   // alert server of game complete
   public static void gameComplete(boolean won) {
-    sendMessage(new Message(player, won));
+    sendMessage(Message.forGameComplete(player, won));
   }
 
   // forfeit a match
   public static void forfeit() {
     gameCTL.forfeit();
     if (GameLogic.getGameMode() == GameMode.Multiplayer) {
-      sendMessage(new Message(Type.FORFEIT));
+      sendMessage(Message.forSimpleInstruction(Type.FORFEIT));
     }
   }
 
   // request a draw
   public static void drawRequest() {
-    sendMessage(new Message(Type.DRAW_REQUEST));
+    sendMessage(Message.forSimpleInstruction(Type.DRAW_REQUEST));
   }
 
   private static void sendMessage(Message m) {
@@ -170,7 +170,8 @@ public class NetworkClient {
 
   public static void disconnect() {
     try {
-      socket.getOutputStream().write(new Message(player).asBytes());
+      out = new ObjectOutputStream(socket.getOutputStream());
+      out.writeObject(Message.forServerDisconnect(player));
       socket.close();
     } catch (Exception e) {
     }

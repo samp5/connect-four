@@ -138,10 +138,10 @@ public class ClientManager {
       if (loginInfo.isSuccess()) {
         Player p = loginInfo.getPlayer();
         client.setPlayer(p);
-        client.sendMessage(new Message(true, null, p));
+        client.sendMessage(Message.forServerLoginResponse(true, null, p));
         GameManager.addToGameQueue(client);
       } else {
-        client.sendMessage(new Message(false, loginInfo.getReason(), null));
+        client.sendMessage(Message.forServerLoginResponse(false, loginInfo.getReason(), null));
       }
     } catch (IOException e) {
       // if an IOException occurs, the client is disconnected

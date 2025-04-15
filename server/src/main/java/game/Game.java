@@ -40,8 +40,8 @@ public class Game {
     public void run() {
       try {
         // Send start message to each player
-        this.player1.sendMessage(new Message(player1.getPlayer(), player2.getPlayer(), PlayerRole.PlayerOne));
-        this.player2.sendMessage(new Message(player2.getPlayer(), player1.getPlayer(), PlayerRole.PlayerTwo));
+        this.player1.sendMessage(Message.forGameStart(player1.getPlayer(), player2.getPlayer(), PlayerRole.PlayerOne));
+        this.player2.sendMessage(Message.forGameStart(player2.getPlayer(), player1.getPlayer(), PlayerRole.PlayerTwo));
 
         // run the game by redirecting any messages recieved to where they need
         // to go
@@ -101,12 +101,12 @@ public class Game {
       try {
         if (disconnectID == player1.getPlayer().getID()) {
           player1 = connection;
-          player1.sendMessage(new Message(player1.getPlayer(), player2.getPlayer(), PlayerRole.PlayerOne));
-          player2.sendMessage(new Message((ArrayList<Integer>)null));
+          player1.sendMessage(Message.forGameStart(player1.getPlayer(), player2.getPlayer(), PlayerRole.PlayerOne));
+          player2.sendMessage(Message.forServerReconnect((ArrayList<Integer>)null));
         } else {
           player2 = connection;
-          player2.sendMessage(new Message(player2.getPlayer(), player1.getPlayer(), PlayerRole.PlayerTwo));
-          player1.sendMessage(new Message((ArrayList<Integer>)null));
+          player2.sendMessage(Message.forGameStart(player2.getPlayer(), player1.getPlayer(), PlayerRole.PlayerTwo));
+          player1.sendMessage(Message.forServerReconnect((ArrayList<Integer>)null));
         }
         ClientManager.removeClientListener(connection);
         GameManager.dcGames.remove(disconnectID);
