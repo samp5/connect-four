@@ -91,6 +91,9 @@ public class ChatController {
     NetworkClient.bindChatController(this);
     setHandlers();
 
+    // auto scroll the chat history based on the height of the vbox
+    chatHistoryScroll.vvalueProperty().bind(chatHistory.heightProperty());
+
     // can't do this in fxml easily
     sendButton
         .setBackground(new Background(new BackgroundImage(new Image("/assets/send_button.png"),
