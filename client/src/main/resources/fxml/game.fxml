@@ -140,5 +140,42 @@
             </VBox>
          </children>
       </Pane>
+      <Pane fx:id="ffRequest" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="128.0" prefWidth="256.0" stylesheets="@../css/chat.css" visible="false">
+         <children>
+            <ImageView fitHeight="128.0" fitWidth="256.0">
+               <image>
+                  <Image url="@../assets/draw_request.png" />
+               </image>
+            </ImageView>
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="128.0" prefWidth="256.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Your opponent has requested that you resign..." wrappingWidth="224.0" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-spacing: 32;">
+                     <children>
+                        <Button fx:id="ffRequestReject" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="88.0" text="Decline">
+                           <padding>
+                              <Insets top="1.0" />
+                           </padding>
+                        </Button>
+                        <Button fx:id="ffRequestAccept" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="88.0" text="Accept">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <padding>
+                              <Insets top="1.0" />
+                           </padding>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets top="12.0" />
+                     </padding>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+               </padding>
+            </VBox>
+         </children>
+      </Pane>
    </children>
 </StackPane>

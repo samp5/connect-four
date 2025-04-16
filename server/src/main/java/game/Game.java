@@ -77,6 +77,11 @@ public class Game {
             GameManager.dcGames.remove(disconnectID);
             active = false;
             return;
+          case COMPLETE:
+            Player p = msg.getPlayer();
+            PlayerRegistry.updatePlayerStats(p, msg.isSuccess());
+            break;
+          case START:
           case LOGIN:
             break;
           case CHAT:
@@ -85,6 +90,9 @@ public class Game {
           case FORFEIT:
           case DRAW_REQUEST:
           case DRAW:
+          case RESIGN_REQUEST:
+          case RESIGN_RESPONSE:
+          default: // redirect by default
             // don't redirect if there was a DC
             if (this.disconnectID != null)
               return;
@@ -95,14 +103,6 @@ public class Game {
             } else {
               player1.sendMessage(msg);
             }
-            break;
-          case START:
-            break;
-          case COMPLETE:
-            Player p = msg.getPlayer();
-            PlayerRegistry.updatePlayerStats(p, msg.isSuccess());
-            break;
-          default:
             break;
         }
       }

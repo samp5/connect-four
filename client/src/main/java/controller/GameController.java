@@ -81,6 +81,13 @@ public class GameController {
   private Button drawRequestAccept;
   @FXML
   private Button drawRequestReject;
+  // could combine these to one later
+  @FXML
+  private Pane ffRequest;
+  @FXML
+  private Button ffRequestAccept;
+  @FXML
+  private Button ffRequestReject;
 
   private GameLogic gameLogic;
 
@@ -357,6 +364,17 @@ public class GameController {
       drawRequest.setVisible(false);
       NetworkClient.replyDrawRequest(false);
     });
+
+    ffRequestAccept.setOnAction(e -> {
+      forfeit();
+      ffRequest.setVisible(false);
+      NetworkClient.replyResignRequest(true);
+    });
+
+    ffRequestReject.setOnAction(e -> {
+      ffRequest.setVisible(false);
+      NetworkClient.replyResignRequest(false);
+    });
   }
 
   public Player getLocalPlayer() {
@@ -531,6 +549,10 @@ public class GameController {
 
   public void recieveDrawRequest() {
     drawRequest.setVisible(true);
+  }
+
+  public void recieveResignRequest() {
+    ffRequest.setVisible(true);
   }
 
   public void staleMate() {

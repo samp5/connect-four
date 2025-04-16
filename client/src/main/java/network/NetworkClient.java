@@ -120,6 +120,17 @@ public class NetworkClient {
         } else {
           chatCTL.drawDeclined();
         }
+      case RESIGN_REQUEST:
+        gameCTL.recieveResignRequest();
+        break;
+      case RESIGN_RESPONSE:
+        if (msg.isSuccess()) {
+          gameCTL.recieveForfeit();
+          chatCTL.resignAccepted();
+        } else {
+          chatCTL.resignDeclined();
+        }
+        break;
       default:
         break;
     }
@@ -161,34 +172,66 @@ public class NetworkClient {
   // request a draw
   public static void drawRequest() {
     switch (GameLogic.getGameMode()) {
-      case LocalAI:
-        chatCTL.drawDeclined();
-        handleChat("What? No.", "AI", false);
-        break;
-      case LocalMultiplayer:
-        gameCTL.recieveDrawRequest();
-        break;
-      case Multiplayer:
-        sendMessage(Message.forSimpleInstruction(Type.DRAW_REQUEST));
-        break;
-      case None:
-      default:
-        break;
+		case LocalAI:
+      chatCTL.drawDeclined();
+      handleChat("What? No.", "AI", false);
+			break;
+		case LocalMultiplayer:
+      gameCTL.recieveDrawRequest();
+			break;
+		case Multiplayer:
+      sendMessage(Message.forSimpleInstruction(Type.DRAW_REQUEST));
+			break;
+		case None:
+		default:
+			break;
     }
   }
 
   public static void replyDrawRequest(boolean accepted) {
     switch (GameLogic.getGameMode()) {
-      case LocalMultiplayer:
-        chatCTL.drawDeclined();
-        break;
-      case Multiplayer:
-        sendMessage(Message.forGameResponse(Type.DRAW, accepted));
-        break;
-      case LocalAI:
-      case None:
-      default:
-        break;
+		case LocalMultiplayer:
+      chatCTL.drawDeclined();
+      break;
+		case Multiplayer:
+      sendMessage(Message.forGameResponse(Type.DRAW, accepted));
+      break;
+		case LocalAI:
+		case None:
+		default:
+			break;
+    }
+  }
+
+  public static void resignRequest() {
+    switch (GameLogic.getGameMode()) {
+		case LocalAI:
+      handleChat("I'm impressed you even considered the option.", "AI", false);
+      chatCTL.resignDeclined();
+		case LocalMultiplayer:
+      gameCTL.recieveResignRequest();
+			break;
+		case Multiplayer:
+      sendMessage(Message.forSimpleInstruction(Type.RESIGN_REQUEST));
+			break;
+		case None:
+		default:
+			break;
+    }
+  }
+
+  public static void replyResignRequest(boolean accepted) {
+    switch (GameLogic.getGameMode()) {
+		case LocalMultiplayer:
+      chatCTL.resignDeclined();
+      break;
+		case Multiplayer:
+      sendMessage(Message.forGameResponse(Type.RESIGN_RESPONSE, accepted));
+      break;
+		case LocalAI:
+		case None:
+		default:
+			break;
     }
   }
 

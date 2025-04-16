@@ -10,7 +10,7 @@ import network.Player.PlayerRole;
  */
 public class Message implements Serializable {
   public static enum Type {
-    LOGIN, START, RECONNECT, DISCONNECT, CHAT, MOVE, COMPLETE, FORFEIT, DRAW, DRAW_REQUEST, OPPONENT_DISCONNECT,
+    LOGIN, START, RECONNECT, DISCONNECT, CHAT, MOVE, COMPLETE, FORFEIT, DRAW, DRAW_REQUEST, RESIGN_REQUEST, RESIGN_RESPONSE, OPPONENT_DISCONNECT,
   };
 
   public static enum WinType {

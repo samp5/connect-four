@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 
-import javafx.animation.Interpolator;
 import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
@@ -95,6 +94,18 @@ public class ChatController {
         .setBackground(new Background(new BackgroundImage(new Image("/assets/send_button.png"),
             BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
             new BackgroundSize(100, 50, false, false, false, false))));
+    ffButton
+        .setBackground(new Background(new BackgroundImage(new Image("/assets/surrender-flag.png"),
+            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+            new BackgroundSize(33, 28, false, false, false, false))));
+    drawButton
+        .setBackground(new Background(new BackgroundImage(new Image("/assets/draw.png"),
+            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+            new BackgroundSize(34, 28, false, false, false, false))));
+    requestFFButton
+        .setBackground(new Background(new BackgroundImage(new Image("/assets/red-flag.png"),
+            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+            new BackgroundSize(33, 28, false, false, false, false))));
   }
 
   private void setHandlers() {
@@ -144,16 +155,16 @@ public class ChatController {
         NetworkClient.drawRequest();
       });
     });
-    //
-    // requestFFButton.setOnAction(e -> {
-    // popup.show(ffButton.getScene().getWindow());
-    // popupConfirmText.setText("request forfeit?");
-    //
-    // popupConfirmButton.setOnAction(e0 -> {
-    // popup.hide();
-    // System.out.println("confirmed forfeit request");
-    // });
-    // });
+
+    requestFFButton.setOnAction(e -> {
+      confirmPopup.setVisible(true);
+      confirmText.setText("Are you sure you want to request that the opponent resigns?");
+
+      popupConfirmButton.setOnAction(e0 -> {
+        confirmPopup.setVisible(false);
+        NetworkClient.resignRequest();
+      });
+    });
   }
 
   public void recieveForfeit() {
@@ -170,6 +181,14 @@ public class ChatController {
 
   public void drawDeclined() {
     getNotification("Your opponent has declined your draw offer.");
+  }
+
+  public void resignAccepted() {
+    getNotification("Your opponent has accepted your resign request.");
+  }
+
+  public void resignDeclined() {
+    getNotification("Your opponent has declined your resign request.");
   }
 
   private void getNotification(String text) {
