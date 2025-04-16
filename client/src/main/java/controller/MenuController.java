@@ -34,13 +34,7 @@ public class MenuController {
   @FXML
   Button settingsButton;
 
-
   public void initialize() {
-    menuPane.setBackground(
-        new Background(new BackgroundImage(new Image("/assets/load-background.png"),
-            BackgroundRepeat.NO_REPEAT,
-            BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            new BackgroundSize(1080, 720, false, false, false, false))));
     playOnlineButton.setOnAction(e -> {
       SceneManager.showScene("connections.fxml");
       GameController.setGameMode(GameMode.Multiplayer);

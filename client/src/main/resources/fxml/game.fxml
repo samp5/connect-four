@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameController">
    <children>
@@ -27,10 +26,9 @@
          </children></Pane>
       <AnchorPane fx:id="gamePane" minHeight="-Infinity" minWidth="-Infinity">
          <children>
-            <VBox alignment="CENTER" prefHeight="718.0" prefWidth="719.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" />
-                  <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="542.0" prefWidth="632.0">
+                  <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="542.0" prefWidth="632.0" translateY="-45.0">
                      <children>
                         <Pane fx:id="backgroundPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="630.0" />
                         <Pane fx:id="midgroundPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="630.0" />
@@ -41,17 +39,15 @@
                                     <Image url="@../assets/board.png" />
                                  </image>
                               </ImageView>
-                           </children></Pane>
+                           </children>
+                        </Pane>
                      </children>
                   </StackPane>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="720.0" translateY="250.0">
                      <children>
                         <HBox prefWidth="359.0">
                            <children>
                               <StackPane>
-                                 <padding>
-                                    <Insets bottom="50.0" left="10.0" right="10.0" top="10.0" />
-                                 </padding>
                                  <children>
                                     <Pane fx:id="chipPane1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="90.0">
                                        <children>
@@ -60,17 +56,18 @@
                                                 <Image url="@../assets/red_chip.png" />
                                              </image>
                                           </ImageView>
-                                       </children></Pane>
+                                       </children>
+                                    </Pane>
                                  </children>
+                                 <padding>
+                                    <Insets left="10.0" />
+                                 </padding>
                               </StackPane>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER_RIGHT" prefWidth="359.0">
+                        <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="359.0">
                            <children>
                               <StackPane>
-                                 <padding>
-                                    <Insets bottom="50.0" left="10.0" right="10.0" top="10.0" />
-                                 </padding>
                                  <children>
                                     <Pane fx:id="chipPane2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="90.0">
                                        <children>
@@ -79,25 +76,30 @@
                                                 <Image url="@../assets/blue_chip.png" />
                                              </image>
                                           </ImageView>
-                                       </children></Pane>
+                                       </children>
+                                    </Pane>
                                  </children>
+                                 <padding>
+                                    <Insets right="10.0" />
+                                 </padding>
                               </StackPane>
                            </children>
                         </HBox>
                      </children>
                   </HBox>
                </children>
-            </VBox>
+            </StackPane>
             <Pane fx:id="overlayPane" prefHeight="720.0" prefWidth="720.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
-      <BorderPane fx:id="settingsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" translateX="-335.0" translateY="-335.0">
+      <BorderPane fx:id="settingsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0" translateX="-325.0" translateY="-325.0">
          <center>
-            <ImageView fitHeight="45.0" fitWidth="45.0" BorderPane.alignment="CENTER">
+            <ImageView fitHeight="55.0" fitWidth="55.0" BorderPane.alignment="CENTER">
                <image>
                   <Image url="@../assets/settings-button.png" />
                </image>
             </ImageView>
-         </center></BorderPane>
+         </center>
+      </BorderPane>
    </children>
 </StackPane>
