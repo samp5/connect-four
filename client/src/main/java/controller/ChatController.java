@@ -1,30 +1,22 @@
 package controller;
 
 import java.io.IOException;
-import java.util.Collection;
 
+import javafx.animation.Interpolator;
+import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
-import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.input.KeyCode;
@@ -32,14 +24,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
+import javafx.scene.shape.HLineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Popup;
-import javafx.stage.Screen;
-import javafx.stage.PopupWindow.AnchorLocation;
-import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.Duration;
 import logic.GameLogic;
 import logic.GameLogic.GameMode;
@@ -72,7 +61,7 @@ public class ChatController {
   @FXML
   Button popupConfirmButton;
   @FXML
-  Text popupConfirmText;
+  Text confirmText;
 
   @FXML
   HBox chatEditorBox;
@@ -86,6 +75,11 @@ public class ChatController {
   ScrollPane chatHistoryScroll;
   @FXML
   BorderPane chatPane;
+
+  @FXML
+  Pane offerRejected;
+  @FXML
+  Text offerRejectedText;
 
   public void initialize() {
     NetworkClient.bindChatController(this);
@@ -126,28 +120,28 @@ public class ChatController {
     });
 
     popupCancelButton.setOnAction(e -> {
-      confirmPopup.visibleProperty().set(false);
+      confirmPopup.setVisible(false);
     });
 
     ffButton.setOnAction(e -> {
-      confirmPopup.visibleProperty().set(true);
-      popupConfirmText.setText("forfeit?");
+      confirmPopup.setVisible(true);
+      confirmText.setText("Are you sure you want to resign?");
 
       popupConfirmButton.setOnAction(e0 -> {
-        confirmPopup.visibleProperty().set(false);
+        confirmPopup.setVisible(false);
         NetworkClient.forfeit();
       });
     });
 
-    // drawButton.setOnAction(e -> {
-    //   popup.show(ffButton.getScene().getWindow());
-    //   popupConfirmText.setText("request draw?");
-    //
-    //   popupConfirmButton.setOnAction(e0 -> {
-    //     popup.hide();
-    //     NetworkClient.drawRequest();
-    //   });
-    // });
+    drawButton.setOnAction(e -> {
+      confirmPopup.setVisible(true);
+      confirmText.setText("Are you sure you want to request a draw?");
+
+      popupConfirmButton.setOnAction(e0 -> {
+        confirmPopup.setVisible(false);
+        NetworkClient.drawRequest();
+      });
+    });
     //
     // requestFFButton.setOnAction(e -> {
     //   popup.show(ffButton.getScene().getWindow());
@@ -158,6 +152,41 @@ public class ChatController {
     //     System.out.println("confirmed forfeit request");
     //   });
     // });
+  }
+  
+  public void recieveForfeit() {
+    getNotification("Your opponent has resigned.");
+  }
+
+  public void draw() {
+    getNotification("Your opponent has accepted your draw offer.");
+  }
+
+  public void drawDeclined() {
+    getNotification("Your opponent has declined your draw offer.");
+  }
+
+  private void getNotification(String text) {
+    offerRejectedText.setText(text);
+    Path extendPath = new Path(new MoveTo(480, -280), new HLineTo(160));
+    PathTransition animation = new PathTransition(Duration.seconds(.5), extendPath, offerRejected);
+    animation.play();
+    offerRejected.setVisible(true);
+
+    Path hidePath = new Path(new MoveTo(160, -280), new HLineTo(480));
+    PathTransition reverse = new PathTransition(Duration.seconds(.5), hidePath, offerRejected);
+
+    PauseTransition delay = new PauseTransition(Duration.seconds(4));
+
+    animation.setOnFinished(e -> {
+      delay.play();
+    });
+    delay.setOnFinished(e -> {
+      reverse.play();
+    });
+    reverse.setOnFinished(e -> {
+      offerRejected.setVisible(false);
+    });
   }
 
   private void sendMessage() {

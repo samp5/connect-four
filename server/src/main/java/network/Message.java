@@ -22,6 +22,12 @@ public class Message implements Serializable {
     DRAW_REQUEST,
   };
 
+  public static enum WinType {
+    WIN,
+    LOSE,
+    DRAW,
+  };
+
   private Type type;
   private String username, password;
   private Integer column;
@@ -34,6 +40,7 @@ public class Message implements Serializable {
   private PlayerRole role;
   private boolean success;
   private ArrayList<Integer> restoredMoves;
+  private WinType winType;
 
   private Message() {}
 
@@ -84,10 +91,10 @@ public class Message implements Serializable {
     return toSend;
   }
 
-  public static Message forDrawResponse(boolean accepted) {
+  public static Message forGameResponse(Type type, boolean accepted) {
     Message toSend = new Message();
 
-    toSend.type = Type.DRAW;
+    toSend.type = type;
     toSend.success = accepted;
 
     return toSend;
@@ -104,12 +111,12 @@ public class Message implements Serializable {
     return toSend;
   }
 
-  public static Message forGameComplete(Player player, boolean won) {
+  public static Message forGameComplete(Player player, WinType winType) {
     Message toSend = new Message();
 
     toSend.type = Type.COMPLETE;
     toSend.player = player;
-    toSend.success = won;
+    toSend.winType = winType;
 
     return toSend;
   }
@@ -189,5 +196,9 @@ public class Message implements Serializable {
 
   public ArrayList<Integer> getRestoredMoves() {
     return restoredMoves;
+  }
+
+  public WinType getWinType() {
+    return winType;
   }
 }

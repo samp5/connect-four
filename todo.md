@@ -3,6 +3,8 @@
 - [x] Board dimensions
 - [x] Migrate visuals to scene builder
 - [x] Username password problem
+- [ ] Player can play for the AI if theyre fast enough
+- [ ] Resign on empty board softlocks (at least) local multi
 
 ## Client
 
@@ -22,7 +24,7 @@
 
 #### Long-term
 - [x] Add AI with levels of difficulty
-- [ ] Add a smarter stalemate detector
+- [~] Add a smarter stalemate detector
 - [ ] Message pane to choose message box from friends
 - [ ] Text emoji drawer
 - [ ] Art overhaul
@@ -35,7 +37,7 @@
 - [ ] Add sender to chat message
 - [x] Move send to other side
 - [>] Add buttons for forfeit, offer draw, request forfeit
-    - [>] with confirmation buttons
+    - [x] with confirmation buttons
 - [x] Style all control elements with pixel art (ART)
 
 ### Menu Screen
@@ -43,6 +45,7 @@
 - [x] Design background (ART) 
 - [x] Make settings controller + UI
     - [x] AI difficulty in settings
+- [ ] Option to disable custom cursors
 
 ### Connections
 - [x] Create FXML scene + Controller
@@ -57,6 +60,7 @@
 
 
 ## Server
- - [ ] Handle main menu button in settings
+- [ ] Handle main menu button in settings
 
-
+## Other
+- [ ] Settings save on quit

@@ -21,15 +21,16 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
-import javafx.scene.shape.Rectangle;
 import logic.GameLogic;
 import logic.GameLogic.GameMode;
 import logic.AI;
 import network.NetworkClient;
 import network.Player;
+import network.Message.WinType;
 import network.Player.PlayerRole;
 import utils.CursorManager;
 
@@ -72,9 +73,15 @@ public class GameController {
   @FXML
   private ImageView clouds;
 
+  @FXML
+  private Pane drawRequest;
+  @FXML
+  private Button drawRequestAccept;
+  @FXML
+  private Button drawRequestReject;
+
   private GameLogic gameLogic;
 
-  private Button bestMoveButton;
 
   public static void setGameMode(GameMode mode) {
     GameLogic.setGameMode(mode);
@@ -139,12 +146,16 @@ public class GameController {
   }
 
   public void animateClouds() {
-    System.out.println(clouds.getFitWidth());
-    System.out.println(clouds.getFitHeight());
     Path cloudPath = new Path(new MoveTo(0, 0), new LineTo(720, 0));
     PathTransition cloudAnimation = new PathTransition(Duration.seconds(65), cloudPath, clouds);
-    cloudAnimation.setCycleCount(PathTransition.INDEFINITE);
     cloudAnimation.play();
+
+    cloudAnimation.onFinishedProperty().set(e -> {
+      Path fullPath = new Path(new MoveTo(-720, 0), new HLineTo(720));
+      PathTransition fullAnimation = new PathTransition(Duration.seconds(130), fullPath, clouds);
+      fullAnimation.setCycleCount(PathTransition.INDEFINITE);
+      fullAnimation.play();
+    });
   }
 
   private void handleRelease(MouseEvent e) {
@@ -315,6 +326,17 @@ public class GameController {
     settingsButton.setOnMouseClicked(e -> {
       GameSettings.loadOnto(foregroundPane);
     });
+
+    drawRequestAccept.setOnAction(e -> {
+      staleMate();
+      drawRequest.setVisible(false);
+      NetworkClient.replyDrawRequest(true);
+    });
+
+    drawRequestReject.setOnAction(e -> {
+      drawRequest.setVisible(false);
+      NetworkClient.replyDrawRequest(false);
+    });
   }
 
   public Player getLocalPlayer() {
@@ -359,6 +381,7 @@ public class GameController {
   }
 
   private void gameOver(PlayerRole winner, BoardPosition[] winningPositions) {
+    canMove = false;
 
     GameLogic.setCurrentPlayerRole(PlayerRole.None);
     // Piece[] winningPieces = new Piece[4];
@@ -409,19 +432,33 @@ public class GameController {
         });
         pathTransition2.play();
 
-        ImageView winnerImg = new ImageView(new Image(
-            "/assets/" + (winner == PlayerRole.PlayerOne ? "red" : "blue") + "-wins.png",
-            CoordUtils.gamePaneWidth - 40, 0, true, false));
+        String loc;
+        switch (winner) {
+          case None:
+            loc = "/assets/draw-message.png";
+            break;
+          case PlayerOne:
+            loc = "/assets/red-wins.png";
+            break;
+          case PlayerTwo:
+            loc = "/assets/blue-wins.png";
+            break;
+          default:
+            loc = "/assets/cloud1.png";
+        }
+        Image textImage = new Image(loc, 0, 96, true, false);
+        ImageView winnerImg = new ImageView(textImage);
 
         overlayPane.getChildren().add(winnerImg);
 
-        winnerImg.setX(20);
+        winnerImg.setX((CoordUtils.gamePaneWidth - textImage.widthProperty().get()) / 2);
         winnerImg.setY(100);
 
         PauseTransition pt = new PauseTransition(Duration.millis(4000));
         pt.setOnFinished(g -> {
           midgroundPane.getChildren().setAll();
           overlayPane.getChildren().remove(winnerImg);
+          canMove = true;
         });
         pt.play();
       });
@@ -430,9 +467,9 @@ public class GameController {
     }
     if (GameLogic.getGameMode() == GameMode.Multiplayer) {
       if (winner == GameLogic.getLocalPlayer().getRole()) {
-        NetworkClient.gameComplete(true);
+        NetworkClient.gameComplete(WinType.WIN);
       } else {
-        NetworkClient.gameComplete(false);
+        NetworkClient.gameComplete(WinType.LOSE);
       }
     } else if (GameLogic.getGameMode() == GameMode.LocalAI && AI.getRole() == winner) {
       NetworkClient.handleChat(AI.getWinningQuip(), "AI", false);
@@ -443,7 +480,6 @@ public class GameController {
 
   public void recieveForfeit() {
     gameOver(GameLogic.getLocalPlayer().getRole(), null);
-    // TODO: add notif or something
   }
 
   public void forfeit() {
@@ -461,8 +497,12 @@ public class GameController {
     }
   }
 
-  private void staleMate() {
-    System.out.println("Stalemate!!");
+  public void recieveDrawRequest() {
+    drawRequest.setVisible(true);
+  }
+
+  public void staleMate() {
+    gameOver(PlayerRole.None, null);
   }
 
 }

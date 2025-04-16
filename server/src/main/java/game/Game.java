@@ -75,6 +75,8 @@ public class Game {
           case MOVE:
           case RECONNECT:
           case FORFEIT:
+          case DRAW_REQUEST:
+          case DRAW:
             // don't redirect if there was a DC
             if (this.disconnectID != null) return;
 

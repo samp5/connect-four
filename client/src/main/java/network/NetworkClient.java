@@ -14,6 +14,7 @@ import utils.SceneManager;
 import logic.GameLogic;
 import logic.GameLogic.GameMode;
 import network.Message.Type;
+import network.Message.WinType;
 
 /**
  * Connect to server
@@ -103,9 +104,18 @@ public class NetworkClient {
         }
       case FORFEIT:
         gameCTL.recieveForfeit();
+        chatCTL.recieveForfeit();
         break;
       case DRAW_REQUEST:
+        gameCTL.recieveDrawRequest();
         break;
+      case DRAW:
+        if (msg.isSuccess()) {
+          gameCTL.staleMate();
+          chatCTL.draw();
+        } else {
+          chatCTL.drawDeclined();
+        }
       default:
         break;
     }
@@ -132,8 +142,8 @@ public class NetworkClient {
   }
 
   // alert server of game complete
-  public static void gameComplete(boolean won) {
-    sendMessage(Message.forGameComplete(player, won));
+  public static void gameComplete(WinType winType) {
+    sendMessage(Message.forGameComplete(player, winType));
   }
 
   // forfeit a match
@@ -146,7 +156,36 @@ public class NetworkClient {
 
   // request a draw
   public static void drawRequest() {
-    sendMessage(Message.forSimpleInstruction(Type.DRAW_REQUEST));
+    switch (GameLogic.getGameMode()) {
+		case LocalAI:
+      chatCTL.drawDeclined();
+      handleChat("What? No.", "AI", false);
+			break;
+		case LocalMultiplayer:
+      gameCTL.recieveDrawRequest();
+			break;
+		case Multiplayer:
+      sendMessage(Message.forSimpleInstruction(Type.DRAW_REQUEST));
+			break;
+		case None:
+		default:
+			break;
+    }
+  }
+
+  public static void replyDrawRequest(boolean accepted) {
+    switch (GameLogic.getGameMode()) {
+		case LocalMultiplayer:
+      chatCTL.drawDeclined();
+      break;
+		case Multiplayer:
+      sendMessage(Message.forGameResponse(Type.DRAW, accepted));
+      break;
+		case LocalAI:
+		case None:
+		default:
+			break;
+    }
   }
 
   private static void sendMessage(Message m) {

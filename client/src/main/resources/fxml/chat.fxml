@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatController">
+<StackPane stylesheets="@../css/chat.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatController">
    <children>
       <Pane>
          <children>
@@ -88,17 +88,9 @@
             </ImageView>
             <VBox alignment="CENTER" maxHeight="96.0" maxWidth="218.0" minHeight="96.0" minWidth="224.0" prefHeight="96.0" prefWidth="218.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Are you sure you want to">
+                  <Text fx:id="confirmText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Are you sure you want to?" wrappingWidth="192.0">
                      <VBox.margin>
                         <Insets top="4.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font name="Mota Pixel Regular" size="20.0" />
-                     </font>
-                  </Text>
-                  <Text fx:id="popupConfirmText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="[confirm]" textAlignment="CENTER">
-                     <VBox.margin>
-                        <Insets right="130.0" top="-4.0" />
                      </VBox.margin>
                      <font>
                         <Font name="Mota Pixel Regular" size="20.0" />
@@ -133,6 +125,20 @@
                         <Insets top="-8.0" />
                      </opaqueInsets>
                   </HBox>
+               </children>
+            </VBox>
+         </children>
+      </Pane>
+      <Pane fx:id="offerRejected" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" translateX="40.0" translateY="-316.0" visible="false">
+         <children>
+            <ImageView fitHeight="64.0" fitWidth="256.0">
+               <image>
+                  <Image url="@../assets/offer_reject.png" />
+               </image>
+            </ImageView>
+            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0">
+               <children>
+                  <Text fx:id="offerRejectedText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Your opponent has declined your draw offer." wrappingWidth="224.0" />
                </children>
             </VBox>
          </children>
