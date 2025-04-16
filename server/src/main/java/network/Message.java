@@ -10,22 +10,11 @@ import network.Player.PlayerRole;
  */
 public class Message implements Serializable {
   public static enum Type {
-    LOGIN,
-    START,
-    RECONNECT,
-    DISCONNECT,
-    CHAT,
-    MOVE,
-    COMPLETE,
-    FORFEIT,
-    DRAW,
-    DRAW_REQUEST,
+    LOGIN, START, RECONNECT, DISCONNECT, CHAT, MOVE, COMPLETE, FORFEIT, DRAW, DRAW_REQUEST, OPPONENT_DISCONNECT,
   };
 
   public static enum WinType {
-    WIN,
-    LOSE,
-    DRAW,
+    WIN, LOSE, DRAW,
   };
 
   private Type type;
@@ -117,6 +106,15 @@ public class Message implements Serializable {
     toSend.type = Type.COMPLETE;
     toSend.player = player;
     toSend.winType = winType;
+
+    return toSend;
+  }
+
+  public static Message forOpponentDisconnect(Player player) {
+    Message toSend = new Message();
+
+    toSend.type = Type.OPPONENT_DISCONNECT;
+    toSend.player = player;
 
     return toSend;
   }

@@ -102,12 +102,16 @@ public class NetworkClient {
           // restore moves from other player
           gameCTL.restoreGameBoard(restoredMoves);
         }
+        break;
       case FORFEIT:
         gameCTL.recieveForfeit();
         chatCTL.recieveForfeit();
         break;
       case DRAW_REQUEST:
         gameCTL.recieveDrawRequest();
+        break;
+      case OPPONENT_DISCONNECT:
+        chatCTL.opponentDisconnect();
         break;
       case DRAW:
         if (msg.isSuccess()) {
@@ -157,34 +161,34 @@ public class NetworkClient {
   // request a draw
   public static void drawRequest() {
     switch (GameLogic.getGameMode()) {
-		case LocalAI:
-      chatCTL.drawDeclined();
-      handleChat("What? No.", "AI", false);
-			break;
-		case LocalMultiplayer:
-      gameCTL.recieveDrawRequest();
-			break;
-		case Multiplayer:
-      sendMessage(Message.forSimpleInstruction(Type.DRAW_REQUEST));
-			break;
-		case None:
-		default:
-			break;
+      case LocalAI:
+        chatCTL.drawDeclined();
+        handleChat("What? No.", "AI", false);
+        break;
+      case LocalMultiplayer:
+        gameCTL.recieveDrawRequest();
+        break;
+      case Multiplayer:
+        sendMessage(Message.forSimpleInstruction(Type.DRAW_REQUEST));
+        break;
+      case None:
+      default:
+        break;
     }
   }
 
   public static void replyDrawRequest(boolean accepted) {
     switch (GameLogic.getGameMode()) {
-		case LocalMultiplayer:
-      chatCTL.drawDeclined();
-      break;
-		case Multiplayer:
-      sendMessage(Message.forGameResponse(Type.DRAW, accepted));
-      break;
-		case LocalAI:
-		case None:
-		default:
-			break;
+      case LocalMultiplayer:
+        chatCTL.drawDeclined();
+        break;
+      case Multiplayer:
+        sendMessage(Message.forGameResponse(Type.DRAW, accepted));
+        break;
+      case LocalAI:
+      case None:
+      default:
+        break;
     }
   }
 
@@ -212,6 +216,7 @@ public class NetworkClient {
       out = new ObjectOutputStream(socket.getOutputStream());
       out.writeObject(Message.forServerDisconnect(player));
       socket.close();
+      socket = null;
     } catch (Exception e) {
     }
   }

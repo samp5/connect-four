@@ -15,6 +15,7 @@ import registry.PlayerRegistry;
  */
 public class Game {
   GameThread thread;
+
   public Game(ServerClient p1, ServerClient p2) {
     thread = new GameThread(p1, p2, this);
     thread.start();
@@ -40,8 +41,10 @@ public class Game {
     public void run() {
       try {
         // Send start message to each player
-        this.player1.sendMessage(Message.forGameStart(player1.getPlayer(), player2.getPlayer(), PlayerRole.PlayerOne));
-        this.player2.sendMessage(Message.forGameStart(player2.getPlayer(), player1.getPlayer(), PlayerRole.PlayerTwo));
+        this.player1.sendMessage(
+            Message.forGameStart(player1.getPlayer(), player2.getPlayer(), PlayerRole.PlayerOne));
+        this.player2.sendMessage(
+            Message.forGameStart(player2.getPlayer(), player1.getPlayer(), PlayerRole.PlayerTwo));
 
         // run the game by redirecting any messages recieved to where they need
         // to go
@@ -60,6 +63,11 @@ public class Game {
         switch (msg.getType()) {
           case DISCONNECT:
             if (disconnectID == null) {
+              if (connection.getPlayer().getID() == player1.getPlayer().getID()) {
+                player2.sendMessage(Message.forOpponentDisconnect(player1.getPlayer()));
+              } else {
+                player1.sendMessage(Message.forOpponentDisconnect(player2.getPlayer()));
+              }
               PlayerRegistry.logoutPlayer(connection.getPlayer());
               disconnectID = connection.getPlayer().getID();
               GameManager.dcGames.put(disconnectID, game);
@@ -78,7 +86,8 @@ public class Game {
           case DRAW_REQUEST:
           case DRAW:
             // don't redirect if there was a DC
-            if (this.disconnectID != null) return;
+            if (this.disconnectID != null)
+              return;
 
             // redirect message to other player
             if (connection.getPlayer().getID() == player1.getPlayer().getID()) {
@@ -103,17 +112,20 @@ public class Game {
       try {
         if (disconnectID == player1.getPlayer().getID()) {
           player1 = connection;
-          player1.sendMessage(Message.forGameStart(player1.getPlayer(), player2.getPlayer(), PlayerRole.PlayerOne));
-          player2.sendMessage(Message.forServerReconnect((ArrayList<Integer>)null));
+          player1.sendMessage(
+              Message.forGameStart(player1.getPlayer(), player2.getPlayer(), PlayerRole.PlayerOne));
+          player2.sendMessage(Message.forServerReconnect((ArrayList<Integer>) null));
         } else {
           player2 = connection;
-          player2.sendMessage(Message.forGameStart(player2.getPlayer(), player1.getPlayer(), PlayerRole.PlayerTwo));
-          player1.sendMessage(Message.forServerReconnect((ArrayList<Integer>)null));
+          player2.sendMessage(
+              Message.forGameStart(player2.getPlayer(), player1.getPlayer(), PlayerRole.PlayerTwo));
+          player1.sendMessage(Message.forServerReconnect((ArrayList<Integer>) null));
         }
         ClientManager.removeClientListener(connection);
         GameManager.dcGames.remove(disconnectID);
         disconnectID = null;
-      } catch (IOException e) {}
+      } catch (IOException e) {
+      }
     }
   }
 }

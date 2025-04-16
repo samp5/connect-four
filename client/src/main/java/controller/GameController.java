@@ -82,7 +82,6 @@ public class GameController {
 
   private GameLogic gameLogic;
 
-
   public static void setGameMode(GameMode mode) {
     GameLogic.setGameMode(mode);
   }
@@ -194,7 +193,7 @@ public class GameController {
 
   }
 
-  private void animateMove(BoardPosition rowCol, Point chipPos, PlayerRole role) {
+  private PathTransition animateToTop(BoardPosition rowCol, Point chipPos, PlayerRole role) {
     if (draggedPiece == null) {
       draggedPiece = new Piece(role, CoordUtils.chipHolder(role));
       overlayPane.getChildren().add(draggedPiece);
@@ -218,46 +217,61 @@ public class GameController {
     pathTransition.setDuration(Duration.millis(1 * chipPos.distanceTo(topOfCol)));
     pathTransition.setPath(path);
     pathTransition.setNode(draggedPiece);
+    return pathTransition;
+  }
+
+  private void animateDrop(Point from, BoardPosition rowCol, PlayerRole role) {
+    double fromX = from.getX();
+    double fromY = from.getY() - CoordUtils.pieceRadius;
+
+    Point topSlot = CoordUtils.fromRowCol(GameLogic.numRows() - 1, rowCol.getColumn());
+    Piece pieceToDrop = new Piece(role, topSlot.copy());
+    Point finalPosition = CoordUtils.fromRowCol(rowCol.getRow(), rowCol.getColumn());
+    midgroundPane.getChildren().add(pieceToDrop);
+
+    Path pth = new Path();
+    pth.getElements().add(new MoveTo(fromX, fromY - pieceToDrop.getRadius()));
+    pth.getElements().add(new LineTo(finalPosition.getX(), finalPosition.getY()));
+
+    // build the animation
+    PathTransition pTrans = new PathTransition();
+    pTrans.setDuration(Duration.millis(1500));
+    pTrans.setPath(pth);
+    pTrans.setNode(pieceToDrop);
+
+    pTrans.play();
+
+    pTrans.setOnFinished(k -> {
+      // chack for game over
+      checkGameOver(role);
+
+      // run our AI if we need to
+      if (GameLogic.getGameMode() == GameMode.LocalAI
+          && gameLogic.getCurrentPlayerRole() == AI.getRole()) {
+        int aiCol = AI.bestColumn(gameLogic.getBoard());
+        BoardPosition bp = new BoardPosition(gameLogic.getAvailableRow(aiCol).get(), aiCol);
+        handleMove(AI.bestColumn(gameLogic.getBoard()), AI.getRole());
+        if (Math.random() < 0.4) {
+          NetworkClient.handleChat(AI.getQuip(), "AI", false);
+        }
+        animateMove(bp, CoordUtils.chipHolder(AI.getRole()),
+            AI.getRole());
+      }
+    });
+
+  }
+
+  private void animateMove(BoardPosition rowCol, Point chipPos, PlayerRole role) {
+    PathTransition pathTransition = animateToTop(rowCol, chipPos, role);
     pathTransition.play();
+
+    Point topOfCol = CoordUtils.topOfColumn(rowCol.getColumn());
+    double topX = topOfCol.getX();
+    double topY = topOfCol.getY() - CoordUtils.pieceRadius;
 
     pathTransition.setOnFinished(f -> {
       overlayPane.getChildren().remove(draggedPiece);
-
-      Point topSlot = CoordUtils.fromRowCol(GameLogic.numRows() - 1, rowCol.getColumn());
-      Piece pieceToDrop = new Piece(role, topSlot.copy());
-      Point finalPosition = CoordUtils.fromRowCol(rowCol.getRow(), rowCol.getColumn());
-      midgroundPane.getChildren().add(pieceToDrop);
-
-      Path pth = new Path();
-      pth.getElements().add(new MoveTo(topX, topY - pieceToDrop.getRadius()));
-      pth.getElements().add(new LineTo(finalPosition.getX(), finalPosition.getY()));
-
-      // build the animation
-      PathTransition pTrans = new PathTransition();
-      pTrans.setDuration(Duration.millis(1500));
-      pTrans.setPath(pth);
-      pTrans.setNode(pieceToDrop);
-
-      pTrans.play();
-
-      pTrans.setOnFinished(k -> {
-        // chack for game over
-        checkGameOver(role);
-
-        // run our AI if we need to
-        if (GameLogic.getGameMode() == GameMode.LocalAI
-            && gameLogic.getCurrentPlayerRole() == AI.getRole()) {
-          int aiCol = AI.bestColumn(gameLogic.getBoard());
-          BoardPosition bp = new BoardPosition(gameLogic.getAvailableRow(aiCol).get(), aiCol);
-          handleMove(AI.bestColumn(gameLogic.getBoard()), AI.getRole());
-          if (Math.random() < 0.4) {
-            NetworkClient.handleChat(AI.getQuip(), "AI", false);
-          }
-          animateMove(bp, CoordUtils.chipHolder(AI.getRole()),
-              AI.getRole());
-        }
-      });
-
+      animateDrop(topOfCol, rowCol, role);
       draggedPiece = null;
       canMove = true;
     });
@@ -348,8 +362,20 @@ public class GameController {
   }
 
   public void restoreGameBoard(ArrayList<Integer> moves) {
-    for (Integer col : moves) {
-      recieveMove(col);
+    for (int move_i = 0; move_i < moves.size(); move_i++) {
+      int col = moves.get(move_i);
+      PlayerRole role;
+      if (move_i % 2 == 0) {
+        role = PlayerRole.PlayerOne;
+      } else {
+        role = PlayerRole.PlayerTwo;
+      }
+      gameLogic.getAvailableRow(col).ifPresent((row) -> {
+        // get locations and role
+        BoardPosition rowCol = new BoardPosition(row, col);
+        handleMove(rowCol.getColumn(), role);
+        animateDrop(CoordUtils.topOfColumn(rowCol.getColumn()), rowCol, role);
+      });
     }
   }
 

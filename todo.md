@@ -3,6 +3,7 @@
 - [x] Board dimensions
 - [x] Migrate visuals to scene builder
 - [x] Username password problem
+- [x] Restore moves only does remote player color
 - [ ] Player can play for the AI if theyre fast enough
 - [ ] Resign on empty board softlocks (at least) local multi
 
@@ -60,7 +61,7 @@
 
 
 ## Server
-- [ ] Handle main menu button in settings
+- [x] Handle main menu button in settings
 
 ## Other
 - [ ] Settings save on quit

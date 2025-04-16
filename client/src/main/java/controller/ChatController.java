@@ -144,22 +144,26 @@ public class ChatController {
     });
     //
     // requestFFButton.setOnAction(e -> {
-    //   popup.show(ffButton.getScene().getWindow());
-    //   popupConfirmText.setText("request forfeit?");
+    // popup.show(ffButton.getScene().getWindow());
+    // popupConfirmText.setText("request forfeit?");
     //
-    //   popupConfirmButton.setOnAction(e0 -> {
-    //     popup.hide();
-    //     System.out.println("confirmed forfeit request");
-    //   });
+    // popupConfirmButton.setOnAction(e0 -> {
+    // popup.hide();
+    // System.out.println("confirmed forfeit request");
+    // });
     // });
   }
-  
+
   public void recieveForfeit() {
     getNotification("Your opponent has resigned.");
   }
 
   public void draw() {
     getNotification("Your opponent has accepted your draw offer.");
+  }
+
+  public void opponentDisconnect() {
+    getNotification("Your opponent just disconnected");
   }
 
   public void drawDeclined() {
@@ -211,8 +215,7 @@ public class ChatController {
   // // when we need to display a new message
   public void appendMessage(String msg, String username, boolean local) {
     try {
-      FXMLLoader loader =
-          new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
+      FXMLLoader loader = new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
       Region msgBox = loader.load();
       ChatMessage newMessageCTL = loader.getController();
       newMessageCTL.build(username, 0, msg, local);

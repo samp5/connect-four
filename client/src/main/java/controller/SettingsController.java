@@ -12,6 +12,9 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import logic.AI;
+import logic.GameLogic;
+import logic.GameLogic.GameMode;
+import network.NetworkClient;
 import utils.AudioManager;
 import utils.CursorManager;
 import utils.SceneManager;
@@ -82,6 +85,9 @@ public class SettingsController {
       detach();
     });
     mainMenuButton.setOnAction(e -> {
+      if (GameLogic.getGameMode() == GameMode.Multiplayer) {
+        NetworkClient.disconnect();
+      }
       SceneManager.showScene("menu.fxml");
     });
   }
