@@ -23,6 +23,8 @@ public class SettingsController {
   @FXML
   Slider volumeSlider;
   @FXML
+  Slider soundFXVolumeSlider;
+  @FXML
   Slider aiDifficultySlider;
   @FXML
   Pane settingsPane;
@@ -52,6 +54,7 @@ public class SettingsController {
     setHandlers();
     styleElements();
     volumeSlider.setValue(volumeSlider.getMax() * AudioManager.getVolume());
+    soundFXVolumeSlider.setValue(soundFXVolumeSlider.getMax() * AudioManager.getSoundFXVolume());
     aiDifficultySlider.setValue(AI.getDifficulty());
   }
 
@@ -74,6 +77,11 @@ public class SettingsController {
     volumeSlider.valueProperty().addListener((observable, old, newValue) -> {
       if (newValue != null) {
         AudioManager.setVolume(newValue.doubleValue() / volumeSlider.getMax());
+      }
+    });
+    soundFXVolumeSlider.valueProperty().addListener((observable, old, newValue) -> {
+      if (newValue != null) {
+        AudioManager.setSoundEffectVolume(newValue.doubleValue() / soundFXVolumeSlider.getMax());
       }
     });
     aiDifficultySlider.valueProperty().addListener((observable, old, newValue) -> {

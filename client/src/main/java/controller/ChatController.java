@@ -33,6 +33,8 @@ import javafx.util.Duration;
 import logic.GameLogic;
 import logic.GameLogic.GameMode;
 import network.NetworkClient;
+import utils.AudioManager;
+import utils.AudioManager.SoundEffect;
 import controller.utils.ChatMessage;
 import controller.utils.Markup;
 
@@ -194,6 +196,7 @@ public class ChatController {
   }
 
   private void sendMessage() {
+    AudioManager.playSoundEffect(SoundEffect.CHAT_SENT);
     String msg = chatEditorInput.getText().trim();
     if (msg.length() == 0) {
       return;
@@ -209,6 +212,7 @@ public class ChatController {
   }
 
   public void recieveMessage(String message, String username, boolean local) {
+    AudioManager.playSoundEffect(SoundEffect.CHAT_RECIEVED);
     appendMessage(message, username, local);
   }
 

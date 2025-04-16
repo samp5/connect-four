@@ -6,14 +6,16 @@
 - [x] Restore moves only does remote player color
 - [ ] Player can play for the AI if theyre fast enough
 - [ ] Resign on empty board softlocks (at least) local multi
+- [ ] Send AI message every 2nd or third message, not based on rand
 
 ## Client
 
 - [ ] Add sound-effects 
     - [x] Background music
-    - [ ] Chip on drop
+    - [x] Chip on drop
     - [ ] Button on click
-    - [ ] Chat on send
+    - [x] Chat on send
+    - [x] Chat recived
 
 ### Game Screen
 - [x] Design background (ART) 

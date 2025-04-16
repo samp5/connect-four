@@ -32,6 +32,8 @@ import network.NetworkClient;
 import network.Player;
 import network.Message.WinType;
 import network.Player.PlayerRole;
+import utils.AudioManager;
+import utils.AudioManager.SoundEffect;
 import utils.CursorManager;
 
 import javafx.util.Duration;
@@ -239,6 +241,12 @@ public class GameController {
     pTrans.setPath(pth);
     pTrans.setNode(pieceToDrop);
 
+    PauseTransition soundEffect = new PauseTransition(Duration.millis(1300));
+    soundEffect.setOnFinished(e -> {
+      AudioManager.playSoundEffect(SoundEffect.CHIP_DROP);
+    });
+
+    soundEffect.play();
     pTrans.play();
 
     pTrans.setOnFinished(k -> {
@@ -266,8 +274,6 @@ public class GameController {
     pathTransition.play();
 
     Point topOfCol = CoordUtils.topOfColumn(rowCol.getColumn());
-    double topX = topOfCol.getX();
-    double topY = topOfCol.getY() - CoordUtils.pieceRadius;
 
     pathTransition.setOnFinished(f -> {
       overlayPane.getChildren().remove(draggedPiece);

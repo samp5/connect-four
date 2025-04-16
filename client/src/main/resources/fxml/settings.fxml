@@ -17,17 +17,27 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-text" text="Settings" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="75.0">
                <children>
                   <VBox spacing="10.0">
                      <children>
-                        <Label text="Volume" />
+                        <Label text="Music Volume" />
                         <Slider fx:id="volumeSlider" minorTickCount="5" />
                      </children>
                   </VBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="75.0" prefWidth="200.0">
+               <children>
+                  <VBox spacing="10.0">
+                     <children>
+                        <Label text="SoundFX Volume" />
+                        <Slider fx:id="soundFXVolumeSlider" minorTickCount="5" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="75.0" prefWidth="200.0">
                <children>
                   <VBox spacing="10.0">
                      <children>
@@ -37,7 +47,7 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="75.0" prefWidth="200.0">
                <children>
                   <VBox spacing="10.0">
                      <children>
