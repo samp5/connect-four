@@ -64,9 +64,9 @@
                                     </Button>
                                     <HBox prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <Button fx:id="ffButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="33.0" stylesheets="@../css/chat.css" text="FF" />
+                                          <Button fx:id="resignButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="33.0" stylesheets="@../css/chat.css" text="FF" />
                                           <Button fx:id="drawButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="34.0" />
-                                          <Button fx:id="requestFFButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="33.0" />
+                                          <Button fx:id="requestResignButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="33.0" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -129,7 +129,7 @@
             </VBox>
          </children>
       </Pane>
-      <Pane fx:id="offerRejected" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" translateX="40.0" translateY="-316.0" visible="false">
+      <Pane fx:id="notificationPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" translateX="40.0" translateY="-316.0" visible="false">
          <children>
             <ImageView fitHeight="64.0" fitWidth="256.0">
                <image>
@@ -138,7 +138,7 @@
             </ImageView>
             <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0">
                <children>
-                  <Text fx:id="offerRejectedText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Your opponent has declined your draw offer." wrappingWidth="224.0" />
+                  <Text fx:id="notificationText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Your opponent has declined your draw offer." wrappingWidth="224.0" />
                </children>
             </VBox>
          </children>

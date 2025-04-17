@@ -103,29 +103,29 @@ public class NetworkClient {
           gameCTL.restoreGameBoard(restoredMoves);
         }
         break;
-      case FORFEIT:
-        gameCTL.recieveForfeit();
-        chatCTL.recieveForfeit();
-        break;
+      case DRAW:
+        if (msg.isSuccess()) {
+          gameCTL.staleMate();
+          chatCTL.drawAccepted();
+        } else {
+          chatCTL.drawDeclined();
+        }
       case DRAW_REQUEST:
         gameCTL.recieveDrawRequest();
         break;
       case OPPONENT_DISCONNECT:
         chatCTL.opponentDisconnect();
         break;
-      case DRAW:
-        if (msg.isSuccess()) {
-          gameCTL.staleMate();
-          chatCTL.draw();
-        } else {
-          chatCTL.drawDeclined();
-        }
+      case RESIGN:
+        gameCTL.recieveResign();
+        chatCTL.recieveResign();
+        break;
       case RESIGN_REQUEST:
         gameCTL.recieveResignRequest();
         break;
       case RESIGN_RESPONSE:
         if (msg.isSuccess()) {
-          gameCTL.recieveForfeit();
+          gameCTL.recieveResign();
           chatCTL.resignAccepted();
         } else {
           chatCTL.resignDeclined();
@@ -161,11 +161,11 @@ public class NetworkClient {
     sendMessage(Message.forGameComplete(player, winType));
   }
 
-  // forfeit a match
-  public static void forfeit() {
-    gameCTL.forfeit();
+  // resign a match
+  public static void resign() {
+    gameCTL.resign();
     if (GameLogic.getGameMode() == GameMode.Multiplayer) {
-      sendMessage(Message.forSimpleInstruction(Type.FORFEIT));
+      sendMessage(Message.forSimpleInstruction(Type.RESIGN));
     }
   }
 
@@ -223,12 +223,18 @@ public class NetworkClient {
   public static void replyResignRequest(boolean accepted) {
     switch (GameLogic.getGameMode()) {
 		case LocalMultiplayer:
-      chatCTL.resignDeclined();
+      if (accepted) {
+        gameCTL.recieveResign();
+        chatCTL.resignAccepted();
+      } else {
+        chatCTL.resignDeclined();
+      }
       break;
 		case Multiplayer:
       sendMessage(Message.forGameResponse(Type.RESIGN_RESPONSE, accepted));
-      break;
 		case LocalAI:
+      if (accepted) gameCTL.resign();
+      break;
 		case None:
 		default:
 			break;

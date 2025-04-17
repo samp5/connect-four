@@ -87,9 +87,9 @@ public class Game {
           case CHAT:
           case MOVE:
           case RECONNECT:
-          case FORFEIT:
-          case DRAW_REQUEST:
           case DRAW:
+          case DRAW_REQUEST:
+          case RESIGN:
           case RESIGN_REQUEST:
           case RESIGN_RESPONSE:
           default: // redirect by default

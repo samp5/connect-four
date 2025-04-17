@@ -5,7 +5,7 @@
 - [x] Username password problem
 - [x] Restore moves only does remote player color
 - [ ] Player can play for the AI if theyre fast enough
-- [ ] Resign on empty board softlocks (at least) local multi
+- [x] Resign on empty board softlocks (at least) local multi
 - [ ] Send AI message every 2nd or third message, not based on rand
 
 ## Client
@@ -39,7 +39,7 @@
     - [x] Message info layout, etc.
 - [ ] Add sender to chat message
 - [x] Move send to other side
-- [>] Add buttons for forfeit, offer draw, request forfeit
+- [x] Add buttons for forfeit, offer draw, request forfeit
     - [x] with confirmation buttons
 - [x] Style all control elements with pixel art (ART)
 

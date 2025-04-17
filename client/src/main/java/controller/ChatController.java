@@ -6,6 +6,8 @@ import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -49,11 +51,11 @@ public class ChatController {
   @FXML
   Button sendButton;
   @FXML
-  Button ffButton;
+  Button resignButton;
   @FXML
   Button drawButton;
   @FXML
-  Button requestFFButton;
+  Button requestResignButton;
 
   @FXML
   Pane confirmPopup;
@@ -78,9 +80,11 @@ public class ChatController {
   BorderPane chatPane;
 
   @FXML
-  Pane offerRejected;
+  Pane notificationPane;
   @FXML
-  Text offerRejectedText;
+  Text notificationText;
+  private PathTransition reverse;
+  private boolean notificationOut;
 
   public void initialize() {
     NetworkClient.bindChatController(this);
@@ -94,7 +98,7 @@ public class ChatController {
         .setBackground(new Background(new BackgroundImage(new Image("/assets/send_button.png"),
             BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
             new BackgroundSize(100, 50, false, false, false, false))));
-    ffButton
+    resignButton
         .setBackground(new Background(new BackgroundImage(new Image("/assets/surrender-flag.png"),
             BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
             new BackgroundSize(33, 28, false, false, false, false))));
@@ -102,7 +106,7 @@ public class ChatController {
         .setBackground(new Background(new BackgroundImage(new Image("/assets/draw.png"),
             BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
             new BackgroundSize(34, 28, false, false, false, false))));
-    requestFFButton
+    requestResignButton
         .setBackground(new Background(new BackgroundImage(new Image("/assets/red-flag.png"),
             BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
             new BackgroundSize(33, 28, false, false, false, false))));
@@ -136,13 +140,13 @@ public class ChatController {
       confirmPopup.setVisible(false);
     });
 
-    ffButton.setOnAction(e -> {
+    resignButton.setOnAction(e -> {
       confirmPopup.setVisible(true);
       confirmText.setText("Are you sure you want to resign?");
 
       popupConfirmButton.setOnAction(e0 -> {
         confirmPopup.setVisible(false);
-        NetworkClient.forfeit();
+        NetworkClient.resign();
       });
     });
 
@@ -156,9 +160,9 @@ public class ChatController {
       });
     });
 
-    requestFFButton.setOnAction(e -> {
+    requestResignButton.setOnAction(e -> {
       confirmPopup.setVisible(true);
-      confirmText.setText("Are you sure you want to request that the opponent resigns?");
+      confirmText.setText("You want to suggest the opponent resigns?");
 
       popupConfirmButton.setOnAction(e0 -> {
         confirmPopup.setVisible(false);
@@ -167,20 +171,12 @@ public class ChatController {
     });
   }
 
-  public void recieveForfeit() {
-    getNotification("Your opponent has resigned.");
-  }
-
-  public void draw() {
-    getNotification("Your opponent has accepted your draw offer.");
-  }
-
   public void opponentDisconnect() {
-    getNotification("Your opponent just disconnected");
+    getNotification("Your opponent has disconnected");
   }
 
-  public void drawDeclined() {
-    getNotification("Your opponent has declined your draw offer.");
+  public void recieveResign() {
+    getNotification("Your opponent has resigned.");
   }
 
   public void resignAccepted() {
@@ -191,17 +187,36 @@ public class ChatController {
     getNotification("Your opponent has declined your resign request.");
   }
 
+  public void drawAccepted() {
+    getNotification("Your opponent has accepted your draw offer.");
+  }
+
+  public void drawDeclined() {
+    getNotification("Your opponent has declined your draw offer.");
+  }
+
   private void getNotification(String text) {
-    offerRejectedText.setText(text);
+    // queue notifications
+    if (notificationOut) {
+      EventHandler<ActionEvent> current = reverse.getOnFinished();
+      reverse.setOnFinished(e -> {
+        current.handle(null);
+        getNotification(text);
+      });
+      return;
+    }
+
+    notificationText.setText(text);
     Path extendPath = new Path(new MoveTo(480, -280), new HLineTo(160));
-    PathTransition animation = new PathTransition(Duration.seconds(.5), extendPath, offerRejected);
+    PathTransition animation = new PathTransition(Duration.seconds(.5), extendPath, notificationPane);
     animation.play();
-    offerRejected.setVisible(true);
+    notificationPane.setVisible(true);
+    notificationOut = true;
 
     Path hidePath = new Path(new MoveTo(160, -280), new HLineTo(480));
-    PathTransition reverse = new PathTransition(Duration.seconds(.5), hidePath, offerRejected);
+    reverse = new PathTransition(Duration.seconds(.5), hidePath, notificationPane);
 
-    PauseTransition delay = new PauseTransition(Duration.seconds(4));
+    PauseTransition delay = new PauseTransition(Duration.seconds(3));
 
     animation.setOnFinished(e -> {
       delay.play();
@@ -210,7 +225,8 @@ public class ChatController {
       reverse.play();
     });
     reverse.setOnFinished(e -> {
-      offerRejected.setVisible(false);
+      notificationPane.setVisible(false);
+      notificationOut = false;
     });
   }
 
@@ -247,4 +263,5 @@ public class ChatController {
       e.printStackTrace();
     }
   }
+
 }

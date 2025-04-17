@@ -81,13 +81,13 @@ public class GameController {
   private Button drawRequestAccept;
   @FXML
   private Button drawRequestReject;
-  // could combine these to one later
+
   @FXML
-  private Pane ffRequest;
+  private Pane resignRequest;
   @FXML
-  private Button ffRequestAccept;
+  private Button resignRequestAccept;
   @FXML
-  private Button ffRequestReject;
+  private Button resignRequestReject;
 
   private GameLogic gameLogic;
 
@@ -365,14 +365,13 @@ public class GameController {
       NetworkClient.replyDrawRequest(false);
     });
 
-    ffRequestAccept.setOnAction(e -> {
-      forfeit();
-      ffRequest.setVisible(false);
+    resignRequestAccept.setOnAction(e -> {
+      resignRequest.setVisible(false);
       NetworkClient.replyResignRequest(true);
     });
 
-    ffRequestReject.setOnAction(e -> {
-      ffRequest.setVisible(false);
+    resignRequestReject.setOnAction(e -> {
+      resignRequest.setVisible(false);
       NetworkClient.replyResignRequest(false);
     });
   }
@@ -432,16 +431,17 @@ public class GameController {
 
   private void gameOver(PlayerRole winner, BoardPosition[] winningPositions) {
     canMove = false;
-
     GameLogic.setCurrentPlayerRole(PlayerRole.None);
+    Object[] pieces = midgroundPane.getChildren().toArray();
+
     // Piece[] winningPieces = new Piece[4];
     // for (int i = 0; i < 4; i++) {
     // BoardPosition bp = winningPositions[i];
     // winningPieces[i] = new Piece(winner, CoordUtils.fromRowCol(bp.getRow(),
     // bp.getColumn()));
     // }
-    Object[] pieces = midgroundPane.getChildren().toArray();
     // midgroundPane.getChildren().addAll(winningPieces);
+
     for (Object pi : pieces) {
       Piece p = (Piece) pi;
 
@@ -481,40 +481,16 @@ public class GameController {
 
         });
         pathTransition2.play();
-
-        String loc;
-        switch (winner) {
-          case None:
-            loc = "/assets/draw-message.png";
-            break;
-          case PlayerOne:
-            loc = "/assets/red-wins.png";
-            break;
-          case PlayerTwo:
-            loc = "/assets/blue-wins.png";
-            break;
-          default:
-            loc = "/assets/cloud1.png";
-        }
-        Image textImage = new Image(loc, 0, 96, true, false);
-        ImageView winnerImg = new ImageView(textImage);
-
-        overlayPane.getChildren().add(winnerImg);
-
-        winnerImg.setX((CoordUtils.gamePaneWidth - textImage.widthProperty().get()) / 2);
-        winnerImg.setY(100);
-
-        PauseTransition pt = new PauseTransition(Duration.millis(4000));
-        pt.setOnFinished(g -> {
-          midgroundPane.getChildren().setAll();
-          overlayPane.getChildren().remove(winnerImg);
-          canMove = true;
-        });
-        pt.play();
+        displayWinner(winner);
       });
 
       pathTransition.play();
     }
+
+    if (pieces.length == 0) {
+      displayWinner(winner);
+    }
+
     if (GameLogic.getGameMode() == GameMode.Multiplayer) {
       if (winner == GameLogic.getLocalPlayer().getRole()) {
         NetworkClient.gameComplete(WinType.WIN);
@@ -525,14 +501,45 @@ public class GameController {
       NetworkClient.handleChat(AI.getWinningQuip(), "AI", false);
     }
     gameLogic.reset();
-
   }
 
-  public void recieveForfeit() {
-    gameOver(GameLogic.getLocalPlayer().getRole(), null);
+  private void displayWinner(PlayerRole winner) {
+    String loc;
+    switch (winner) {
+      case None:
+        loc = "/assets/draw-message.png";
+        break;
+      case PlayerOne:
+        loc = "/assets/red-wins.png";
+        break;
+      case PlayerTwo:
+        loc = "/assets/blue-wins.png";
+        break;
+      default:
+        loc = "/assets/cloud1.png";
+    }
+    Image textImage = new Image(loc, 0, 96, true, false);
+    ImageView winnerImg = new ImageView(textImage);
+
+    overlayPane.getChildren().add(winnerImg);
+
+    winnerImg.setX((CoordUtils.gamePaneWidth - textImage.widthProperty().get()) / 2);
+    winnerImg.setY(100);
+
+    PauseTransition pt = new PauseTransition(Duration.millis(4000));
+    pt.setOnFinished(g -> {
+      midgroundPane.getChildren().setAll();
+      overlayPane.getChildren().remove(winnerImg);
+      canMove = true;
+    });
+    pt.play();
   }
 
-  public void forfeit() {
+  public void recieveDrawRequest() {
+    drawRequest.setVisible(true);
+  }
+
+  public void resign() {
     GameMode mode = GameLogic.getGameMode();
     if (mode == GameMode.Multiplayer) {
       gameOver(GameLogic.getRemotePlayer().getRole(), null);
@@ -547,12 +554,23 @@ public class GameController {
     }
   }
 
-  public void recieveDrawRequest() {
-    drawRequest.setVisible(true);
+  public void recieveResign() {
+    switch (GameLogic.getGameMode()) {
+		case LocalMultiplayer:
+      gameOver(gameLogic.getCurrentPlayerRole(), null);
+			break;
+		case Multiplayer:
+      gameOver(GameLogic.getLocalPlayer().getRole(), null);
+			break;
+		case LocalAI:
+		case None:
+		default:
+			break;
+    }
   }
 
   public void recieveResignRequest() {
-    ffRequest.setVisible(true);
+    resignRequest.setVisible(true);
   }
 
   public void staleMate() {
