@@ -90,3 +90,11 @@
   -fx-border-style: solid; 
   -fx-border-width: 2px; 
 }
+
+.tooltip {
+  -fx-font-family: "Mota Pixel Regular";
+  -fx-background-color: #c0a36e; 
+  -fx-border-color: #363646; 
+  -fx-font-size: 12px;
+  -fx-text-fill: black;
+}

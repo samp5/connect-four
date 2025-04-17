@@ -13,6 +13,7 @@ import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -35,7 +36,7 @@ import network.Player.PlayerRole;
 import utils.AudioManager;
 import utils.AudioManager.SoundEffect;
 import utils.CursorManager;
-
+import utils.ToolTipHelper;
 import javafx.util.Duration;
 
 /**
@@ -149,6 +150,9 @@ public class GameController {
 
     NetworkClient.bindGameController(this);
     settingsButton.setBackground(SettingsController.getButtonBackground(40));
+
+    Tooltip.install(settingsButton, ToolTipHelper.make("Settings"));
+
     overlayPane.setMouseTransparent(true);
     setHandlers();
   }
@@ -177,7 +181,8 @@ public class GameController {
     // get positions and role
     BoardPosition rowCol = CoordUtils.toRowCol(dropHint.position).get();
     PlayerRole role = gameLogic.getCurrentPlayerRole();
-    Point startPos = new Point(draggedPiece.getCenterX(), draggedPiece.getCenterY(), CoordSystem.GamePane);
+    Point startPos =
+        new Point(draggedPiece.getCenterX(), draggedPiece.getCenterY(), CoordSystem.GamePane);
 
     handleMove(rowCol.getColumn(), role);
     animateMove(rowCol, startPos, role);
@@ -556,16 +561,16 @@ public class GameController {
 
   public void recieveResign() {
     switch (GameLogic.getGameMode()) {
-		case LocalMultiplayer:
-      gameOver(gameLogic.getCurrentPlayerRole(), null);
-			break;
-		case Multiplayer:
-      gameOver(GameLogic.getLocalPlayer().getRole(), null);
-			break;
-		case LocalAI:
-		case None:
-		default:
-			break;
+      case LocalMultiplayer:
+        gameOver(gameLogic.getCurrentPlayerRole(), null);
+        break;
+      case Multiplayer:
+        gameOver(GameLogic.getLocalPlayer().getRole(), null);
+        break;
+      case LocalAI:
+      case None:
+      default:
+        break;
     }
   }
 

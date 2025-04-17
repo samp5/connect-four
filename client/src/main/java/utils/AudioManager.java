@@ -27,14 +27,12 @@ public class AudioManager {
     BUTTON_PRESS, /* SELECTION, */ CHIP_DROP, CHAT_SENT, CHAT_RECIEVED, WIN/* , LOSE */;
 
     public String toFileName() {
-      System.out.println(this.toString().toLowerCase() + ".wav");
       return "/assets/sounds/" + this.toString().toLowerCase() + ".wav";
     }
 
     public void play() {
       MediaPlayer mp = soundEFfectPlayers.get(this);
       mp.seek(mp.getStartTime());
-      System.out.println("Playing " + this.toString() + ": volume is " + mp.getVolume());
       mp.play();
     }
 

@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundRepeat;
@@ -35,7 +36,9 @@ import logic.GameLogic;
 import logic.GameLogic.GameMode;
 import network.NetworkClient;
 import utils.AudioManager;
+import utils.ToolTipHelper;
 import utils.AudioManager.SoundEffect;
+import utils.NotificationManager;
 import controller.utils.ChatMessage;
 import controller.utils.Markup;
 
@@ -82,9 +85,11 @@ public class ChatController {
   @FXML
   Pane notificationPane;
   @FXML
-  Text notificationText;
+  TextFlow notificationText;
   private PathTransition reverse;
   private boolean notificationOut;
+
+  private NotificationManager notificationManager;
 
   public void initialize() {
     NetworkClient.bindChatController(this);
@@ -92,6 +97,7 @@ public class ChatController {
 
     // auto scroll the chat history based on the height of the vbox
     chatHistoryScroll.vvalueProperty().bind(chatHistory.heightProperty());
+    notificationManager = new NotificationManager(notificationPane, notificationText);
 
     // can't do this in fxml easily
     sendButton
@@ -116,6 +122,7 @@ public class ChatController {
     sendButton.setOnAction(e -> {
       sendMessage();
     });
+    sendButton.setTooltip(ToolTipHelper.make("Send message"));
 
     chatEditorInput.textProperty().addListener(new ChangeListener<String>() {
       @Override
@@ -150,6 +157,8 @@ public class ChatController {
       });
     });
 
+    resignButton.setTooltip(ToolTipHelper.make("Resign"));
+
     drawButton.setOnAction(e -> {
       confirmPopup.setVisible(true);
       confirmText.setText("Are you sure you want to request a draw?");
@@ -159,6 +168,7 @@ public class ChatController {
         NetworkClient.drawRequest();
       });
     });
+    drawButton.setTooltip(ToolTipHelper.make("Request a draw"));
 
     requestResignButton.setOnAction(e -> {
       confirmPopup.setVisible(true);
@@ -169,65 +179,31 @@ public class ChatController {
         NetworkClient.resignRequest();
       });
     });
+    requestResignButton.setTooltip(ToolTipHelper.make("Request your opponent resigns"));
   }
 
   public void opponentDisconnect() {
-    getNotification("Your opponent has disconnected");
+    notificationManager.getNotification("Your opponent has disconnected");
   }
 
   public void recieveResign() {
-    getNotification("Your opponent has resigned.");
+    notificationManager.getNotification("Your opponent has resigned.");
   }
 
   public void resignAccepted() {
-    getNotification("Your opponent has accepted your resign request.");
+    notificationManager.getNotification("Your opponent has accepted your resign request.");
   }
 
   public void resignDeclined() {
-    getNotification("Your opponent has declined your resign request.");
+    notificationManager.getNotification("Your opponent has declined your resign request.");
   }
 
   public void drawAccepted() {
-    getNotification("Your opponent has accepted your draw offer.");
+    notificationManager.getNotification("Your opponent has accepted your draw offer.");
   }
 
   public void drawDeclined() {
-    getNotification("Your opponent has declined your draw offer.");
-  }
-
-  private void getNotification(String text) {
-    // queue notifications
-    if (notificationOut) {
-      EventHandler<ActionEvent> current = reverse.getOnFinished();
-      reverse.setOnFinished(e -> {
-        current.handle(null);
-        getNotification(text);
-      });
-      return;
-    }
-
-    notificationText.setText(text);
-    Path extendPath = new Path(new MoveTo(480, -280), new HLineTo(160));
-    PathTransition animation = new PathTransition(Duration.seconds(.5), extendPath, notificationPane);
-    animation.play();
-    notificationPane.setVisible(true);
-    notificationOut = true;
-
-    Path hidePath = new Path(new MoveTo(160, -280), new HLineTo(480));
-    reverse = new PathTransition(Duration.seconds(.5), hidePath, notificationPane);
-
-    PauseTransition delay = new PauseTransition(Duration.seconds(3));
-
-    animation.setOnFinished(e -> {
-      delay.play();
-    });
-    delay.setOnFinished(e -> {
-      reverse.play();
-    });
-    reverse.setOnFinished(e -> {
-      notificationPane.setVisible(false);
-      notificationOut = false;
-    });
+    notificationManager.getNotification("Your opponent has declined your draw offer.");
   }
 
   private void sendMessage() {
@@ -254,7 +230,8 @@ public class ChatController {
   // // when we need to display a new message
   public void appendMessage(String msg, String username, boolean local) {
     try {
-      FXMLLoader loader = new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
+      FXMLLoader loader =
+          new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
       Region msgBox = loader.load();
       ChatMessage newMessageCTL = loader.getController();
       newMessageCTL.build(username, 0, msg, local);
