@@ -23,6 +23,6 @@
             </TextFlow>
          </children>
       </VBox>
-      <ImageView fx:id="notificationIcon" fitHeight="30.0" fitWidth="30.0" layoutX="-15.0" layoutY="-15.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="notificationIcon" fitHeight="30.0" fitWidth="30.0" layoutX="-15.0" layoutY="-15.0" pickOnBounds="true" preserveRatio="true" smooth="false" />
    </children>
 </Pane>

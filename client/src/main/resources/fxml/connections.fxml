@@ -80,7 +80,7 @@
                   <Image url="@../assets/load-background.png" />
                </image>
             </ImageView>
-            <Button fx:id="addConnectionBackButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="50.0" styleClass="back-button" text="&lt;-" />
+            <Button fx:id="addConnectionBackButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="50.0" styleClass="back-button" text="x" />
             <HBox alignment="CENTER" layoutY="105.0" prefWidth="500.0">
                <children>
                   <VBox alignment="CENTER" spacing="20.0">
@@ -133,7 +133,7 @@
                   <Image url="@../assets/load-background.png" />
                </image>
             </ImageView>
-            <Button fx:id="loginBackButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="50.0" styleClass="back-button" text="&lt;-" />
+            <Button fx:id="loginBackButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="50.0" styleClass="back-button" text="x" />
             <HBox alignment="CENTER" layoutY="62.0" prefWidth="500.0">
                <children>
                   <VBox alignment="CENTER" prefHeight="327.0" prefWidth="280.0" spacing="20.0">
@@ -167,7 +167,7 @@
             </HBox>
          </children>
       </Pane>
-      <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="48.0" styleClass="back-button" text="&lt;-" />
+      <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="48.0" styleClass="back-button" text="x" />
       <Pane fx:id="notificationPane" layoutX="810.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" visible="false">
          <children>
             <ImageView fitHeight="64.0" fitWidth="256.0">

@@ -42,11 +42,20 @@
   -fx-background-insets: 0;
 }
 
+.pixel-button:hover {
+  -fx-background-color: #337EFF;
+}
+
 .back-button {
   -fx-border-color: #363646;
   -fx-border-width: 0px;
   -fx-background-color: transparent;
 }
+
+.back-button .text:hover {
+  -fx-font-family: "Mota Pixel Bold";
+}
+
 .list-view .list-cell {
     -fx-background: transparent;
     -fx-background-color: transparent;

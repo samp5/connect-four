@@ -83,23 +83,6 @@ public class ConnectionsController {
         new NotificationManager(notificationPane, notificationText, notificationIcon);
 
     // set backgrounds
-    menuPane.setBackground(
-        new Background(new BackgroundImage(new Image("/assets/load-background.png"),
-            BackgroundRepeat.NO_REPEAT,
-            BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            new BackgroundSize(1080, 720, false, false, false, false))));
-
-    addConnectionPane.setBackground(
-        new Background(new BackgroundImage(new Image("/assets/load-background.png"),
-            BackgroundRepeat.NO_REPEAT,
-            BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            new BackgroundSize(500, 500, false, false, false, false))));
-    loginPane.setBackground(
-        new Background(new BackgroundImage(new Image("/assets/load-background.png"),
-            BackgroundRepeat.NO_REPEAT,
-            BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            new BackgroundSize(500, 500, false, false, false, false))));
-
     connectionListView.setBackground(
         new Background(
             new BackgroundImage(new Image("/assets/recent_connection_background.png"),
@@ -114,11 +97,6 @@ public class ConnectionsController {
     RecentConnectionRegistry.load();
     connectionListView
         .setItems(FXCollections.observableArrayList(RecentConnectionRegistry.getConnections()));
-
-    Button[] backButtons = {addConnectionBackButton, loginBackButton, backButton};
-    for (Button b : backButtons) {
-      b.setText("\u21AB");
-    }
 
     Button[] allButtons =
         {addNewConnectionButton, addConnectionButton, addConnectionBackButton, connectButton,
