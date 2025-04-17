@@ -39,6 +39,7 @@
   -fx-border-color: #363646;
   -fx-border-width: 3px;
   -fx-background-color: #639bff;
+  -fx-background-insets: 0;
 }
 
 .back-button {

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MenuController">
+<Pane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" stylesheets="@../css/chat.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MenuController">
    <children>
       <ImageView fitHeight="720.0" fitWidth="1080.0">
          <image>
@@ -24,10 +24,10 @@
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="205.0" spacing="50.0">
                <children>
-                  <Button fx:id="playOnlineButton" mnemonicParsing="false" styleClass="pixel-button" text="Play Online" />
-                  <Button fx:id="playLocalButton" mnemonicParsing="false" styleClass="pixel-button" text="Play Locally" />
-                  <Button fx:id="playAIButton" mnemonicParsing="false" styleClass="pixel-button" text="Play v.s AI" />
-                  <Button fx:id="settingsButton" mnemonicParsing="false" styleClass="pixel-button" text="Settings" />
+                  <Button fx:id="playOnlineButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="pixel-button" text="Play Online" />
+                  <Button fx:id="playLocalButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="pixel-button" text="Play Locally" />
+                  <Button fx:id="playAIButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="pixel-button" text="Play v.s AI" />
+                  <Button fx:id="settingsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="pixel-button" text="Settings" />
                </children>
             </VBox>
          </children>

@@ -118,7 +118,6 @@ public class ConnectionsController {
     Button[] backButtons = {addConnectionBackButton, loginBackButton, backButton};
     for (Button b : backButtons) {
       b.setText("\u21AB");
-      b.getStyleClass().add("back-button");
     }
 
     Button[] allButtons =

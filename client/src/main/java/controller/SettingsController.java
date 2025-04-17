@@ -152,11 +152,6 @@ public class SettingsController {
   }
 
   private void styleElements() {
-    settingsPane.setBackground(
-        new Background(new BackgroundImage(new Image("/assets/load-background.png"),
-            BackgroundRepeat.NO_REPEAT,
-            BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            new BackgroundSize(500, 500, false, false, false, false))));
     CursorManager.setHandCursor(volumeSlider);
   }
 
