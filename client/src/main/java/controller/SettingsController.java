@@ -118,6 +118,7 @@ public class SettingsController {
   }
 
   public void initialize() {
+    customCursorToggle.setSelected(currentSettings.cursorsEnabled);
     getSliderValues();
     setHandlers();
     styleElements();
@@ -157,6 +158,8 @@ public class SettingsController {
 
   private void styleElements() {
     CursorManager.setHandCursor(volumeSlider);
+    CursorManager.setHandCursor(soundFXVolumeSlider);
+    CursorManager.setHandCursor(aiDifficultySlider);
   }
 
   private void setHandlers() {
@@ -183,6 +186,7 @@ public class SettingsController {
       detach();
     });
     mainMenuButton.setOnAction(e -> {
+      detach();
       if (GameLogic.getGameMode() == GameMode.Multiplayer) {
         NetworkClient.disconnect();
       }
