@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.image.Image?>
@@ -51,6 +52,16 @@
                      <children>
                         <Label text="AI Difficulty" />
                         <Slider fx:id="aiDifficultySlider" max="7.0" min="1.0" minorTickCount="5" value="4.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="75.0" prefWidth="200.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" spacing="5.0">
+                     <children>
+                        <Label text="Custom Cursors" />
+                        <CheckBox fx:id="customCursorToggle" mnemonicParsing="false" />
                      </children>
                   </VBox>
                </children>

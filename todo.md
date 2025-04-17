@@ -9,7 +9,7 @@
 - [x] Send AI message every 2nd or third message, not based on rand
 - [>] Option to disable custom cursors
 - [ ] Button size fix
-- [ ] Notification Manager
+- [x] Notification Manager
 
 ## Features
 - [x] Add AI with levels of difficulty

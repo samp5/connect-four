@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -36,6 +37,9 @@ public class SettingsController {
   Pane settingsPane;
   @FXML
   Button backButton;
+
+  @FXML
+  CheckBox customCursorToggle;
 
   @FXML
   Button mainMenuButton;
@@ -183,6 +187,11 @@ public class SettingsController {
         NetworkClient.disconnect();
       }
       SceneManager.showScene("menu.fxml");
+    });
+
+    customCursorToggle.setOnAction(e -> {
+      currentSettings.cursorsEnabled = customCursorToggle.isSelected();
+      CursorManager.setEnabled(currentSettings.cursorsEnabled);
     });
   }
 
