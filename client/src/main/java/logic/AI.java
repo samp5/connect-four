@@ -10,6 +10,7 @@ public class AI {
   private static final int COLUMNS = 7;
   private static int playingAs = -1;
   private static int difficulty = 5;
+  private static int turnsSinceQuip = 0;
   private static String[] generalQuips = {
       "is this your strategy or are you just winging it?",
       "i just finished simulating 9,823,421 games. you're in the bottom third.",
@@ -64,6 +65,21 @@ public class AI {
   // }
   //
   // }
+
+  /**
+   * The AI should quip either every other move, or every second.
+   * 50% chance for each.
+   */
+  public static boolean shouldQuip() {
+    turnsSinceQuip += 1;
+    if (turnsSinceQuip >= 2) {
+      if (turnsSinceQuip == 3 || Math.random() > 0.5) {
+        turnsSinceQuip = 0;
+        return true;
+      }
+    }
+    return false;
+  }
 
   public static String getQuip() {
 

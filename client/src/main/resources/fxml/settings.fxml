@@ -22,7 +22,7 @@
                   <VBox spacing="10.0">
                      <children>
                         <Label text="Music Volume" />
-                        <Slider fx:id="volumeSlider" minorTickCount="5" />
+                        <Slider fx:id="volumeSlider" max="1.0" minorTickCount="5" />
                      </children>
                   </VBox>
                </children>
@@ -32,7 +32,7 @@
                   <VBox spacing="10.0">
                      <children>
                         <Label text="SoundFX Volume" />
-                        <Slider fx:id="soundFXVolumeSlider" minorTickCount="5" />
+                        <Slider fx:id="soundFXVolumeSlider" max="1.0" minorTickCount="5" />
                      </children>
                   </VBox>
                </children>

@@ -30,8 +30,13 @@ public class GameLogic {
     public boolean canMove(GameLogic currentState, PlayerRole chipPile) {
       switch (this) {
         case LocalAI:
+          // A player can move in local AI mode when
+          // 1. the current player is player one
+          // 2. they are dragging from their pile
+          return currentState.getCurrentPlayerRole() == PlayerRole.PlayerOne
+              && currentState.getCurrentPlayerRole() == chipPile;
         case LocalMultiplayer:
-          // A player can move in local multiplayer mode or local AI mode when
+          // A player can move in local multiplayer mode when
           // 1. they are the current player and the chip pile belongs to them
           return chipPile == currentState.getCurrentPlayerRole();
         case Multiplayer:

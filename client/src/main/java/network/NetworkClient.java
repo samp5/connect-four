@@ -174,7 +174,7 @@ public class NetworkClient {
     switch (GameLogic.getGameMode()) {
 		case LocalAI:
       chatCTL.drawDeclined();
-      handleChat("What? No.", "AI", false);
+      handleChat("what? no.", "AI", false);
 			break;
 		case LocalMultiplayer:
       gameCTL.recieveDrawRequest();
@@ -206,7 +206,7 @@ public class NetworkClient {
   public static void resignRequest() {
     switch (GameLogic.getGameMode()) {
 		case LocalAI:
-      handleChat("I'm impressed you even considered the option.", "AI", false);
+      handleChat("i'm impressed you even considered the option.", "AI", false);
       chatCTL.resignDeclined();
 		case LocalMultiplayer:
       gameCTL.recieveResignRequest();

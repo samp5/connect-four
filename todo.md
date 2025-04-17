@@ -4,9 +4,9 @@
 - [x] Migrate visuals to scene builder
 - [x] Username password problem
 - [x] Restore moves only does remote player color
-- [ ] Player can play for the AI if theyre fast enough
+- [x] Player can play for the AI if theyre fast enough
 - [x] Resign on empty board softlocks (at least) local multi
-- [ ] Send AI message every 2nd or third message, not based on rand
+- [x] Send AI message every 2nd or third message, not based on rand
 
 ## Client
 
@@ -48,7 +48,7 @@
 - [x] Design background (ART) 
 - [x] Make settings controller + UI
     - [x] AI difficulty in settings
-- [ ] Option to disable custom cursors
+- [>] Option to disable custom cursors
 
 ### Connections
 - [x] Create FXML scene + Controller
@@ -66,4 +66,4 @@
 - [x] Handle main menu button in settings
 
 ## Other
-- [ ] Settings save on quit
+- [x] Settings save on quit

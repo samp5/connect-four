@@ -266,7 +266,7 @@ public class GameController {
         int aiCol = AI.bestColumn(gameLogic.getBoard());
         BoardPosition bp = new BoardPosition(gameLogic.getAvailableRow(aiCol).get(), aiCol);
         handleMove(AI.bestColumn(gameLogic.getBoard()), AI.getRole());
-        if (Math.random() < 0.4) {
+        if (AI.shouldQuip()) {
           NetworkClient.handleChat(AI.getQuip(), "AI", false);
         }
         animateMove(bp, CoordUtils.chipHolder(AI.getRole()),

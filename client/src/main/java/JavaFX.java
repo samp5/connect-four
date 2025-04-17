@@ -3,6 +3,7 @@ import javafx.stage.Stage;
 import network.NetworkClient;
 import utils.AudioManager;
 import utils.SceneManager;
+import controller.SettingsController;
 
 /**
  * Main Application Class.
@@ -11,15 +12,18 @@ import utils.SceneManager;
 public class JavaFX extends Application {
 
   public static void main(String[] args) {
-    // add shut down disconnect protection
+    // add shut down disconnect and settings protection
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       // this happens often when not doing anything over network
       try {
+        SettingsController.save();
+
         Class.forName("network.NetworkClient");
         NetworkClient.disconnect();
       } catch (ClassNotFoundException e) {
       }
     }));
+
     // attempt to connect to localhost server
     launch(args);
   }
@@ -29,5 +33,8 @@ public class JavaFX extends Application {
     SceneManager.initialize(primaryStage);
     SceneManager.showScene("menu.fxml");
     AudioManager.playContinuous("main_theme.mp3");
+
+    // load settings
+    SettingsController.load();
   }
 }

@@ -135,7 +135,7 @@ public class PlayerRegistry {
     objectout.close();
     } catch (IOException e) {
       e.printStackTrace();
-      System.out.println("error on save");
+      System.out.println("Player Registry had an exception on save. Registry not saved.");
     }
   }
 
@@ -159,10 +159,12 @@ public class PlayerRegistry {
       nextid = (long) registeredPlayers.size();
 
       objectin.close();
-    } catch (IOException e) {
     } catch (ClassNotFoundException e) {
       System.out.println("Error loading player registry. class not found:");
       e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.out.println("Player Registry had an exception on Load. Registry not loaded.");
     }
   }
 }
