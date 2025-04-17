@@ -138,7 +138,7 @@
             </ImageView>
             <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0">
                <children>
-                  <TextFlow fx:id="notificationText" prefHeight="200.0" prefWidth="200.0">
+                  <TextFlow fx:id="notificationText" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="236.0">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Your opponent has declined your draw offer." wrappingWidth="224.0" />
                      </children>

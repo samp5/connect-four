@@ -86,8 +86,6 @@ public class ChatController {
   Pane notificationPane;
   @FXML
   TextFlow notificationText;
-  private PathTransition reverse;
-  private boolean notificationOut;
 
   private NotificationManager notificationManager;
 
@@ -183,27 +181,27 @@ public class ChatController {
   }
 
   public void opponentDisconnect() {
-    notificationManager.getNotification("Your opponent has disconnected");
+    notificationManager.recieve("Your opponent has disconnected");
   }
 
   public void recieveResign() {
-    notificationManager.getNotification("Your opponent has resigned.");
+    notificationManager.recieve("Your opponent has resigned.");
   }
 
   public void resignAccepted() {
-    notificationManager.getNotification("Your opponent has accepted your resign request.");
+    notificationManager.recieve("Your opponent has accepted your resign request.");
   }
 
   public void resignDeclined() {
-    notificationManager.getNotification("Your opponent has declined your resign request.");
+    notificationManager.recieve("Your opponent has declined your resign request.");
   }
 
   public void drawAccepted() {
-    notificationManager.getNotification("Your opponent has accepted your draw offer.");
+    notificationManager.recieve("Your opponent has accepted your draw offer.");
   }
 
   public void drawDeclined() {
-    notificationManager.getNotification("Your opponent has declined your draw offer.");
+    notificationManager.recieve("Your opponent has declined your draw offer.");
   }
 
   private void sendMessage() {

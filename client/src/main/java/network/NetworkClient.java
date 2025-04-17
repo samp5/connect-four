@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import controller.ChatController;
+import controller.ConnectionsController;
 import controller.GameController;
 import javafx.application.Platform;
 import utils.SceneManager;
@@ -36,6 +37,7 @@ public class NetworkClient {
 
   private static GameController gameCTL;
   private static ChatController chatCTL;
+  private static ConnectionsController connectionCTL;
   private static Player player;
 
   // connect to a host
@@ -80,7 +82,7 @@ public class NetworkClient {
           player = msg.getPlayer();
           SceneManager.showScene("loading.fxml");
         } else {
-          System.out.println("Error logging in: " + msg.getChatMessage());
+          connectionCTL.recieveNotification("Error logging in " + msg.getChatMessage());
         }
         break;
       case CHAT:
@@ -172,72 +174,73 @@ public class NetworkClient {
   // request a draw
   public static void drawRequest() {
     switch (GameLogic.getGameMode()) {
-		case LocalAI:
-      chatCTL.drawDeclined();
-      handleChat("what? no.", "AI", false);
-			break;
-		case LocalMultiplayer:
-      gameCTL.recieveDrawRequest();
-			break;
-		case Multiplayer:
-      sendMessage(Message.forSimpleInstruction(Type.DRAW_REQUEST));
-			break;
-		case None:
-		default:
-			break;
+      case LocalAI:
+        chatCTL.drawDeclined();
+        handleChat("what? no.", "AI", false);
+        break;
+      case LocalMultiplayer:
+        gameCTL.recieveDrawRequest();
+        break;
+      case Multiplayer:
+        sendMessage(Message.forSimpleInstruction(Type.DRAW_REQUEST));
+        break;
+      case None:
+      default:
+        break;
     }
   }
 
   public static void replyDrawRequest(boolean accepted) {
     switch (GameLogic.getGameMode()) {
-		case LocalMultiplayer:
-      chatCTL.drawDeclined();
-      break;
-		case Multiplayer:
-      sendMessage(Message.forGameResponse(Type.DRAW, accepted));
-      break;
-		case LocalAI:
-		case None:
-		default:
-			break;
+      case LocalMultiplayer:
+        chatCTL.drawDeclined();
+        break;
+      case Multiplayer:
+        sendMessage(Message.forGameResponse(Type.DRAW, accepted));
+        break;
+      case LocalAI:
+      case None:
+      default:
+        break;
     }
   }
 
   public static void resignRequest() {
     switch (GameLogic.getGameMode()) {
-		case LocalAI:
-      handleChat("i'm impressed you even considered the option.", "AI", false);
-      chatCTL.resignDeclined();
-		case LocalMultiplayer:
-      gameCTL.recieveResignRequest();
-			break;
-		case Multiplayer:
-      sendMessage(Message.forSimpleInstruction(Type.RESIGN_REQUEST));
-			break;
-		case None:
-		default:
-			break;
+      case LocalAI:
+        handleChat("i'm impressed you even considered the option.", "AI", false);
+        chatCTL.resignDeclined();
+      case LocalMultiplayer:
+        gameCTL.recieveResignRequest();
+        break;
+      case Multiplayer:
+        sendMessage(Message.forSimpleInstruction(Type.RESIGN_REQUEST));
+        break;
+      case None:
+      default:
+        break;
     }
   }
 
   public static void replyResignRequest(boolean accepted) {
     switch (GameLogic.getGameMode()) {
-		case LocalMultiplayer:
-      if (accepted) {
-        gameCTL.recieveResign();
-        chatCTL.resignAccepted();
-      } else {
-        chatCTL.resignDeclined();
-      }
-      break;
-		case Multiplayer:
-      sendMessage(Message.forGameResponse(Type.RESIGN_RESPONSE, accepted));
-		case LocalAI:
-      if (accepted) gameCTL.resign();
-      break;
-		case None:
-		default:
-			break;
+      case LocalMultiplayer:
+        if (accepted) {
+          gameCTL.recieveResign();
+          chatCTL.resignAccepted();
+        } else {
+          chatCTL.resignDeclined();
+        }
+        break;
+      case Multiplayer:
+        sendMessage(Message.forGameResponse(Type.RESIGN_RESPONSE, accepted));
+      case LocalAI:
+        if (accepted)
+          gameCTL.resign();
+        break;
+      case None:
+      default:
+        break;
     }
   }
 
@@ -254,6 +257,12 @@ public class NetworkClient {
   //
   public static void bindGameController(GameController gc) {
     gameCTL = gc;
+  }
+
+  // set controllers so that the network client can "message" the ui
+  //
+  public static void bindConnectionController(ConnectionsController cc) {
+    connectionCTL = cc;
   }
 
   public static void bindChatController(ChatController cc) {

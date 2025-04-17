@@ -24,13 +24,15 @@ public class NotificationManager {
     this.notificationText = notifText;
   }
 
-  public void getNotification(Node... nodes) {
+  // TODO: update these numbers to be based on the notifPane minWidth
+  public void recieve(Node... nodes) {
+    System.out.println("recieving notification");
     // queue notifications
     if (notificationOut) {
       EventHandler<ActionEvent> current = reverse.getOnFinished();
       reverse.setOnFinished(e -> {
         current.handle(null);
-        getNotification(nodes);
+        recieve(nodes);
       });
       return;
     }
@@ -61,11 +63,9 @@ public class NotificationManager {
 
   }
 
-  public void getNotification(String text) {
+  public void recieve(String text) {
     Text t = new Text(text);
-    t.setWrappingWidth(0.88 * notificationPane.getMinWidth());
     t.getStyleClass().add("text");
-    TextFlow fl = new TextFlow(t);
-    getNotification(fl);
+    recieve(t);
   }
 }

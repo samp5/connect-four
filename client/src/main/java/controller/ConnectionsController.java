@@ -18,9 +18,11 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.TextFlow;
 import network.NetworkClient;
 import utils.SceneManager;
 import utils.CursorManager;
+import utils.NotificationManager;
 
 public class ConnectionsController {
   @FXML
@@ -61,26 +63,40 @@ public class ConnectionsController {
   @FXML
   Button joinButton;
 
+  @FXML
+  Pane notificationPane;
+  @FXML
+  TextFlow notificationText;
+
+  private NotificationManager notificationManager;
+
   public void initialize() {
+    NetworkClient.bindConnectionController(this);
+
+    notificationManager = new NotificationManager(notificationPane, notificationText);
 
     // set backgrounds
     menuPane.setBackground(
-        new Background(new BackgroundImage(new Image("/assets/load-background.png"), BackgroundRepeat.NO_REPEAT,
+        new Background(new BackgroundImage(new Image("/assets/load-background.png"),
+            BackgroundRepeat.NO_REPEAT,
             BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
             new BackgroundSize(1080, 720, false, false, false, false))));
 
     addConnectionPane.setBackground(
-        new Background(new BackgroundImage(new Image("/assets/load-background.png"), BackgroundRepeat.NO_REPEAT,
+        new Background(new BackgroundImage(new Image("/assets/load-background.png"),
+            BackgroundRepeat.NO_REPEAT,
             BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
             new BackgroundSize(500, 500, false, false, false, false))));
     loginPane.setBackground(
-        new Background(new BackgroundImage(new Image("/assets/load-background.png"), BackgroundRepeat.NO_REPEAT,
+        new Background(new BackgroundImage(new Image("/assets/load-background.png"),
+            BackgroundRepeat.NO_REPEAT,
             BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
             new BackgroundSize(500, 500, false, false, false, false))));
 
     connectionListView.setBackground(
         new Background(
-            new BackgroundImage(new Image("/assets/recent_connection_background.png"), BackgroundRepeat.NO_REPEAT,
+            new BackgroundImage(new Image("/assets/recent_connection_background.png"),
+                BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
                 new BackgroundSize(300, 300, false, false, false, false))));
 
@@ -89,16 +105,18 @@ public class ConnectionsController {
 
     // load recent connections
     RecentConnectionRegistry.load();
-    connectionListView.setItems(FXCollections.observableArrayList(RecentConnectionRegistry.getConnections()));
+    connectionListView
+        .setItems(FXCollections.observableArrayList(RecentConnectionRegistry.getConnections()));
 
-    Button[] backButtons = { addConnectionBackButton, loginBackButton, backButton };
+    Button[] backButtons = {addConnectionBackButton, loginBackButton, backButton};
     for (Button b : backButtons) {
       b.setText("\u21AB");
       b.getStyleClass().add("back-button");
     }
 
-    Button[] allButtons = { addNewConnectionButton, addConnectionButton, addConnectionBackButton, connectButton,
-        backButton, loginButton, loginBackButton };
+    Button[] allButtons =
+        {addNewConnectionButton, addConnectionButton, addConnectionBackButton, connectButton,
+            backButton, loginButton, loginBackButton};
     for (Button b : allButtons) {
       CursorManager.setHandCursor(b);
     }
@@ -136,11 +154,12 @@ public class ConnectionsController {
     });
 
     // enter and escape press handlers
-    //   -- login screen
+    // -- login screen
     usernameInput.setOnAction(e -> attemptLogin());
     passwordInput.setOnAction(e -> attemptLogin());
     loginButton.addEventHandler(KeyEvent.KEY_PRESSED, e -> {
-      if (e.getCode() == KeyCode.ENTER) attemptLogin();
+      if (e.getCode() == KeyCode.ENTER)
+        attemptLogin();
     });
     loginPane.addEventHandler(KeyEvent.KEY_RELEASED, e -> {
       if (e.getCode() == KeyCode.ESCAPE) {
@@ -148,7 +167,7 @@ public class ConnectionsController {
         e.consume();
       }
     });
-    //   -- add connection screen
+    // -- add connection screen
     ipInput.setOnAction(e -> addConnection());
     portInput.setOnAction(e -> addConnection());
     connectionNameInput.setOnAction(e -> addConnection());
@@ -158,16 +177,18 @@ public class ConnectionsController {
         e.consume();
       }
     });
-    //   -- connection screen
+    // -- connection screen
     menuPane.addEventHandler(KeyEvent.KEY_RELEASED, e -> {
-      if (e.getCode() == KeyCode.ESCAPE) SceneManager.showScene("menu.fxml");
+      if (e.getCode() == KeyCode.ESCAPE)
+        SceneManager.showScene("menu.fxml");
     });
   }
 
   private void addConnection() {
     try {
       Integer port = Integer.valueOf(portInput.getText());
-      RecentConnection c = new RecentConnection(ipInput.getText(), port, connectionNameInput.getText());
+      RecentConnection c =
+          new RecentConnection(ipInput.getText(), port, connectionNameInput.getText());
       connectionListView.getItems().add(c);
       RecentConnectionRegistry.add(c);
     } catch (NumberFormatException f) {
@@ -189,14 +210,26 @@ public class ConnectionsController {
     }
   }
 
+  public void recieveNotification(String message) {
+    notificationManager.recieve(message);
+  }
+
   private void connectToHost(RecentConnection c, String username, String password) {
-    c.updateLastConnected();
     RecentConnectionRegistry.save();
 
-    System.out.printf("Attempting to connect user `%s` to server at %s:%d\n", username, c.getIp(), c.getPort());
+    notificationManager
+        .recieve("Attempting to connect user " + username + " to server at " + c.getIp() + ":" +
+            c.getPort());
     try {
-      NetworkClient.connect(c.getIp(), c.getPort(), username, password);
+      if (!NetworkClient.connect(c.getIp(), c.getPort(), username, password)) {
+        notificationManager
+            .recieve("Failed to connect to server at " + c.getIp() + ":" +
+                c.getPort());
+      } else {
+        c.updateLastConnected();
+      }
     } catch (IOException e1) {
+      e1.printStackTrace();
     }
   }
 }
