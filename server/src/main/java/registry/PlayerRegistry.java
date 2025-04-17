@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import game.GameManager;
 import network.Player;
+import network.Message.WinType;
 
 /**
  * Tracks all players: logged in, playing or not.
@@ -17,7 +19,7 @@ public class PlayerRegistry {
   private static Long nextid = 0l;
   private static HashMap<String, Long> usernameLookup = new HashMap<>();
   private static HashMap<Long, RegistryPlayer> registeredPlayers = new HashMap<>();
-  private static HashMap<Long, RegistryPlayer> activePlayers = new HashMap<>();
+  private static HashSet<Long> activePlayers = new HashSet<>();
 
   /**
    * Get the player registered under this username and password.
@@ -37,20 +39,20 @@ public class PlayerRegistry {
       Long newId = getNextID();
       RegistryPlayer newReg = new RegistryPlayer(username, password, newId);
       registeredPlayers.put(newId, newReg);
-      activePlayers.put(newId, newReg);
+      activePlayers.add(newId);
       usernameLookup.put(username, newId);
       return new PlayerRegistrationInfo(true, newReg.getClientPlayer());
     }
 
     // check if the player is already active
-    if (activePlayers.keySet().contains(id)) {
+    if (activePlayers.contains(id)) {
       return new PlayerRegistrationInfo(false, "Player already logged in.");
     }
 
     // check if the player is currently registered
     RegistryPlayer p = registeredPlayers.get(id);
     if (p.getPassword().equals(password)) {
-      activePlayers.put(id, p);
+      activePlayers.add(id);
       return new PlayerRegistrationInfo(true, p.getClientPlayer());
     }
     return new PlayerRegistrationInfo(false, "Username and Password do not match.");
@@ -79,10 +81,8 @@ public class PlayerRegistry {
   /**
    * Updates a player's stats
    */
-  public static void updatePlayerStats(Player p, boolean win) {
+  public static void updatePlayerStats(Player p, WinType win) {
     registeredPlayers.get(p.getID()).completeGame(win);
-
-    // TODO: update rank
   }
 
   /**

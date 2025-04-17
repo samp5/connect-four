@@ -1,21 +1,23 @@
 package registry;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import network.Player;
+import network.Message.WinType;
 
 class RegistryPlayer implements Serializable {
   Long id;
   String username, password;
   PlayerStats stats;
-  ArrayList<Player> friends;
+  HashSet<Long> friends;
 
   public RegistryPlayer(String username, String password, Long id) {
     this.username = username;
     this.password = password;
     this.id = id;
     this.stats = new PlayerStats();
+    this.friends = new HashSet<>();
   }
 
   public Player getClientPlayer() {
@@ -24,19 +26,28 @@ class RegistryPlayer implements Serializable {
 
   public class PlayerStats implements Serializable {
     int gamesWon;
+    int gamesTied;
+    int gamesLost;
     int gamesPlayed;
     int globalRank;
   }
 
-  public void completeGame(boolean win) {
+  public void completeGame(WinType type) {
     stats.gamesPlayed += 1;
-    stats.gamesWon += win ? 1 : 0;
 
-    // TODO: update rank
-  }
-
-  public void setRank(int rank) {
-    stats.globalRank = rank;
+    switch (type) {
+		case WIN:
+      stats.gamesWon += 1;
+			break;
+		case DRAW:
+      stats.gamesTied += 1;
+			break;
+		case LOSE:
+      stats.gamesLost += 1;
+			break;
+		default:
+			break;
+    }
   }
 
   public int getRank() {
@@ -53,5 +64,9 @@ class RegistryPlayer implements Serializable {
 
   public String getPassword() {
     return password;
+  }
+
+  public HashSet<Long> getFriendIDs() {
+    return friends;
   }
 }

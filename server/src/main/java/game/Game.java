@@ -9,6 +9,7 @@ import network.Player;
 import network.ServerClient;
 import network.Player.PlayerRole;
 import registry.PlayerRegistry;
+import registry.Leaderboard;
 
 /**
  * An instance of a connect-4 game with two players
@@ -79,7 +80,7 @@ public class Game {
             return;
           case COMPLETE:
             Player p = msg.getPlayer();
-            PlayerRegistry.updatePlayerStats(p, msg.isSuccess());
+            PlayerRegistry.updatePlayerStats(p, msg.getWinType());
             break;
           case START:
           case LOGIN:

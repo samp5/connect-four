@@ -1,5 +1,6 @@
 import network.ClientManager;
 import registry.PlayerRegistry;
+import registry.Leaderboard;
 
 /**
  * Main Class.
@@ -11,8 +12,12 @@ public class Main {
     System.out.println("\033[2J\033[H\033[1;35;40m~~Connect-4 Server~~\033[0m");
 
     // save registry on exit, and load on startup
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> PlayerRegistry.save()));
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      PlayerRegistry.save();
+      Leaderboard.save();
+    }));
     PlayerRegistry.load();
+    Leaderboard.load();
 
     ClientManager.connectToClients();
   }
