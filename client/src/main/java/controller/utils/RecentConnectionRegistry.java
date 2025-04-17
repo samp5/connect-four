@@ -25,6 +25,10 @@ public class RecentConnectionRegistry {
     connections.add(c);
   }
 
+  public static void remove(RecentConnection c) {
+    connections.remove(c);
+  }
+
   /**
    * Save the registry to a file
    */

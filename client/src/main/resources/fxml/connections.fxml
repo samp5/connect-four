@@ -143,9 +143,13 @@
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Your opponent has declined your draw offer." wrappingWidth="224.0" />
                      </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
                   </TextFlow>
                </children>
             </VBox>
+            <ImageView fx:id="notificationIcon" fitHeight="30.0" fitWidth="30.0" layoutX="-10.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>
    </children>

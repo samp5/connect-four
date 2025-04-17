@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
@@ -18,9 +19,11 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import network.NetworkClient;
 import utils.SceneManager;
+import utils.NotificationManager.NotificationType;
 import utils.CursorManager;
 import utils.NotificationManager;
 
@@ -63,17 +66,21 @@ public class ConnectionsController {
   @FXML
   Button joinButton;
 
+  // notification
   @FXML
   Pane notificationPane;
   @FXML
   TextFlow notificationText;
+  @FXML
+  ImageView notificationIcon;
 
   private NotificationManager notificationManager;
 
   public void initialize() {
     NetworkClient.bindConnectionController(this);
 
-    notificationManager = new NotificationManager(notificationPane, notificationText);
+    notificationManager =
+        new NotificationManager(notificationPane, notificationText, notificationIcon);
 
     // set backgrounds
     menuPane.setBackground(
@@ -117,6 +124,7 @@ public class ConnectionsController {
     Button[] allButtons =
         {addNewConnectionButton, addConnectionButton, addConnectionBackButton, connectButton,
             backButton, loginButton, loginBackButton};
+
     for (Button b : allButtons) {
       CursorManager.setHandCursor(b);
     }
@@ -191,6 +199,7 @@ public class ConnectionsController {
           new RecentConnection(ipInput.getText(), port, connectionNameInput.getText());
       connectionListView.getItems().add(c);
       RecentConnectionRegistry.add(c);
+      notificationManager.recieve("Added connection");
     } catch (NumberFormatException f) {
 
       // TODO: Add cool format validation on textinput
@@ -224,12 +233,13 @@ public class ConnectionsController {
       if (!NetworkClient.connect(c.getIp(), c.getPort(), username, password)) {
         notificationManager
             .recieve("Failed to connect to server at " + c.getIp() + ":" +
-                c.getPort());
+                c.getPort(), NotificationType.CONNECTION_ERROR);
       } else {
         c.updateLastConnected();
       }
     } catch (IOException e1) {
-      e1.printStackTrace();
+      notificationManager
+          .recieve("Connection refused", NotificationType.CONNECTION_ERROR);
     }
   }
 }

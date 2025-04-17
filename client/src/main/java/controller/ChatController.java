@@ -15,6 +15,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
@@ -39,6 +40,7 @@ import utils.AudioManager;
 import utils.ToolTipHelper;
 import utils.AudioManager.SoundEffect;
 import utils.NotificationManager;
+import utils.NotificationManager.NotificationType;
 import controller.utils.ChatMessage;
 import controller.utils.Markup;
 
@@ -86,6 +88,8 @@ public class ChatController {
   Pane notificationPane;
   @FXML
   TextFlow notificationText;
+  @FXML
+  ImageView notificationIcon;
 
   private NotificationManager notificationManager;
 
@@ -95,7 +99,8 @@ public class ChatController {
 
     // auto scroll the chat history based on the height of the vbox
     chatHistoryScroll.vvalueProperty().bind(chatHistory.heightProperty());
-    notificationManager = new NotificationManager(notificationPane, notificationText);
+    notificationManager =
+        new NotificationManager(notificationPane, notificationText, notificationIcon);
 
     // can't do this in fxml easily
     sendButton
@@ -181,23 +186,27 @@ public class ChatController {
   }
 
   public void opponentDisconnect() {
-    notificationManager.recieve("Your opponent has disconnected");
+    notificationManager.recieve("Your opponent has disconnected",
+        NotificationType.CONNECTION_ERROR);
   }
 
   public void recieveResign() {
-    notificationManager.recieve("Your opponent has resigned.");
+    notificationManager.recieve("Your opponent has resigned.", NotificationType.INFORMATION);
   }
 
   public void resignAccepted() {
-    notificationManager.recieve("Your opponent has accepted your resign request.");
+    notificationManager.recieve("Your opponent has accepted your resign request.",
+        NotificationType.INFORMATION);
   }
 
   public void resignDeclined() {
-    notificationManager.recieve("Your opponent has declined your resign request.");
+    notificationManager.recieve("Your opponent has declined your resign request.",
+        NotificationType.INFORMATION);
   }
 
   public void drawAccepted() {
-    notificationManager.recieve("Your opponent has accepted your draw offer.");
+    notificationManager.recieve("Your opponent has accepted your draw offer.",
+        NotificationType.INFORMATION);
   }
 
   public void drawDeclined() {

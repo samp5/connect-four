@@ -7,6 +7,21 @@
 - [x] Player can play for the AI if theyre fast enough
 - [x] Resign on empty board softlocks (at least) local multi
 - [x] Send AI message every 2nd or third message, not based on rand
+- [>] Option to disable custom cursors
+- [ ] Button size fix
+- [ ] Notification Manager
+
+## Features
+- [x] Add AI with levels of difficulty
+- [~] Add a smarter stalemate detector
+- [ ] Leaderboard
+- [ ] Friends
+- [ ] Turn indicator
+- [ ] Profile pictures
+
+- [ ] Message pane to choose message box from friends
+- [ ] Text emoji drawer
+- [ ] Art overhaul
 
 ## Client
 
@@ -21,16 +36,9 @@
 - [x] Design background (ART) 
 - [ ] Add move effects
 - [x] Add on-win animations
-- [ ] Additional animations on overlay layer for *stimulation*
-    - [x] clouds
-    - [x] Rethink cloud animation mechanism
+- [x] clouds
+- [x] Rethink cloud animation mechanism
 
-#### Long-term
-- [x] Add AI with levels of difficulty
-- [~] Add a smarter stalemate detector
-- [ ] Message pane to choose message box from friends
-- [ ] Text emoji drawer
-- [ ] Art overhaul
 
 ### Chat
 - [x] Design background (ART) 
@@ -48,7 +56,6 @@
 - [x] Design background (ART) 
 - [x] Make settings controller + UI
     - [x] AI difficulty in settings
-- [>] Option to disable custom cursors
 
 ### Connections
 - [x] Create FXML scene + Controller

@@ -15,121 +15,126 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<StackPane stylesheets="@../css/chat.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatController">
+
+<Pane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatController">
    <children>
-      <Pane>
+      <StackPane stylesheets="@../css/chat.css">
          <children>
-            <ImageView fitHeight="720.0" fitWidth="360.0">
-               <image>
-                  <Image url="@../assets/chat_background.png" />
-               </image>
-            </ImageView>
-            <BorderPane fx:id="chatPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="360.0">
-               <center>
-                  <ScrollPane fx:id="chatHistoryScroll" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minViewportHeight="600.0" minViewportWidth="360.0" minWidth="-Infinity" prefHeight="620.0" prefViewportHeight="600.0" prefViewportWidth="360.0" prefWidth="344.0" style="-fx-background-color: transparent;" styleClass="chat-history-scroll" stylesheets="@../css/chat.css" translateY="8.0">
-                     <content>
-                        <VBox fx:id="chatHistory" alignment="TOP_CENTER" />
-                     </content>
-                  </ScrollPane>
-               </center>
-               <bottom>
-                  <HBox alignment="CENTER_LEFT" minHeight="100.0" minWidth="100.0" prefHeight="100.0" prefWidth="145.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <HBox fx:id="chatEditorBox">
+            <Pane>
+               <children>
+                  <ImageView fitHeight="720.0" fitWidth="360.0">
+                     <image>
+                        <Image url="@../assets/chat_background.png" />
+                     </image>
+                  </ImageView>
+                  <BorderPane fx:id="chatPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="360.0">
+                     <center>
+                        <ScrollPane fx:id="chatHistoryScroll" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minViewportHeight="600.0" minViewportWidth="360.0" minWidth="-Infinity" prefHeight="620.0" prefViewportHeight="600.0" prefViewportWidth="360.0" prefWidth="344.0" style="-fx-background-color: transparent;" styleClass="chat-history-scroll" stylesheets="@../css/chat.css" translateY="8.0">
+                           <content>
+                              <VBox fx:id="chatHistory" alignment="TOP_CENTER" />
+                           </content>
+                        </ScrollPane>
+                     </center>
+                     <bottom>
+                        <HBox alignment="CENTER_LEFT" minHeight="100.0" minWidth="100.0" prefHeight="100.0" prefWidth="145.0" BorderPane.alignment="CENTER">
                            <children>
-                              <StackPane>
+                              <HBox fx:id="chatEditorBox">
                                  <children>
-                                    <ImageView fitHeight="79.0" fitWidth="239.0">
-                                       <image>
-                                          <Image url="@../assets/chat_message_local.png" />
-                                       </image>
-                                    </ImageView>
-                                    <TextFlow fx:id="chatEditorDisplay" mouseTransparent="true">
-                                       <padding>
-                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                       </padding>
-                                    </TextFlow>
-                                    <TextArea fx:id="chatEditorInput" opacity="0.0" wrapText="true"> </TextArea>
-                                 </children>
-                                 <HBox.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </HBox.margin>
-                              </StackPane>
-                              <VBox prefHeight="200.0" prefWidth="100.0" translateX="-9.0" translateY="11.0">
-                                 <children>
-                                    <Button fx:id="sendButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" styleClass="send-button" stylesheets="@../css/chat.css" text="SEND">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Button>
-                                    <HBox prefHeight="100.0" prefWidth="200.0">
+                                    <StackPane>
                                        <children>
-                                          <Button fx:id="resignButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="33.0" stylesheets="@../css/chat.css" text="FF" />
-                                          <Button fx:id="drawButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="34.0" />
-                                          <Button fx:id="requestResignButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="33.0" />
+                                          <ImageView fitHeight="79.0" fitWidth="239.0">
+                                             <image>
+                                                <Image url="@../assets/chat_message_local.png" />
+                                             </image>
+                                          </ImageView>
+                                          <TextFlow fx:id="chatEditorDisplay" mouseTransparent="true">
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </padding>
+                                          </TextFlow>
+                                          <TextArea fx:id="chatEditorInput" opacity="0.0" wrapText="true"> </TextArea>
                                        </children>
-                                    </HBox>
+                                       <HBox.margin>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </HBox.margin>
+                                    </StackPane>
+                                    <VBox prefHeight="200.0" prefWidth="100.0" translateX="-9.0" translateY="11.0">
+                                       <children>
+                                          <Button fx:id="sendButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" styleClass="send-button" stylesheets="@../css/chat.css" text="SEND">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                          <HBox prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <Button fx:id="resignButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="33.0" stylesheets="@../css/chat.css" text="FF" />
+                                                <Button fx:id="drawButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="34.0" />
+                                                <Button fx:id="requestResignButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="33.0" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
                                  </children>
-                              </VBox>
+                              </HBox>
                            </children>
                         </HBox>
-                     </children>
-                  </HBox>
-               </bottom>
-            </BorderPane>
-         </children>
-      </Pane>
-      <Pane fx:id="confirmPopup" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="96.0" prefWidth="224.0" translateY="220.0" visible="false">
-         <children>
-            <ImageView fitHeight="96.0" fitWidth="224.0">
-               <image>
-                  <Image url="@../assets/confirm_popup_bg.png" />
-               </image>
-            </ImageView>
-            <VBox alignment="CENTER" maxHeight="96.0" maxWidth="218.0" minHeight="96.0" minWidth="224.0" prefHeight="96.0" prefWidth="218.0">
-               <children>
-                  <Text fx:id="confirmText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Are you sure you want to?" wrappingWidth="192.0">
-                     <VBox.margin>
-                        <Insets top="4.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font name="Mota Pixel Regular" size="20.0" />
-                     </font>
-                  </Text>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-spacing: 12px;">
-                     <children>
-                        <Button fx:id="popupCancelButton" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" text="Cancel" textAlignment="CENTER">
-                           <font>
-                              <Font name="Mota Pixel Regular" size="20.0" />
-                           </font>
-                           <padding>
-                              <Insets bottom="-1.0" />
-                           </padding>
-                           <HBox.margin>
-                              <Insets top="-4.0" />
-                           </HBox.margin>
-                        </Button>
-                        <Button fx:id="popupConfirmButton" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" text="Confirm" textAlignment="CENTER">
-                           <font>
-                              <Font name="Mota Pixel Regular" size="20.0" />
-                           </font>
-                           <padding>
-                              <Insets bottom="-1.0" />
-                           </padding>
-                           <HBox.margin>
-                              <Insets top="-4.0" />
-                           </HBox.margin>
-                        </Button>
-                     </children>
-                     <opaqueInsets>
-                        <Insets top="-8.0" />
-                     </opaqueInsets>
-                  </HBox>
+                     </bottom>
+                  </BorderPane>
                </children>
-            </VBox>
+            </Pane>
+            <Pane fx:id="confirmPopup" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="96.0" prefWidth="224.0" translateY="220.0" visible="false">
+               <children>
+                  <ImageView fitHeight="96.0" fitWidth="224.0">
+                     <image>
+                        <Image url="@../assets/confirm_popup_bg.png" />
+                     </image>
+                  </ImageView>
+                  <VBox alignment="CENTER" maxHeight="96.0" maxWidth="218.0" minHeight="96.0" minWidth="224.0" prefHeight="96.0" prefWidth="218.0">
+                     <children>
+                        <Text fx:id="confirmText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Are you sure you want to?" wrappingWidth="192.0">
+                           <VBox.margin>
+                              <Insets top="4.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font name="Mota Pixel Regular" size="20.0" />
+                           </font>
+                        </Text>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-spacing: 12px;">
+                           <children>
+                              <Button fx:id="popupCancelButton" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" text="Cancel" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Mota Pixel Regular" size="20.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="-1.0" />
+                                 </padding>
+                                 <HBox.margin>
+                                    <Insets top="-4.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button fx:id="popupConfirmButton" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" text="Confirm" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="Mota Pixel Regular" size="20.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="-1.0" />
+                                 </padding>
+                                 <HBox.margin>
+                                    <Insets top="-4.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                           <opaqueInsets>
+                              <Insets top="-8.0" />
+                           </opaqueInsets>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </Pane>
          </children>
-      </Pane>
-      <Pane fx:id="notificationPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" translateX="40.0" translateY="-316.0" visible="false">
+      </StackPane>
+      <Pane fx:id="notificationPane" layoutX="90.0" layoutY="15.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" visible="false">
          <children>
             <ImageView fitHeight="64.0" fitWidth="256.0">
                <image>
@@ -142,10 +147,17 @@
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Your opponent has declined your draw offer." wrappingWidth="224.0" />
                      </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
                   </TextFlow>
                </children>
             </VBox>
+            <ImageView fx:id="notificationIcon" fitHeight="30.0" fitWidth="30.0" layoutX="-10.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>
    </children>
-</StackPane>
+</Pane>

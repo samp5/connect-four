@@ -74,9 +74,11 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
 
               bp.setOnMouseClicked(e -> {
                 param.getItems().remove(connection);
+                RecentConnectionRegistry.remove(connection);
               });
               bp.setOnMouseEntered(e -> {
-                bp.setCenter(new ImageView(new Image("/assets/garbage_opened.png", 25, 25, false, false)));
+                bp.setCenter(
+                    new ImageView(new Image("/assets/garbage_opened.png", 25, 25, false, false)));
               });
               bp.setOnMouseExited(e -> {
                 bp.setCenter(new ImageView(new Image("/assets/garbage.png", 25, 25, false, false)));
