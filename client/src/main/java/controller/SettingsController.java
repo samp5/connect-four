@@ -39,6 +39,7 @@ public class SettingsController {
 
   @FXML
   Button mainMenuButton;
+  private static boolean isAttached = false;
 
   private Pane parent;
   private Node root;
@@ -48,11 +49,11 @@ public class SettingsController {
   public static void save() {
     try {
 
-    FileOutputStream fileout = new FileOutputStream("local.settings");
-    ObjectOutputStream objectout = new ObjectOutputStream(fileout);
+      FileOutputStream fileout = new FileOutputStream("local.settings");
+      ObjectOutputStream objectout = new ObjectOutputStream(fileout);
 
-    objectout.writeObject(currentSettings);
-    objectout.close();
+      objectout.writeObject(currentSettings);
+      objectout.close();
 
     } catch (Exception e) {
 
@@ -90,16 +91,25 @@ public class SettingsController {
     }
   }
 
+  public static boolean isAttached() {
+    return isAttached;
+  }
+
   public void attach(Pane parent, Pane root) {
+    if (isAttached) {
+      return;
+    }
     parent.getChildren().add(root);
     root.relocate((parent.getWidth() - 500) / 2,
         (parent.getHeight() - 500) / 2);
     root.toFront();
     this.parent = parent;
     this.root = root;
+    isAttached = true;
   }
 
   private void detach() {
+    isAttached = false;
     parent.getChildren().remove(root);
   }
 

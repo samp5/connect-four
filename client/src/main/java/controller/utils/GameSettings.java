@@ -8,6 +8,10 @@ import utils.SceneManager;
 
 public class GameSettings {
   public static void loadOnto(Pane onto) {
+    if (SettingsController.isAttached()) {
+      return;
+    }
+
     try {
       FXMLLoader loader = new FXMLLoader(GameSettings.class.getResource("/fxml/settings.fxml"));
       Pane settings = loader.load();
