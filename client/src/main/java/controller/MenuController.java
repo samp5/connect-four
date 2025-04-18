@@ -26,16 +26,16 @@ public class MenuController {
 
   public void initialize() {
     playOnlineButton.setOnAction(e -> {
-      SceneManager.showScene("connections.fxml");
       GameController.setGameMode(GameMode.Multiplayer);
+      SceneManager.showScene("connections.fxml");
     });
     playLocalButton.setOnAction(e -> {
-      SceneManager.showScene("main.fxml");
       GameController.setGameMode(GameMode.LocalMultiplayer);
+      SceneManager.showScene("main.fxml");
     });
     playAIButton.setOnAction(e -> {
-      SceneManager.showScene("main.fxml");
       GameController.setGameMode(GameMode.LocalAI);
+      SceneManager.showScene("main.fxml");
     });
     settingsButton.setOnAction(e -> {
       GameSettings.loadOnto(menuPane);

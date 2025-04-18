@@ -54,6 +54,11 @@
                                  <children>
                                     <Pane fx:id="chipPane1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="90.0">
                                        <children>
+                                          <ImageView fx:id="redTurnIndicator" fitHeight="105.0" fitWidth="105.0" translateX="-7.5" translateY="-7.5" visible="false">
+                                             <image>
+                                                <Image url="@../assets/turn_indicator.png" />
+                                             </image>
+                                          </ImageView>
                                           <ImageView fitHeight="90.0" fitWidth="90.0">
                                              <image>
                                                 <Image url="@../assets/red_chip.png" />
@@ -74,6 +79,11 @@
                                  <children>
                                     <Pane fx:id="chipPane2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="90.0">
                                        <children>
+                                          <ImageView fx:id="blueTurnIndicator" fitHeight="105.0" fitWidth="105.0" translateX="-7.5" translateY="-7.5" visible="false">
+                                             <image>
+                                                <Image url="@../assets/turn_indicator.png" />
+                                             </image>
+                                          </ImageView>
                                           <ImageView fitHeight="90.0" fitWidth="90.0">
                                              <image>
                                                 <Image url="@../assets/blue_chip.png" />

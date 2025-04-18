@@ -11,6 +11,8 @@ import controller.utils.CoordUtils;
 import controller.utils.GameSettings;
 import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
@@ -76,6 +78,10 @@ public class GameController {
   private BorderPane settingsButton;
   @FXML
   private ImageView clouds;
+  @FXML
+  private ImageView redTurnIndicator;
+  @FXML
+  private ImageView blueTurnIndicator;
 
   @FXML
   private Pane drawRequest;
@@ -104,6 +110,7 @@ public class GameController {
 
   public void initialize() {
     gameLogic = new GameLogic();
+    updateTurnIndicator();
 
     CursorManager.setHandCursor(chipPane1, chipPane2);
     animateClouds();
@@ -115,6 +122,10 @@ public class GameController {
 
     overlayPane.setMouseTransparent(true);
     setHandlers();
+
+    if (GameLogic.getGameMode() == GameMode.LocalAI) {
+      showPlayerRoles();
+    }
   }
 
   private void setHandlers() {
@@ -425,10 +436,33 @@ public class GameController {
     gameLogic.getAvailableRow(col).ifPresentOrElse((r) -> {
       gameLogic.placePiece(gameLogic.getAvailableRow(col).orElse(6), col, role);
       gameLogic.switchPlayer();
+      updateTurnIndicator();
     }, () -> {
       System.err.println("Recieved invalid move");
     });
+  }
 
+  private void updateTurnIndicator() {
+    switch (gameLogic.getCurrentPlayerRole()) {
+      case None:
+        redTurnIndicator.setVisible(false);
+        blueTurnIndicator.setVisible(false);
+        break;
+      case PlayerOne:
+        redTurnIndicator.setVisible(true);
+        blueTurnIndicator.setVisible(false);
+        break;
+      case PlayerTwo:
+        redTurnIndicator.setVisible(false);
+        blueTurnIndicator.setVisible(true);
+        break;
+    }
+
+  }
+
+  private void resetGameState() {
+    gameLogic.reset();
+    updateTurnIndicator();
   }
 
   private void checkGameOver(PlayerRole role) {
@@ -441,8 +475,31 @@ public class GameController {
     }
   }
 
+  private void displayLargeText(String fileName, Duration duration, Optional<EventHandler<ActionEvent>> onFinish) {
+    if (fileName == null) {
+      return;
+    }
+
+    Image textImage = new Image(fileName, 0, 96, true, false);
+    ImageView largeText = new ImageView(textImage);
+
+    overlayPane.getChildren().add(largeText);
+
+    largeText.setX((CoordUtils.gamePaneWidth - textImage.widthProperty().get()) / 2);
+    largeText.setY(100);
+
+    PauseTransition pt = new PauseTransition(duration);
+    pt.setOnFinished(g -> {
+      overlayPane.getChildren().remove(largeText);
+      onFinish.ifPresent(f -> {
+        f.handle(g);
+      });
+    });
+    pt.play();
+  }
+
   private void displayWinner(PlayerRole winner) {
-    String loc;
+    String loc = null;
     switch (winner) {
       case None:
         loc = "/assets/draw-message.png";
@@ -453,29 +510,17 @@ public class GameController {
       case PlayerTwo:
         loc = "/assets/blue-wins.png";
         break;
-      default:
-        loc = "/assets/cloud1.png";
     }
-    Image textImage = new Image(loc, 0, 96, true, false);
-    ImageView winnerImg = new ImageView(textImage);
-
-    overlayPane.getChildren().add(winnerImg);
-
-    winnerImg.setX((CoordUtils.gamePaneWidth - textImage.widthProperty().get()) / 2);
-    winnerImg.setY(100);
-
-    PauseTransition pt = new PauseTransition(Duration.millis(4000));
-    pt.setOnFinished(g -> {
+    displayLargeText(loc, Duration.millis(4000), Optional.of(g -> {
       midgroundPane.getChildren().setAll();
-      overlayPane.getChildren().remove(winnerImg);
       canMove = true;
-    });
-    pt.play();
+    }));
   }
 
   private void gameOver(PlayerRole winner, BoardPosition[] winningPositions) {
     canMove = false;
     GameLogic.setCurrentPlayerRole(PlayerRole.None);
+    updateTurnIndicator();
     Object[] pieces = midgroundPane.getChildren().toArray();
 
     // Piece[] winningPieces = new Piece[4];
@@ -547,7 +592,7 @@ public class GameController {
       if (GameLogic.getGameMode() == GameMode.LocalAI && AI.getRole() == winner) {
         NetworkClient.handleChat(AI.getWinningQuip(), "AI", false);
       }
-      gameLogic.reset();
+      resetGameState();
     }
 
   }
@@ -557,6 +602,24 @@ public class GameController {
    */
   public void recieveDrawRequest() {
     drawRequest.setVisible(true);
+  }
+
+  public void showPlayerRoles() {
+    if (GameLogic.getGameMode() == GameMode.Multiplayer) {
+      switch (GameLogic.getLocalPlayer().getRole()) {
+        case PlayerOne:
+          displayLargeText("/assets/red_player.png", Duration.millis(4000), Optional.empty());
+          break;
+        case PlayerTwo:
+          displayLargeText("/assets/blue_player.png", Duration.millis(4000), Optional.empty());
+          break;
+        default:
+          break;
+      }
+    } else if (GameLogic.getGameMode() == GameMode.LocalAI) {
+      System.out.println("displaying red");
+      displayLargeText("/assets/red_player.png", Duration.millis(2000), Optional.empty());
+    }
   }
 
   public void resign() {
@@ -596,7 +659,9 @@ public class GameController {
       // reset our text
       rematchYes.setText("Yes");
       // rest the game logic
-      gameLogic.reset();
+      resetGameState();
+      gameLogic.swapLocalRemotePlayerRoles();
+      showPlayerRoles();
     }
   }
 
@@ -618,6 +683,7 @@ public class GameController {
 
   public void recieveOpponentReturnToLobby() {
     GameLogic.setCurrentPlayerRole(PlayerRole.None);
+    updateTurnIndicator();
     rematch.setVisible(true);
     rematchYes.setDisable(true);
     rematchYes.setOnAction(e -> {

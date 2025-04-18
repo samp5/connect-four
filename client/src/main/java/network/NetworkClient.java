@@ -94,6 +94,7 @@ public class NetworkClient {
       case START:
         SceneManager.showScene("main.fxml");
         GameLogic.initialize(msg.getPlayer(), msg.getPlayer2(), msg.getRole());
+        gameCTL.showPlayerRoles();
         break;
       case RECONNECT:
         ArrayList<Integer> restoredMoves = msg.getRestoredMoves();

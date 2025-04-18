@@ -4,7 +4,20 @@ import java.io.Serializable;
 
 public class Player implements Serializable {
   public enum PlayerRole {
-    PlayerOne, PlayerTwo, None
+    PlayerOne, PlayerTwo, None;
+
+    public PlayerRole other() {
+      switch (this) {
+        case None:
+          return None;
+        case PlayerOne:
+          return PlayerRole.PlayerTwo;
+        case PlayerTwo:
+          return PlayerRole.PlayerOne;
+        default:
+          return None;
+      }
+    }
   }
 
   public Player(String username, Long id) {

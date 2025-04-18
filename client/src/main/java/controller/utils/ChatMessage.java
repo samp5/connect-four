@@ -40,9 +40,13 @@ public class ChatMessage {
     this.message = msg;
     this.sendTime = LocalDateTime.now();
     messageFlow.getChildren().setAll(Markup.markup(this.message));
-    Text timestampTxt = new Text(this.sendTime.format(DateTimeFormatter.ofPattern("h:m a")));
+    Text timestampTxt = new Text(this.sendTime.format(DateTimeFormatter.ofPattern("h:mm a")));
     timestampTxt.getStyleClass().add("text-chat-timestamp");
     timeStampFlow.getChildren().setAll(timestampTxt);
+
+    Text senderTxt = new Text(sender + "  ");
+    senderTxt.getStyleClass().add("text-chat-timestamp");
+    senderFlow.getChildren().setAll(senderTxt);
 
     if (local) {
       messageBox.setBackground(
@@ -68,5 +72,6 @@ public class ChatMessage {
 
   }
 
-  public void initialize() {}
+  public void initialize() {
+  }
 }

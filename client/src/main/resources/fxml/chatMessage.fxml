@@ -21,6 +21,11 @@
                      <children>
                         <AnchorPane>
                            <children>
+                              <TextFlow fx:id="senderFlow" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane>
+                           <children>
                               <TextFlow fx:id="timeStampFlow" />
                            </children>
                         </AnchorPane>

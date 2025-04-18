@@ -7,16 +7,15 @@
 - [x] Player can play for the AI if theyre fast enough
 - [x] Resign on empty board softlocks (at least) local multi
 - [x] Send AI message every 2nd or third message, not based on rand
-- [>] Option to disable custom cursors
-- [ ] Button size fix
+- [x] Option to disable custom cursors
+- [x] Button size fix
 - [x] Notification Manager
 
 ## Features
 - [x] Add AI with levels of difficulty
-- [~] Add a smarter stalemate detector
 - [ ] Leaderboard
 - [ ] Friends
-- [ ] Turn indicator
+- [x] Turn indicator
 - [ ] Profile pictures
 
 - [ ] Message pane to choose message box from friends

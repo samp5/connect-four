@@ -149,6 +149,14 @@ public class GameLogic {
     return currentPlayerRole;
   };
 
+  public void swapLocalRemotePlayerRoles() {
+    if (getGameMode() != GameMode.Multiplayer) {
+      return;
+    }
+    localPlayer.setRole(localPlayer.getRole().other());
+    remotePlayer.setRole(remotePlayer.getRole().other());
+  }
+
   public Player getCurrentPlayer() {
     if (getLocalPlayer().getRole() == currentPlayerRole) {
       return localPlayer;
