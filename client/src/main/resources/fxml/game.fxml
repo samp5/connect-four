@@ -177,5 +177,41 @@
             </VBox>
          </children>
       </Pane>
+      <Pane fx:id="rematch" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="256.0" prefWidth="256.0" stylesheets="@../css/chat.css">
+         <children>
+            <ImageView fitHeight="256.0" fitWidth="256.0">
+               <image>
+                  <Image url="@../assets/draw_request.png" />
+               </image>
+            </ImageView>
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="128.0" prefWidth="256.0" spacing="20.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Rematch?" textAlignment="CENTER" wrappingWidth="224.0" />
+                  <VBox alignment="CENTER" spacing="20.0">
+                     <children>
+                        <Button fx:id="rematchYes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="88.0" styleClass="pixel-button" text="Yes">
+                           <padding>
+                              <Insets top="1.0" />
+                           </padding>
+                        </Button>
+                        <Button fx:id="rematchToLobby" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="88.0" styleClass="pixel-button" text="To lobby">
+                           <padding>
+                              <Insets top="1.0" />
+                           </padding>
+                        </Button>
+                        <Button fx:id="rematchMainMenu" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="88.0" styleClass="pixel-button" text="Main Menu">
+                           <padding>
+                              <Insets top="1.0" />
+                           </padding>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+               </padding>
+            </VBox>
+         </children>
+      </Pane>
    </children>
 </StackPane>

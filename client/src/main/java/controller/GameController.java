@@ -90,57 +90,16 @@ public class GameController {
   @FXML
   private Button resignRequestReject;
 
+  @FXML
+  private Pane rematch;
+  @FXML
+  private Button rematchYes;
+  @FXML
+  private Button rematchToLobby;
+  @FXML
+  private Button rematchMainMenu;
+
   private GameLogic gameLogic;
-
-  public static void setGameMode(GameMode mode) {
-    GameLogic.setGameMode(mode);
-  }
-
-  private class Piece extends Circle {
-    public Point position;
-    public PlayerRole role;
-
-    public PlayerRole getPlayer() {
-      return role;
-    }
-
-    Piece(PlayerRole player, Point pos) {
-      super();
-
-      position = pos.copy();
-      role = player;
-
-      super.setCenterX(position.getX());
-      super.setCenterY(position.getY());
-
-      if (player == PlayerRole.PlayerOne) {
-        super.setFill(new ImagePattern(new Image("/assets/red_chip.png")));
-      } else {
-        super.setFill(new ImagePattern(new Image("/assets/blue_chip.png")));
-      }
-      super.setRadius(45);
-    }
-
-    public void setFill(Image img) {
-      super.setFill(new ImagePattern(img));
-    }
-
-    public void setPoint(double x, double y) {
-      this.position.set(x, y);
-      super.setCenterX(x);
-      super.setCenterY(y);
-    }
-
-    public void setPoint(Point p) {
-      this.position = p.copy();
-      super.setCenterX(position.getX());
-      super.setCenterY(position.getY());
-    }
-  }
-
-  public void setLocalPlayer(PlayerRole local) {
-    GameLogic.setLocalPlayerRole(local);
-  }
 
   public void initialize() {
     gameLogic = new GameLogic();
@@ -157,16 +116,104 @@ public class GameController {
     setHandlers();
   }
 
-  public void animateClouds() {
-    Path cloudPath = new Path(new MoveTo(0, 0), new LineTo(720, 0));
-    PathTransition cloudAnimation = new PathTransition(Duration.seconds(65), cloudPath, clouds);
-    cloudAnimation.play();
+  private void setHandlers() {
+    chipPane2.setOnMouseDragged(e -> {
+      handleDrag(e, PlayerRole.PlayerTwo);
+    });
 
-    cloudAnimation.onFinishedProperty().set(e -> {
-      Path fullPath = new Path(new MoveTo(-720, 0), new HLineTo(720));
-      PathTransition fullAnimation = new PathTransition(Duration.seconds(130), fullPath, clouds);
-      fullAnimation.setCycleCount(PathTransition.INDEFINITE);
-      fullAnimation.play();
+    chipPane2.setOnMouseReleased(e -> {
+      handleRelease(e);
+    });
+
+    chipPane1.setOnMouseDragged(e -> {
+      handleDrag(e, PlayerRole.PlayerOne);
+    });
+
+    chipPane1.setOnMouseReleased(e -> {
+      handleRelease(e);
+    });
+
+    settingsButton.setOnMouseClicked(e -> {
+      GameSettings.loadOnto(foregroundPane);
+    });
+
+    drawRequestAccept.setOnAction(e -> {
+      staleMate();
+      drawRequest.setVisible(false);
+      NetworkClient.replyDrawRequest(true);
+    });
+
+    drawRequestReject.setOnAction(e -> {
+      drawRequest.setVisible(false);
+      NetworkClient.replyDrawRequest(false);
+    });
+
+    resignRequestAccept.setOnAction(e -> {
+      resignRequest.setVisible(false);
+      NetworkClient.replyResignRequest(true);
+    });
+
+    resignRequestReject.setOnAction(e -> {
+      resignRequest.setVisible(false);
+      NetworkClient.replyResignRequest(false);
+    });
+  }
+
+  /*************************************************************************
+   * STATIC STATE ACCESSORS
+   */
+  public static void setGameMode(GameMode mode) {
+    GameLogic.setGameMode(mode);
+  }
+
+  public void setLocalPlayer(PlayerRole local) {
+    GameLogic.setLocalPlayerRole(local);
+  }
+
+  /*************************************************************************
+   * EVENT HANDLERS
+   *
+   */
+  private void handleDrag(MouseEvent e, PlayerRole playerPile) {
+    if (!canMove || !GameLogic.getGameMode().canMove(gameLogic, playerPile)) {
+      return;
+    }
+
+    if (draggedPiece == null) {
+      draggedPiece = new Piece(gameLogic.getCurrentPlayerRole(),
+          new Point(e.getSceneX(), e.getSceneY(), CoordSystem.GamePane));
+      overlayPane.getChildren().addAll(draggedPiece);
+    }
+
+    draggedPiece.setPoint(e.getSceneX(), e.getSceneY());
+
+    int col = CoordUtils.toRowCol(draggedPiece.position).map(bp -> {
+      return bp.getColumn();
+    }).orElse(-1);
+
+    gameLogic.getAvailableRow(col).ifPresentOrElse(row -> {
+      if (dropHint == null) {
+        dropHint = new Piece(gameLogic.getCurrentPlayerRole(),
+            new Point(e.getSceneX(), e.getSceneY(), CoordSystem.GamePane));
+        String imgString;
+        switch (gameLogic.getCurrentPlayerRole()) {
+          case PlayerOne:
+            imgString = "/assets/red_chip_hint.png";
+            break;
+          case PlayerTwo:
+            imgString = "/assets/blue_chip_hint.png";
+            break;
+          case None:
+          default:
+            return;
+        }
+        dropHint.setFill(new Image(imgString));
+        midgroundPane.getChildren().addAll(dropHint);
+      }
+      dropHint.setPoint(CoordUtils.fromRowCol(row, col));
+    }, () -> {
+      midgroundPane.getChildren().remove(dropHint);
+      dropHint = null;
     });
   }
 
@@ -181,8 +228,7 @@ public class GameController {
     // get positions and role
     BoardPosition rowCol = CoordUtils.toRowCol(dropHint.position).get();
     PlayerRole role = gameLogic.getCurrentPlayerRole();
-    Point startPos =
-        new Point(draggedPiece.getCenterX(), draggedPiece.getCenterY(), CoordSystem.GamePane);
+    Point startPos = new Point(draggedPiece.getCenterX(), draggedPiece.getCenterY(), CoordSystem.GamePane);
 
     handleMove(rowCol.getColumn(), role);
     animateMove(rowCol, startPos, role);
@@ -197,14 +243,21 @@ public class GameController {
     dropHint = null;
   }
 
-  private void handleMove(int col, PlayerRole role) {
-    gameLogic.getAvailableRow(col).ifPresentOrElse((r) -> {
-      gameLogic.placePiece(gameLogic.getAvailableRow(col).orElse(6), col, role);
-      gameLogic.switchPlayer();
-    }, () -> {
-      System.err.println("Recieved invalid move");
-    });
+  /*************************************************************************
+   * ANIMATION HELPERS
+   *
+   */
+  public void animateClouds() {
+    Path cloudPath = new Path(new MoveTo(0, 0), new LineTo(720, 0));
+    PathTransition cloudAnimation = new PathTransition(Duration.seconds(65), cloudPath, clouds);
+    cloudAnimation.play();
 
+    cloudAnimation.onFinishedProperty().set(e -> {
+      Path fullPath = new Path(new MoveTo(-720, 0), new HLineTo(720));
+      PathTransition fullAnimation = new PathTransition(Duration.seconds(130), fullPath, clouds);
+      fullAnimation.setCycleCount(PathTransition.INDEFINITE);
+      fullAnimation.play();
+    });
   }
 
   private PathTransition animateToTop(BoardPosition rowCol, Point chipPos, PlayerRole role) {
@@ -295,133 +348,63 @@ public class GameController {
     });
   }
 
-  private void handleDrag(MouseEvent e, PlayerRole playerPile) {
-    if (!canMove || !GameLogic.getGameMode().canMove(gameLogic, playerPile)) {
-      return;
+  /************************************************************************
+   * PIECE CLASS
+   *
+   */
+  private class Piece extends Circle {
+    public Point position;
+    public PlayerRole role;
+
+    public PlayerRole getPlayer() {
+      return role;
     }
 
-    if (draggedPiece == null) {
-      draggedPiece = new Piece(gameLogic.getCurrentPlayerRole(),
-          new Point(e.getSceneX(), e.getSceneY(), CoordSystem.GamePane));
-      overlayPane.getChildren().addAll(draggedPiece);
-    }
+    Piece(PlayerRole player, Point pos) {
+      super();
 
-    draggedPiece.setPoint(e.getSceneX(), e.getSceneY());
+      position = pos.copy();
+      role = player;
 
-    int col = CoordUtils.toRowCol(draggedPiece.position).map(bp -> {
-      return bp.getColumn();
-    }).orElse(-1);
+      super.setCenterX(position.getX());
+      super.setCenterY(position.getY());
 
-    gameLogic.getAvailableRow(col).ifPresentOrElse(row -> {
-      if (dropHint == null) {
-        dropHint = new Piece(gameLogic.getCurrentPlayerRole(),
-            new Point(e.getSceneX(), e.getSceneY(), CoordSystem.GamePane));
-        String imgString;
-        switch (gameLogic.getCurrentPlayerRole()) {
-          case PlayerOne:
-            imgString = "/assets/red_chip_hint.png";
-            break;
-          case PlayerTwo:
-            imgString = "/assets/blue_chip_hint.png";
-            break;
-          case None:
-          default:
-            return;
-        }
-        dropHint.setFill(new Image(imgString));
-        midgroundPane.getChildren().addAll(dropHint);
-      }
-      dropHint.setPoint(CoordUtils.fromRowCol(row, col));
-    }, () -> {
-      midgroundPane.getChildren().remove(dropHint);
-      dropHint = null;
-    });
-  }
-
-  private void setHandlers() {
-    chipPane2.setOnMouseDragged(e -> {
-      handleDrag(e, PlayerRole.PlayerTwo);
-    });
-
-    chipPane2.setOnMouseReleased(e -> {
-      handleRelease(e);
-    });
-
-    chipPane1.setOnMouseDragged(e -> {
-      handleDrag(e, PlayerRole.PlayerOne);
-    });
-
-    chipPane1.setOnMouseReleased(e -> {
-      handleRelease(e);
-    });
-
-    settingsButton.setOnMouseClicked(e -> {
-      GameSettings.loadOnto(foregroundPane);
-    });
-
-    drawRequestAccept.setOnAction(e -> {
-      staleMate();
-      drawRequest.setVisible(false);
-      NetworkClient.replyDrawRequest(true);
-    });
-
-    drawRequestReject.setOnAction(e -> {
-      drawRequest.setVisible(false);
-      NetworkClient.replyDrawRequest(false);
-    });
-
-    resignRequestAccept.setOnAction(e -> {
-      resignRequest.setVisible(false);
-      NetworkClient.replyResignRequest(true);
-    });
-
-    resignRequestReject.setOnAction(e -> {
-      resignRequest.setVisible(false);
-      NetworkClient.replyResignRequest(false);
-    });
-  }
-
-  public Player getLocalPlayer() {
-    return GameLogic.getLocalPlayer();
-  }
-
-  public ArrayList<Integer> getMoveHistory() {
-    return this.gameLogic.getMoveHistory();
-  }
-
-  public void restoreGameBoard(ArrayList<Integer> moves) {
-    for (int move_i = 0; move_i < moves.size(); move_i++) {
-      int col = moves.get(move_i);
-      PlayerRole role;
-      if (move_i % 2 == 0) {
-        role = PlayerRole.PlayerOne;
+      if (player == PlayerRole.PlayerOne) {
+        super.setFill(new ImagePattern(new Image("/assets/red_chip.png")));
       } else {
-        role = PlayerRole.PlayerTwo;
+        super.setFill(new ImagePattern(new Image("/assets/blue_chip.png")));
       }
-      gameLogic.getAvailableRow(col).ifPresent((row) -> {
-        // get locations and role
-        BoardPosition rowCol = new BoardPosition(row, col);
-        handleMove(rowCol.getColumn(), role);
-        animateDrop(CoordUtils.topOfColumn(rowCol.getColumn()), rowCol, role);
-      });
+      super.setRadius(45);
+    }
+
+    public void setFill(Image img) {
+      super.setFill(new ImagePattern(img));
+    }
+
+    public void setPoint(double x, double y) {
+      this.position.set(x, y);
+      super.setCenterX(x);
+      super.setCenterY(y);
+    }
+
+    public void setPoint(Point p) {
+      this.position = p.copy();
+      super.setCenterX(position.getX());
+      super.setCenterY(position.getY());
     }
   }
 
-  public void recieveMove(int col) {
-    // handle the move logic and animate it
-    gameLogic.getAvailableRow(col).ifPresent((row) -> {
-      // get locations and role
-      BoardPosition rowCol = new BoardPosition(row, col);
-      PlayerRole role = GameLogic.getRemotePlayer().getRole();
-      Point chipHolder = CoordUtils.chipHolder(role);
-
-      // add the chip to animate
-      draggedPiece = new Piece(role, chipHolder);
-      overlayPane.getChildren().add(draggedPiece);
-
-      handleMove(rowCol.getColumn(), role);
-      animateMove(rowCol, chipHolder, role);
+  /*************************************************************************
+   * INTERNAL GAME UPDATES
+   */
+  private void handleMove(int col, PlayerRole role) {
+    gameLogic.getAvailableRow(col).ifPresentOrElse((r) -> {
+      gameLogic.placePiece(gameLogic.getAvailableRow(col).orElse(6), col, role);
+      gameLogic.switchPlayer();
+    }, () -> {
+      System.err.println("Recieved invalid move");
     });
+
   }
 
   private void checkGameOver(PlayerRole role) {
@@ -432,6 +415,38 @@ public class GameController {
     } else if (gameLogic.staleMate()) {
       staleMate();
     }
+  }
+
+  private void displayWinner(PlayerRole winner) {
+    String loc;
+    switch (winner) {
+      case None:
+        loc = "/assets/draw-message.png";
+        break;
+      case PlayerOne:
+        loc = "/assets/red-wins.png";
+        break;
+      case PlayerTwo:
+        loc = "/assets/blue-wins.png";
+        break;
+      default:
+        loc = "/assets/cloud1.png";
+    }
+    Image textImage = new Image(loc, 0, 96, true, false);
+    ImageView winnerImg = new ImageView(textImage);
+
+    overlayPane.getChildren().add(winnerImg);
+
+    winnerImg.setX((CoordUtils.gamePaneWidth - textImage.widthProperty().get()) / 2);
+    winnerImg.setY(100);
+
+    PauseTransition pt = new PauseTransition(Duration.millis(4000));
+    pt.setOnFinished(g -> {
+      midgroundPane.getChildren().setAll();
+      overlayPane.getChildren().remove(winnerImg);
+      canMove = true;
+    });
+    pt.play();
   }
 
   private void gameOver(PlayerRole winner, BoardPosition[] winningPositions) {
@@ -508,38 +523,9 @@ public class GameController {
     gameLogic.reset();
   }
 
-  private void displayWinner(PlayerRole winner) {
-    String loc;
-    switch (winner) {
-      case None:
-        loc = "/assets/draw-message.png";
-        break;
-      case PlayerOne:
-        loc = "/assets/red-wins.png";
-        break;
-      case PlayerTwo:
-        loc = "/assets/blue-wins.png";
-        break;
-      default:
-        loc = "/assets/cloud1.png";
-    }
-    Image textImage = new Image(loc, 0, 96, true, false);
-    ImageView winnerImg = new ImageView(textImage);
-
-    overlayPane.getChildren().add(winnerImg);
-
-    winnerImg.setX((CoordUtils.gamePaneWidth - textImage.widthProperty().get()) / 2);
-    winnerImg.setY(100);
-
-    PauseTransition pt = new PauseTransition(Duration.millis(4000));
-    pt.setOnFinished(g -> {
-      midgroundPane.getChildren().setAll();
-      overlayPane.getChildren().remove(winnerImg);
-      canMove = true;
-    });
-    pt.play();
-  }
-
+  /*****************************************************************
+   * GAME STATE INTERFACE
+   */
   public void recieveDrawRequest() {
     drawRequest.setVisible(true);
   }
@@ -576,6 +562,49 @@ public class GameController {
 
   public void recieveResignRequest() {
     resignRequest.setVisible(true);
+  }
+
+  public Player getLocalPlayer() {
+    return GameLogic.getLocalPlayer();
+  }
+
+  public ArrayList<Integer> getMoveHistory() {
+    return this.gameLogic.getMoveHistory();
+  }
+
+  public void restoreGameBoard(ArrayList<Integer> moves) {
+    for (int move_i = 0; move_i < moves.size(); move_i++) {
+      int col = moves.get(move_i);
+      PlayerRole role;
+      if (move_i % 2 == 0) {
+        role = PlayerRole.PlayerOne;
+      } else {
+        role = PlayerRole.PlayerTwo;
+      }
+      gameLogic.getAvailableRow(col).ifPresent((row) -> {
+        // get locations and role
+        BoardPosition rowCol = new BoardPosition(row, col);
+        handleMove(rowCol.getColumn(), role);
+        animateDrop(CoordUtils.topOfColumn(rowCol.getColumn()), rowCol, role);
+      });
+    }
+  }
+
+  public void recieveMove(int col) {
+    // handle the move logic and animate it
+    gameLogic.getAvailableRow(col).ifPresent((row) -> {
+      // get locations and role
+      BoardPosition rowCol = new BoardPosition(row, col);
+      PlayerRole role = GameLogic.getRemotePlayer().getRole();
+      Point chipHolder = CoordUtils.chipHolder(role);
+
+      // add the chip to animate
+      draggedPiece = new Piece(role, chipHolder);
+      overlayPane.getChildren().add(draggedPiece);
+
+      handleMove(rowCol.getColumn(), role);
+      animateMove(rowCol, chipHolder, role);
+    });
   }
 
   public void staleMate() {
