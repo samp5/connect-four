@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import game.GameManager;
+import registry.Leaderboard;
 import registry.PlayerRegistry;
 import registry.PlayerRegistry.PlayerRegistrationInfo;
 
@@ -29,6 +30,13 @@ public class ClientManager {
    */
   public static void removeClientListener(ServerClient connection) {
     toStopListening.add(connection);
+  }
+
+  /**
+   * Add a server client to this managed listener.
+   */
+  public static void addClientListener(ServerClient connection) {
+    clients.add(connection);
   }
 
   /**
@@ -79,8 +87,6 @@ public class ClientManager {
       ArrayList<Message> recievedMsgs = connection.getMessages();
       for (Message msg : recievedMsgs) {
         switch (msg.getType()) {
-          case CHAT:
-            break;
           case DISCONNECT:
             toStopListening.add(connection);
             PlayerRegistry.logoutPlayer(msg.getPlayer());
@@ -88,9 +94,8 @@ public class ClientManager {
           case LOGIN:
             attemptLogin(connection, msg);
             break;
-          case MOVE:
-            break;
-          case START:
+          case FETCH_LEADER_BOARD:
+            sendLeaderBoard(connection, msg);
             break;
           default:
             break;
@@ -124,6 +129,16 @@ public class ClientManager {
         }
         keyIterator.remove();
       }
+    }
+  }
+
+  private static void sendLeaderBoard(ServerClient client, Message msg) {
+    try {
+      client.sendMessage(Message.forLeaderBoardData(msg.getLeaderBoardViewType(),
+          new ArrayList<>(Leaderboard.getLeaderBoard(msg.getLeaderBoardViewType()))));
+    } catch (IOException e) {
+
+      e.printStackTrace();
     }
   }
 
@@ -164,10 +179,13 @@ public class ClientManager {
     if (System.currentTimeMillis() >= (lastFrame + frametime)) {
       // stats..
       // dont worry about it :)
-      System.out.printf("\033[2;26f\033[32m%d\033[0m players\033[0K\033[E", PlayerRegistry.registeredCount());
-      System.out.printf("\033[32m%d\033[0m players currently logged in\033[0K\033[E", PlayerRegistry.loggedInCount());
+      System.out.printf("\033[2;26f\033[32m%d\033[0m players\033[0K\033[E",
+          PlayerRegistry.registeredCount());
+      System.out.printf("\033[32m%d\033[0m players currently logged in\033[0K\033[E",
+          PlayerRegistry.loggedInCount());
       System.out.printf("\033[23C\033[32m%d\033[0m clients\033[0K\033[E", clients.size());
-      System.out.printf("\033[18C\033[32m%d\033[0m games\033[0K\033[E", GameManager.getActiveGameCount());
+      System.out.printf("\033[18C\033[32m%d\033[0m games\033[0K\033[E",
+          GameManager.getActiveGameCount());
 
       // "loading" animation
       lastFrame = System.currentTimeMillis();

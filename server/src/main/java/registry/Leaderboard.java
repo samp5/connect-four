@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.stream.Collectors;
+import network.LeaderBoardData;
+import network.Message.LeaderBoardView;
 import network.Message.WinType;
 
 public class Leaderboard {
@@ -37,22 +39,22 @@ public class Leaderboard {
     // get the actual score from the game outcome
     double actualA, actualB;
     switch (outcomeA) {
-		case WIN:
-      actualA = 1;
-      actualB = 0;
-			break;
-		case DRAW:
-      actualA = 0.5;
-      actualB = 0.5;
-			break;
-		case LOSE:
-      actualA = 0;
-      actualB = 1;
-			break;
-		default:
-      actualA = 0;
-      actualB = 0;
-			break;
+      case WIN:
+        actualA = 1;
+        actualB = 0;
+        break;
+      case DRAW:
+        actualA = 0.5;
+        actualB = 0.5;
+        break;
+      case LOSE:
+        actualA = 0;
+        actualB = 1;
+        break;
+      default:
+        actualA = 0;
+        actualB = 0;
+        break;
     }
 
     // calc the new elo
@@ -64,8 +66,8 @@ public class Leaderboard {
     trackedElo.put(idB, newEloB);
 
     // update the leaderboard
-    LeaderboardEntry currentA = leaderboard.stream().filter(o -> o.id == idA).findFirst().get();
-    LeaderboardEntry currentB = leaderboard.stream().filter(o -> o.id == idB).findFirst().get();
+    LeaderboardEntry currentA = leaderboard.stream().filter(o -> o.id == idA).findFirst().orElse(null);
+    LeaderboardEntry currentB = leaderboard.stream().filter(o -> o.id == idB).findFirst().orElse(null);
 
     if (currentA == null) {
       currentA = new LeaderboardEntry(idA, newEloA);
@@ -90,13 +92,14 @@ public class Leaderboard {
     return 1. / denom;
   }
 
-  public static List<LeaderboardEntry> getTopN(int n) {
+  private static List<LeaderboardEntry> getTopN(int n) {
     return leaderboard.subList(0, Math.min(n, leaderboard.size()));
   }
 
-  public static List<LeaderboardEntry> getNAroundPlayer(Long playerId, int n) {
+  private static List<LeaderboardEntry> getNAroundPlayer(Long playerId, int n) {
     LeaderboardEntry entry = leaderboard.stream().filter(o -> o.id == playerId).findFirst().get();
-    if (entry == null) return null;
+    if (entry == null)
+      return null;
 
     int ndx = leaderboard.indexOf(entry);
     int ndxTop = Math.min(0, ndx - Math.ceilDiv(n, 2));
@@ -105,8 +108,31 @@ public class Leaderboard {
     return leaderboard.subList(ndxTop, Math.min(n, ndxBot));
   }
 
-  public static List<LeaderboardEntry> getPlayerFriendsBoard(RegistryPlayer player) {
+  private static List<LeaderboardEntry> getPlayerFriendsBoard(RegistryPlayer player) {
     return leaderboard.stream().filter(o -> player.friends.contains(o.id)).toList();
+  }
+
+  public static List<LeaderBoardData> getLeaderBoard(LeaderBoardView view) {
+    switch (view) {
+      case TOP_TEN:
+        return getTopN(10).stream().map(entry -> {
+          return PlayerRegistry.getRegistryPlayerByID(entry.id).map(rp -> {
+            return entry.toData()
+                .withUserName(rp.getUsername())
+                .withRank(rp.getRank())
+                .withGamesWon(rp.getGamesWon())
+                .withGamesLost(rp.getGamesLost())
+                .withWinPercent(rp.getWinPercentage());
+          });
+        }).filter(opt -> {
+          return opt.isPresent();
+        }).map(opt -> {
+          return opt.get();
+        }).collect(Collectors.toList());
+      default:
+        break;
+    }
+    return null;
   }
 
   /**
@@ -115,12 +141,12 @@ public class Leaderboard {
   public static void save() {
     try {
 
-    FileOutputStream fileout = new FileOutputStream("leaderboard.registry");
-    ObjectOutputStream objectout = new ObjectOutputStream(fileout);
+      FileOutputStream fileout = new FileOutputStream("leaderboard.registry");
+      ObjectOutputStream objectout = new ObjectOutputStream(fileout);
 
-    objectout.writeObject(trackedElo);
-    objectout.writeObject(leaderboard);
-    objectout.close();
+      objectout.writeObject(trackedElo);
+      objectout.writeObject(leaderboard);
+      objectout.close();
 
     } catch (IOException e) {
 
@@ -158,7 +184,7 @@ public class Leaderboard {
     }
   }
 
-  public static class LeaderboardEntry implements Comparable<LeaderboardEntry>, Serializable {
+  private static class LeaderboardEntry implements Comparable<LeaderboardEntry>, Serializable {
     Long id;
     Double elo;
 
@@ -178,6 +204,10 @@ public class Leaderboard {
     @Override
     public int compareTo(LeaderboardEntry o) {
       return -elo.compareTo(o.elo);
+    }
+
+    public LeaderBoardData toData() {
+      return new LeaderBoardData().withELO(this.elo);
     }
   }
 }

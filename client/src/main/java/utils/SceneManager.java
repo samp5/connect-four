@@ -23,6 +23,7 @@ public class SceneManager {
       scene.getStylesheets().add("/css/chat.css");
       scene.getStylesheets().add("/css/game.css");
       scene.getStylesheets().add("/css/menu.css");
+
       stage.setScene(scene);
       stage.setResizable(false);
       stage.show();

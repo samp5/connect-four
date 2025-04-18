@@ -36,18 +36,30 @@ class RegistryPlayer implements Serializable {
     stats.gamesPlayed += 1;
 
     switch (type) {
-		case WIN:
-      stats.gamesWon += 1;
-			break;
-		case DRAW:
-      stats.gamesTied += 1;
-			break;
-		case LOSE:
-      stats.gamesLost += 1;
-			break;
-		default:
-			break;
+      case WIN:
+        stats.gamesWon += 1;
+        break;
+      case DRAW:
+        stats.gamesTied += 1;
+        break;
+      case LOSE:
+        stats.gamesLost += 1;
+        break;
+      default:
+        break;
     }
+  }
+
+  public int getGamesWon() {
+    return this.stats.gamesWon;
+  }
+
+  public int getGamesLost() {
+    return this.stats.gamesLost;
+  }
+
+  public double getWinPercentage() {
+    return (float) this.stats.gamesWon / (float) this.stats.gamesPlayed * 100.0;
   }
 
   public int getRank() {

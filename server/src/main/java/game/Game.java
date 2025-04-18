@@ -32,6 +32,9 @@ public class Game {
     private Long disconnectID = null;
     private boolean active = true;
 
+    // TO TEST LEADERBOARD
+    private boolean updatedELO = false;
+
     public GameThread(ServerClient player1, ServerClient player2, Game game) {
       this.game = game;
       this.player1 = player1;
@@ -84,6 +87,12 @@ public class Game {
           case COMPLETE:
             Player p = msg.getPlayer();
             PlayerRegistry.updatePlayerStats(p, msg.getWinType());
+            if (!updatedELO) {
+              Player opponent = p.getRole() == player1.getPlayer().getRole() ? player2.getPlayer()
+                  : player1.getPlayer();
+              Leaderboard.updateElo(p.getID(), opponent.getID(), msg.getWinType());
+              updatedELO = true;
+            }
             break;
           case RETURN_TO_LOBBY:
             if (disconnectID == null) {
@@ -94,14 +103,17 @@ public class Game {
               }
               disconnectID = connection.getPlayer().getID();
               GameManager.addToGameQueue(connection);
-              break;
+              ClientManager.addClientListener(connection);
+              return;
             }
             GameManager.addToGameQueue(connection);
+            ClientManager.addClientListener(connection);
             active = false;
             break;
           case START:
           case LOGIN:
             break;
+          case FETCH_LEADER_BOARD:
           case CHAT:
           case MOVE:
           case RECONNECT:

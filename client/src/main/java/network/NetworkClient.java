@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import controller.ChatController;
 import controller.ConnectionsController;
 import controller.GameController;
+import controller.LeaderBoardController;
 import javafx.application.Platform;
 import utils.SceneManager;
 import logic.GameLogic;
 import logic.GameLogic.GameMode;
+import network.Message.LeaderBoardView;
 import network.Message.Type;
 import network.Message.WinType;
 
@@ -36,6 +38,7 @@ public class NetworkClient {
   private static NetworkThread listener;
 
   private static GameController gameCTL;
+  private static LeaderBoardController leaderBoardCTL;
   private static ChatController chatCTL;
   private static ConnectionsController connectionCTL;
   private static Player player;
@@ -145,6 +148,9 @@ public class NetworkClient {
         chatCTL.rematchRequest();
         gameCTL.recieveRematchRequest();
         break;
+      case LEADER_BOARD_DATA:
+        System.out.println("Got leaderboard data");
+        leaderBoardCTL.fill(msg.getLeaderBoardData());
       default:
         break;
     }
@@ -168,6 +174,11 @@ public class NetworkClient {
       Message toSend = Message.forChat(localPlayer.getUsername(), message, localPlayer.getID());
       sendMessage(toSend);
     }
+  }
+
+  // send chat to server
+  public static void fetchLeaderBoard(LeaderBoardView view) {
+    sendMessage(Message.forFetchLeaderboard(view));
   }
 
   // alert server of game complete
@@ -281,6 +292,12 @@ public class NetworkClient {
   //
   public static void bindGameController(GameController gc) {
     gameCTL = gc;
+  }
+
+  // set controllers so that the network client can "message" the ui
+  //
+  public static void bindLeaderBoardController(LeaderBoardController lbc) {
+    leaderBoardCTL = lbc;
   }
 
   // set controllers so that the network client can "message" the ui

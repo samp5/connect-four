@@ -7,7 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
-
+import java.util.Optional;
 import game.GameManager;
 import network.Player;
 import network.Message.WinType;
@@ -25,10 +25,10 @@ public class PlayerRegistry {
    * Get the player registered under this username and password.
    * If the username doesn't exist, registers automatically.
    * If the username does exist, and the password matches, returns the user.
-   * If the username exists but the password doesn't match, returns an error to 
-   *    handle in the client.
+   * If the username exists but the password doesn't match, returns an error to
+   * handle in the client.
    * If the username exists, but is logged in already, returns an error to
-   *    handle in the client.
+   * handle in the client.
    */
   public static PlayerRegistrationInfo getRegisteredPlayer(String username, String password) {
     Long id = usernameLookup.get(username);
@@ -58,12 +58,22 @@ public class PlayerRegistry {
     return new PlayerRegistrationInfo(false, "Username and Password do not match.");
   }
 
+  public static Optional<RegistryPlayer> getRegistryPlayerByID(Long id) {
+    RegistryPlayer player = registeredPlayers.get(id);
+    if (player == null) {
+      return Optional.empty();
+    } else {
+      return Optional.of(player);
+    }
+  }
+
   /**
    * Remove a player from the active player list, and the queue if they are in
    * queue.
    */
   public static void logoutPlayer(Player player) {
-    if (player == null) return;
+    if (player == null)
+      return;
 
     activePlayers.remove(player.getID());
     GameManager.removeFromQueue(player);
@@ -97,18 +107,19 @@ public class PlayerRegistry {
       this.success = success;
       this.player = player;
     }
+
     private PlayerRegistrationInfo(boolean success, String reason) {
       this.success = success;
       this.reason = reason;
     }
 
-  	public boolean isSuccess() {
-  		return success;
-  	}
+    public boolean isSuccess() {
+      return success;
+    }
 
-  	public String getReason() {
-  		return reason;
-  	}
+    public String getReason() {
+      return reason;
+    }
 
     public Player getPlayer() {
       return player;
@@ -128,11 +139,11 @@ public class PlayerRegistry {
    */
   public static void save() {
     try {
-    FileOutputStream fileout = new FileOutputStream("player.registry");
-    ObjectOutputStream objectout = new ObjectOutputStream(fileout);
-    objectout.writeObject(registeredPlayers);
-    objectout.writeObject(usernameLookup);
-    objectout.close();
+      FileOutputStream fileout = new FileOutputStream("player.registry");
+      ObjectOutputStream objectout = new ObjectOutputStream(fileout);
+      objectout.writeObject(registeredPlayers);
+      objectout.writeObject(usernameLookup);
+      objectout.close();
     } catch (IOException e) {
       e.printStackTrace();
       System.out.println("Player Registry had an exception on save. Registry not saved.");

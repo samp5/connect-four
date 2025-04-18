@@ -2,7 +2,7 @@ package network;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
+import java.util.List;
 import network.Player.PlayerRole;
 
 /**
@@ -12,11 +12,15 @@ public class Message implements Serializable {
   public static enum Type {
     LOGIN, START, RECONNECT, DISCONNECT, CHAT, MOVE, COMPLETE, DRAW, DRAW_REQUEST, RESIGN, RESIGN_REQUEST,
     RESIGN_RESPONSE, RETURN_TO_LOBBY, OPPONENT_RETURN_TO_LOBBY, OPPONENT_DISCONNECT, REMATCH, REMATCH_REQUEST,
-    REMATCH_RESPONSE
+    FETCH_LEADER_BOARD, LEADER_BOARD_DATA
   };
 
   public static enum WinType {
     WIN, LOSE, DRAW,
+  };
+
+  public static enum LeaderBoardView {
+    TOP_TEN,
   };
 
   private Type type;
@@ -32,6 +36,8 @@ public class Message implements Serializable {
   private boolean success;
   private ArrayList<Integer> restoredMoves;
   private WinType winType;
+  private LeaderBoardView viewType;
+  private ArrayList<LeaderBoardData> leaderBoardData;
 
   private Message() {
   }
@@ -162,6 +168,22 @@ public class Message implements Serializable {
     return toSend;
   }
 
+  public static Message forFetchLeaderboard(LeaderBoardView view) {
+    Message toSend = new Message();
+
+    toSend.type = Type.FETCH_LEADER_BOARD;
+    toSend.viewType = view;
+
+    return toSend;
+  }
+
+  public static Message forLeaderBoardData(LeaderBoardView view, ArrayList<LeaderBoardData> data) {
+    Message toSend = new Message();
+    toSend.type = Type.LEADER_BOARD_DATA;
+    toSend.leaderBoardData = data;
+    return toSend;
+  }
+
   /**
    * getters
    */
@@ -217,7 +239,15 @@ public class Message implements Serializable {
     return restoredMoves;
   }
 
+  public ArrayList<LeaderBoardData> getLeaderBoardData() {
+    return leaderBoardData;
+  }
+
   public WinType getWinType() {
     return winType;
+  }
+
+  public LeaderBoardView getLeaderBoardViewType() {
+    return viewType;
   }
 }
