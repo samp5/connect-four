@@ -10,25 +10,13 @@ import network.Player.PlayerRole;
  */
 public class Message implements Serializable {
   public static enum Type {
-    LOGIN,
-    START,
-    RECONNECT,
-    DISCONNECT,
-    CHAT,
-    MOVE,
-    COMPLETE,
-    DRAW,
-    DRAW_REQUEST,
-    RESIGN,
-    RESIGN_REQUEST,
-    RESIGN_RESPONSE,
-    OPPONENT_DISCONNECT,
+    LOGIN, START, RECONNECT, DISCONNECT, CHAT, MOVE, COMPLETE, DRAW, DRAW_REQUEST, RESIGN, RESIGN_REQUEST,
+    RESIGN_RESPONSE, RETURN_TO_LOBBY, OPPONENT_RETURN_TO_LOBBY, OPPONENT_DISCONNECT, REMATCH, REMATCH_REQUEST,
+    REMATCH_RESPONSE
   };
 
   public static enum WinType {
-    WIN,
-    LOSE,
-    DRAW,
+    WIN, LOSE, DRAW,
   };
 
   private Type type;
@@ -45,7 +33,8 @@ public class Message implements Serializable {
   private ArrayList<Integer> restoredMoves;
   private WinType winType;
 
-  private Message() {}
+  private Message() {
+  }
 
   public static Message forSimpleInstruction(Type type) {
     Message toSend = new Message();
@@ -151,6 +140,24 @@ public class Message implements Serializable {
     toSend.username = username;
     toSend.column = column;
     toSend.playerID = playerID;
+
+    return toSend;
+  }
+
+  public static Message forReturnToLobbyRequest(Player player) {
+    Message toSend = new Message();
+
+    toSend.type = Type.RETURN_TO_LOBBY;
+    toSend.player = player;
+
+    return toSend;
+  }
+
+  public static Message forOpponentReturnToLobby(Player player) {
+    Message toSend = new Message();
+
+    toSend.type = Type.OPPONENT_RETURN_TO_LOBBY;
+    toSend.player = player;
 
     return toSend;
   }

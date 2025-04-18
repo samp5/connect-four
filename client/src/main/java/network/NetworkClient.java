@@ -118,6 +118,10 @@ public class NetworkClient {
       case OPPONENT_DISCONNECT:
         chatCTL.opponentDisconnect();
         break;
+      case OPPONENT_RETURN_TO_LOBBY:
+        chatCTL.opponentDisconnect();
+        gameCTL.recieveOpponentReturnToLobby();
+        break;
       case RESIGN:
         gameCTL.recieveResign();
         chatCTL.recieveResign();
@@ -132,6 +136,13 @@ public class NetworkClient {
         } else {
           chatCTL.resignDeclined();
         }
+        break;
+      case REMATCH:
+        gameCTL.rematch();
+        break;
+      case REMATCH_REQUEST:
+        chatCTL.rematchRequest();
+        gameCTL.recieveRematchRequest();
         break;
       default:
         break;
@@ -169,6 +180,18 @@ public class NetworkClient {
     if (GameLogic.getGameMode() == GameMode.Multiplayer) {
       sendMessage(Message.forSimpleInstruction(Type.RESIGN));
     }
+  }
+
+  public static void returnToLobby() {
+    sendMessage(Message.forReturnToLobbyRequest(player));
+  }
+
+  public static void rematchRequest() {
+    sendMessage(Message.forSimpleInstruction(Type.REMATCH_REQUEST));
+  }
+
+  public static void acceptRematch() {
+    sendMessage(Message.forSimpleInstruction(Type.REMATCH));
   }
 
   // request a draw

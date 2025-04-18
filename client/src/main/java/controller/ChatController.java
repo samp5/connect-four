@@ -90,8 +90,7 @@ public class ChatController {
 
     // auto scroll the chat history based on the height of the vbox
     chatHistoryScroll.vvalueProperty().bind(chatHistory.heightProperty());
-    notificationManager =
-        new NotificationManager(notificationPane, notificationText, notificationIcon);
+    notificationManager = new NotificationManager(notificationPane, notificationText, notificationIcon);
 
     // can't do this in fxml easily
     sendButton
@@ -181,6 +180,11 @@ public class ChatController {
         NotificationType.CONNECTION_ERROR);
   }
 
+  public void rematchRequest() {
+    notificationManager.recieve("You opponent want a rematch",
+        NotificationType.INFORMATION);
+  }
+
   public void recieveResign() {
     notificationManager.recieve("Your opponent has resigned.", NotificationType.INFORMATION);
   }
@@ -201,7 +205,7 @@ public class ChatController {
   }
 
   public void drawDeclined() {
-    notificationManager.recieve("Your opponent has declined your draw offer.");
+    notificationManager.recieve("Your opponent has declined your draw offer.", NotificationType.INFORMATION);
   }
 
   private void sendMessage() {
@@ -228,8 +232,7 @@ public class ChatController {
   // // when we need to display a new message
   public void appendMessage(String msg, String username, boolean local) {
     try {
-      FXMLLoader loader =
-          new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
+      FXMLLoader loader = new FXMLLoader(ChatController.class.getResource("/fxml/chatMessage.fxml"));
       Region msgBox = loader.load();
       ChatMessage newMessageCTL = loader.getController();
       newMessageCTL.build(username, 0, msg, local);

@@ -90,9 +90,7 @@ public class GameLogic {
   }
 
   public GameLogic() {
-    for (int[] row : board) {
-      Arrays.fill(row, 0);
-    }
+    reset();
   }
 
   public static Player getLocalPlayer() {

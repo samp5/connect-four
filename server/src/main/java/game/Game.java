@@ -59,6 +59,9 @@ public class Game {
     }
 
     private void handleMessages(ServerClient connection) throws IOException {
+      if (disconnectID == connection.getPlayer().getID()) {
+        return;
+      }
       ArrayList<Message> messages = connection.getMessages();
       for (Message msg : messages) {
         switch (msg.getType()) {
@@ -77,10 +80,24 @@ public class Game {
             PlayerRegistry.logoutPlayer(connection.getPlayer());
             GameManager.dcGames.remove(disconnectID);
             active = false;
-            return;
+            break;
           case COMPLETE:
             Player p = msg.getPlayer();
             PlayerRegistry.updatePlayerStats(p, msg.getWinType());
+            break;
+          case RETURN_TO_LOBBY:
+            if (disconnectID == null) {
+              if (connection.getPlayer().getID() == player1.getPlayer().getID()) {
+                player2.sendMessage(Message.forOpponentReturnToLobby(player1.getPlayer()));
+              } else {
+                player1.sendMessage(Message.forOpponentReturnToLobby(player2.getPlayer()));
+              }
+              disconnectID = connection.getPlayer().getID();
+              GameManager.addToGameQueue(connection);
+              break;
+            }
+            GameManager.addToGameQueue(connection);
+            active = false;
             break;
           case START:
           case LOGIN:
@@ -93,6 +110,8 @@ public class Game {
           case RESIGN:
           case RESIGN_REQUEST:
           case RESIGN_RESPONSE:
+          case REMATCH_REQUEST:
+          case REMATCH:
           default: // redirect by default
             // don't redirect if there was a DC
             if (this.disconnectID != null)

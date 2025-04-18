@@ -36,6 +36,7 @@ import network.Player.PlayerRole;
 import utils.AudioManager;
 import utils.AudioManager.SoundEffect;
 import utils.CursorManager;
+import utils.SceneManager;
 import utils.ToolTipHelper;
 import javafx.util.Duration;
 
@@ -157,6 +158,29 @@ public class GameController {
       resignRequest.setVisible(false);
       NetworkClient.replyResignRequest(false);
     });
+
+    rematchYes.setOnAction(e -> {
+      rematchYes.setText("Wating...");
+      if (GameLogic.getGameMode() == GameMode.Multiplayer) {
+        NetworkClient.rematchRequest();
+      }
+    });
+
+    rematchMainMenu.setOnAction(e -> {
+      if (GameLogic.getGameMode() == GameMode.Multiplayer) {
+        NetworkClient.disconnect();
+      }
+      SceneManager.showScene("menu.fxml");
+    });
+
+    rematchToLobby.setOnAction(e -> {
+      if (GameLogic.getGameMode() == GameMode.Multiplayer) {
+        NetworkClient.returnToLobby();
+      }
+      rematch.setVisible(false);
+      SceneManager.showScene("loading.fxml");
+    });
+
   }
 
   /*************************************************************************
@@ -517,10 +541,15 @@ public class GameController {
       } else {
         NetworkClient.gameComplete(WinType.LOSE);
       }
-    } else if (GameLogic.getGameMode() == GameMode.LocalAI && AI.getRole() == winner) {
-      NetworkClient.handleChat(AI.getWinningQuip(), "AI", false);
+      rematch.setVisible(true);
+      return;
+    } else {
+      if (GameLogic.getGameMode() == GameMode.LocalAI && AI.getRole() == winner) {
+        NetworkClient.handleChat(AI.getWinningQuip(), "AI", false);
+      }
+      gameLogic.reset();
     }
-    gameLogic.reset();
+
   }
 
   /*****************************************************************
@@ -560,8 +589,39 @@ public class GameController {
     }
   }
 
+  public void rematch() {
+    if (GameLogic.getGameMode() == GameMode.Multiplayer) {
+      // hide our menu
+      rematch.setVisible(false);
+      // reset our text
+      rematchYes.setText("Yes");
+      // rest the game logic
+      gameLogic.reset();
+    }
+  }
+
+  public void recieveRematchRequest() {
+    // edge case of network being slow
+    if (rematchYes.getText() == "Wating...") {
+      rematch();
+    } else {
+      rematchYes.setOnAction(e -> {
+        NetworkClient.acceptRematch();
+        rematch();
+      });
+    }
+  }
+
   public void recieveResignRequest() {
     resignRequest.setVisible(true);
+  }
+
+  public void recieveOpponentReturnToLobby() {
+    GameLogic.setCurrentPlayerRole(PlayerRole.None);
+    rematch.setVisible(true);
+    rematchYes.setDisable(true);
+    rematchYes.setOnAction(e -> {
+    });
   }
 
   public Player getLocalPlayer() {

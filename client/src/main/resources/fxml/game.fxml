@@ -177,7 +177,7 @@
             </VBox>
          </children>
       </Pane>
-      <Pane fx:id="rematch" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="256.0" prefWidth="256.0" stylesheets="@../css/chat.css">
+      <Pane fx:id="rematch" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="256.0" prefWidth="256.0" stylesheets="@../css/chat.css" visible="false">
          <children>
             <ImageView fitHeight="256.0" fitWidth="256.0">
                <image>
