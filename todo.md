@@ -13,7 +13,7 @@
 
 ## Features
 - [x] Add AI with levels of difficulty
-- [ ] Leaderboard
+- [x] Leaderboard
 - [ ] Friends
 - [x] Turn indicator
 - [ ] Profile pictures

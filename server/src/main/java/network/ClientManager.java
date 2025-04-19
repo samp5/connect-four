@@ -8,6 +8,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import game.GameManager;
@@ -115,8 +116,13 @@ public class ClientManager {
             sendLeaderBoard(connection, msg);
             break;
           case GET_SERVER_STATUS:
-
             sendServerInfo(connection);
+            break;
+          case FETCH_PROFILE:
+            sendProfile(connection, msg.getPlayerID());
+            break;
+          case PROFILE_PIC_UPDATE:
+            PlayerRegistry.updateProfilePicture(msg.getPlayerID(), msg.getProfilePicture());
             break;
           default:
             break;
@@ -172,6 +178,16 @@ public class ClientManager {
       client.sendMessage(Message.forServerInfo(PlayerRegistry.loggedInCount(), GameManager.getActiveGameCount()));
     } catch (IOException e) {
       e.printStackTrace();
+    }
+  }
+
+  private static void sendProfile(ServerClient client, Long playerID) {
+    try {
+      client.sendMessage(Message.forProfileData(PlayerRegistry.getUserProfileByID(playerID).get()));
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (NoSuchElementException dne) {
+      dne.printStackTrace();
     }
   }
 

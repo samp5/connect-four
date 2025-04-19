@@ -4,13 +4,16 @@ import java.io.Serializable;
 import java.util.HashSet;
 
 import network.Player;
+import network.UserProfile;
 import network.Message.WinType;
+import network.UserProfile.ProfilePicture;
 
 class RegistryPlayer implements Serializable {
   Long id;
   String username, password;
   PlayerStats stats;
   HashSet<Long> friends;
+  ProfilePicture profilePicture;
 
   public RegistryPlayer(String username, String password, Long id) {
     this.username = username;
@@ -18,6 +21,7 @@ class RegistryPlayer implements Serializable {
     this.id = id;
     this.stats = new PlayerStats();
     this.friends = new HashSet<>();
+    this.profilePicture = ProfilePicture.BASIC_BLUE;
   }
 
   public Player getClientPlayer() {
@@ -48,6 +52,12 @@ class RegistryPlayer implements Serializable {
       default:
         break;
     }
+  }
+
+  public UserProfile asUserProfile() {
+
+    return new UserProfile(id, this.username, friends, this.stats.gamesWon, this.stats.gamesTied, this.stats.gamesLost,
+        this.stats.gamesPlayed, Leaderboard.getElo(id), this.profilePicture);
   }
 
   public int getGamesWon() {

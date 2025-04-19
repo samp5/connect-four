@@ -25,6 +25,14 @@ public class Leaderboard {
   private static ArrayList<LeaderboardEntry> leaderboard = new ArrayList<>();
   private static Object lock = new Object();
 
+  public static Double getElo(Long id) {
+    Double elo = trackedElo.get(id);
+    if (elo == null) {
+      elo = 800.;
+    }
+    return elo;
+  }
+
   public static void updateElo(Long idA, Long idB, WinType outcomeA) {
     synchronized (lock) {
       // get the current elo

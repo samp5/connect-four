@@ -27,6 +27,7 @@
   -fx-font-size:100.0;
 }
 
+
 .text-field {
   -fx-font-family: "Mota Pixel Regular";
   -fx-font-size:24.0;
@@ -132,6 +133,11 @@
 .text-medium {
   -fx-font-family: "Mota Pixel Regular";
   -fx-font-size:20px;
+}
+
+.text-bold-medium {
+  -fx-font-family: "Mota Pixel Bold Shadow 2 Short";
+  -fx-font-size:24px;
 }
 .text-number {
   -fx-font-family: "Mota Pixel Regular";

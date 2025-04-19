@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import network.Player.PlayerRole;
+import network.UserProfile.ProfilePicture;
 
 /**
  * Maybe rework this into an abstract class situation
@@ -12,7 +13,8 @@ public class Message implements Serializable {
   public static enum Type {
     LOGIN, START, RECONNECT, DISCONNECT, CHAT, MOVE, COMPLETE, DRAW, DRAW_REQUEST, RESIGN, RESIGN_REQUEST,
     RESIGN_RESPONSE, RETURN_TO_LOBBY, OPPONENT_RETURN_TO_LOBBY, OPPONENT_DISCONNECT, REMATCH, REMATCH_REQUEST,
-    FETCH_LEADER_BOARD, LEADER_BOARD_DATA, JOIN_GAME, CANCEL_JOIN, GET_SERVER_STATUS, SERVER_STATUS
+    FETCH_LEADER_BOARD, LEADER_BOARD_DATA, JOIN_GAME, CANCEL_JOIN, GET_SERVER_STATUS, SERVER_STATUS, FETCH_PROFILE,
+    PROFILE_DATA, PROFILE_PIC_UPDATE;
   };
 
   public static enum WinType {
@@ -40,6 +42,8 @@ public class Message implements Serializable {
   private WinType winType;
   private LeaderBoardView viewType;
   private ArrayList<LeaderBoardData> leaderBoardData;
+  private UserProfile profile;
+  private ProfilePicture profilePicture;
 
   private Message() {
   }
@@ -194,6 +198,28 @@ public class Message implements Serializable {
     return toSend;
   }
 
+  public static Message forFetchProfile(Long playerID) {
+    Message toSend = new Message();
+    toSend.type = Type.FETCH_PROFILE;
+    toSend.playerID = playerID;
+    return toSend;
+  }
+
+  public static Message forProfileData(UserProfile profile) {
+    Message toSend = new Message();
+    toSend.type = Type.PROFILE_DATA;
+    toSend.profile = profile;
+    return toSend;
+  }
+
+  public static Message forProfilePictureUpdate(Long playerID, ProfilePicture newPicture) {
+    Message toSend = new Message();
+    toSend.type = Type.PROFILE_PIC_UPDATE;
+    toSend.playerID = playerID;
+    toSend.profilePicture = newPicture;
+    return toSend;
+  }
+
   /**
    * getters
    */
@@ -268,4 +294,13 @@ public class Message implements Serializable {
   public Integer getNumActiveGames() {
     return numberActiveGames;
   }
+
+  public UserProfile getProfile() {
+    return profile;
+  }
+
+  public ProfilePicture getProfilePicture() {
+    return profilePicture;
+  }
+
 }

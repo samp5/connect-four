@@ -148,9 +148,9 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
   // less than, equal to, or greater than the specified object.
   @Override
   public int compareTo(RecentConnection arg0) {
-    if (this.lastConnected.isBefore(arg0.lastConnected)) {
+    if (this.lastConnected.isAfter(arg0.lastConnected)) {
       return -1;
-    } else if (this.lastConnected.isAfter(arg0.lastConnected)) {
+    } else if (this.lastConnected.isBefore(arg0.lastConnected)) {
       return 1;
     } else {
       return this.name.compareTo(arg0.name);

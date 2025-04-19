@@ -20,6 +20,7 @@ import logic.GameLogic.GameMode;
 import network.Message.LeaderBoardView;
 import network.Message.Type;
 import network.Message.WinType;
+import network.UserProfile.ProfilePicture;
 
 /**
  * Connect to server
@@ -159,6 +160,9 @@ public class NetworkClient {
         break;
       case SERVER_STATUS:
         serverMenuCTL.setPlayerInfo(msg.getNumPlayers(), msg.getNumActiveGames());
+        break;
+      case PROFILE_DATA:
+        serverMenuCTL.recieveProfileData(msg.getProfile());
       default:
         break;
     }
@@ -184,9 +188,18 @@ public class NetworkClient {
     }
   }
 
-  // send chat to server
+  // get the leader board with the specified view
   public static void fetchLeaderBoard(LeaderBoardView view) {
     sendMessage(Message.forFetchLeaderboard(view));
+  }
+
+  // get the profile for this player
+  public static void fetchProfile() {
+    sendMessage(Message.forFetchProfile(player.getID()));
+  }
+
+  public static void updateProfilePicture(ProfilePicture pic) {
+    sendMessage(Message.forProfilePictureUpdate(player.getID(), pic));
   }
 
   // alert server of game complete
@@ -303,11 +316,13 @@ public class NetworkClient {
     if (socket == null) {
       return;
     }
-    try {
-      out = new ObjectOutputStream(socket.getOutputStream());
-      out.writeObject(m);
-    } catch (IOException ioe) {
-      ioe.printStackTrace();
+    synchronized (socket) {
+      try {
+        out = new ObjectOutputStream(socket.getOutputStream());
+        out.writeObject(m);
+      } catch (IOException ioe) {
+        ioe.printStackTrace();
+      }
     }
   }
 

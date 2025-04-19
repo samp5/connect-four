@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import game.GameManager;
 import network.Player;
+import network.UserProfile;
+import network.UserProfile.ProfilePicture;
 import network.Message.WinType;
 
 /**
@@ -65,6 +67,24 @@ public class PlayerRegistry {
       return Optional.empty();
     } else {
       return Optional.of(player);
+    }
+  }
+
+  public static Optional<UserProfile> getUserProfileByID(Long id) {
+    RegistryPlayer player = registeredPlayers.get(id);
+    if (player == null) {
+      return Optional.empty();
+    } else {
+      return Optional.of(player.asUserProfile());
+    }
+  }
+
+  public static void updateProfilePicture(Long id, ProfilePicture newPic) {
+    RegistryPlayer player = registeredPlayers.get(id);
+    if (player != null) {
+      player.profilePicture = newPic;
+    } else {
+      System.err.println("PlayerRegistry::updateProfilePicture could not find player with id: " + id.toString());
     }
   }
 
