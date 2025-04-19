@@ -33,7 +33,7 @@ public class Game {
     private boolean active = true;
 
     // TO TEST LEADERBOARD
-    private boolean updatedELO = false;
+    private int completeRequestRecieved = 0;
 
     public GameThread(ServerClient player1, ServerClient player2, Game game) {
       this.game = game;
@@ -61,7 +61,28 @@ public class Game {
       GameManager.gameCount--;
     }
 
+    private ServerClient opponent(ServerClient connection) {
+      return connection.getPlayer().getID() == player1.getPlayer().getID() ? player2 : player1;
+    }
+
+    private void sendToOpponent(ServerClient connection, Message msg) throws IOException {
+      // if this player is disconnected do nothing
+      if (connection.getPlayer().getID() == disconnectID) {
+        return;
+      }
+      ServerClient opponent = opponent(connection);
+
+      // if the opponent is already disconnected
+      if (opponent.getPlayer().getID() == disconnectID) {
+        return;
+      }
+
+      opponent.sendMessage(msg);
+
+    }
+
     private void handleMessages(ServerClient connection) throws IOException {
+      // Ignore any client who is disconnected
       if (disconnectID == connection.getPlayer().getID()) {
         return;
       }
@@ -70,45 +91,42 @@ public class Game {
         switch (msg.getType()) {
           case DISCONNECT:
             if (disconnectID == null) {
-              if (connection.getPlayer().getID() == player1.getPlayer().getID()) {
-                player2.sendMessage(Message.forOpponentDisconnect(player1.getPlayer()));
-              } else {
-                player1.sendMessage(Message.forOpponentDisconnect(player2.getPlayer()));
-              }
+              // send our opponent a message that we are disconnecting
+              sendToOpponent(connection, Message.forServerDisconnect(opponent(connection).getPlayer()));
+
+              // log out
               PlayerRegistry.logoutPlayer(connection.getPlayer());
+
+              // set the disconnectID
               disconnectID = connection.getPlayer().getID();
               GameManager.dcGames.put(disconnectID, game);
-              return;
+            } else {
+              PlayerRegistry.logoutPlayer(connection.getPlayer());
+              GameManager.dcGames.remove(disconnectID);
+              active = false;
             }
-            PlayerRegistry.logoutPlayer(connection.getPlayer());
-            GameManager.dcGames.remove(disconnectID);
-            active = false;
             break;
           case COMPLETE:
             Player p = msg.getPlayer();
             PlayerRegistry.updatePlayerStats(p, msg.getWinType());
-            if (!updatedELO) {
-              Player opponent = p.getRole() == player1.getPlayer().getRole() ? player2.getPlayer()
-                  : player1.getPlayer();
+            if (completeRequestRecieved % 2 == 0) {
+              Player opponent = opponent(connection).getPlayer();
               Leaderboard.updateElo(p.getID(), opponent.getID(), msg.getWinType());
-              updatedELO = true;
+              completeRequestRecieved += 1;
             }
             break;
           case RETURN_TO_LOBBY:
             if (disconnectID == null) {
-              if (connection.getPlayer().getID() == player1.getPlayer().getID()) {
-                player2.sendMessage(Message.forOpponentReturnToLobby(player1.getPlayer()));
-              } else {
-                player1.sendMessage(Message.forOpponentReturnToLobby(player2.getPlayer()));
-              }
+              sendToOpponent(connection, Message.forOpponentReturnToLobby(opponent(connection).getPlayer()));
               disconnectID = connection.getPlayer().getID();
-              GameManager.addToGameQueue(connection);
               ClientManager.addClientListener(connection);
+              GameManager.addToGameQueue(connection);
               return;
+            } else {
+              ClientManager.addClientListener(connection);
+              GameManager.addToGameQueue(connection);
+              active = false;
             }
-            GameManager.addToGameQueue(connection);
-            ClientManager.addClientListener(connection);
-            active = false;
             break;
           case START:
           case LOGIN:
@@ -125,15 +143,9 @@ public class Game {
           case REMATCH_REQUEST:
           case REMATCH:
           default: // redirect by default
-            // don't redirect if there was a DC
-            if (this.disconnectID != null)
-              return;
-
-            // redirect message to other player
-            if (connection.getPlayer().getID() == player1.getPlayer().getID()) {
-              player2.sendMessage(msg);
-            } else {
-              player1.sendMessage(msg);
+            // only redirect if both players are connected
+            if (disconnectID == null) {
+              sendToOpponent(connection, msg);
             }
             break;
         }

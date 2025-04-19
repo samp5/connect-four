@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class ServerClient {
   private final SocketChannel connection;
-  private Player player;  // the player corresponding to the connection
+  private Player player; // the player corresponding to the connection
 
   public ServerClient(SocketChannel connection) {
     this.connection = connection;

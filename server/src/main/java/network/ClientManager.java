@@ -29,14 +29,18 @@ public class ClientManager {
    * Remove a server client from this managed listener.
    */
   public static void removeClientListener(ServerClient connection) {
-    toStopListening.add(connection);
+    synchronized (clients) {
+      clients.remove(connection);
+    }
   }
 
   /**
    * Add a server client to this managed listener.
    */
   public static void addClientListener(ServerClient connection) {
-    clients.add(connection);
+    synchronized (clients) {
+      clients.add(connection);
+    }
   }
 
   /**
@@ -72,7 +76,7 @@ public class ClientManager {
 
     // keep accepting clients and getting messages
     while (true) {
-      animateStatus();
+      // animateStatus();
       recieveAllMessages();
       acceptClients();
     }
@@ -82,8 +86,15 @@ public class ClientManager {
    * Gathers all messages from all clients connected to the manager.
    */
   private static void recieveAllMessages() {
+
+    ArrayList<ServerClient> curentClients;
+
+    synchronized (clients) {
+      curentClients = new ArrayList<>(clients);
+    }
+
     // get messages, if any, and handle
-    for (ServerClient connection : clients) {
+    for (ServerClient connection : curentClients) {
       ArrayList<Message> recievedMsgs = connection.getMessages();
       for (Message msg : recievedMsgs) {
         switch (msg.getType()) {
@@ -103,9 +114,11 @@ public class ClientManager {
       }
     }
 
-    // remove that which needs removed
-    clients.removeAll(toStopListening);
-    toStopListening.clear();
+    synchronized (clients) {
+      // remove that which needs removed
+      clients.removeAll(toStopListening);
+      toStopListening.clear();
+    }
   }
 
   /**
@@ -113,26 +126,29 @@ public class ClientManager {
    * Non-Blocking.
    */
   private static void acceptClients() throws IOException {
-    int readyChannels = selector.selectNow();
-    if (readyChannels > 0) {
-      // iterate through available keys
-      Set<SelectionKey> selectedKeys = selector.selectedKeys();
-      Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
+    synchronized (clients) {
+      int readyChannels = selector.selectNow();
+      if (readyChannels > 0) {
+        // iterate through available keys
+        Set<SelectionKey> selectedKeys = selector.selectedKeys();
+        Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
 
-      while (keyIterator.hasNext()) {
-        SelectionKey key = keyIterator.next();
-        if (key.isAcceptable()) {
-          // get the connection
-          ServerSocketChannel readyChannel = (ServerSocketChannel) key.channel();
-          ServerClient connection = new ServerClient(readyChannel.accept());
-          clients.add(connection);
+        while (keyIterator.hasNext()) {
+          SelectionKey key = keyIterator.next();
+          if (key.isAcceptable()) {
+            // get the connection
+            ServerSocketChannel readyChannel = (ServerSocketChannel) key.channel();
+            ServerClient connection = new ServerClient(readyChannel.accept());
+            clients.add(connection);
+          }
+          keyIterator.remove();
         }
-        keyIterator.remove();
       }
     }
   }
 
   private static void sendLeaderBoard(ServerClient client, Message msg) {
+    System.out.println("got leaderboard request from " + client.getPlayer().getUsername() + client.getPlayer().getID());
     try {
       client.sendMessage(Message.forLeaderBoardData(msg.getLeaderBoardViewType(),
           new ArrayList<>(Leaderboard.getLeaderBoard(msg.getLeaderBoardViewType()))));

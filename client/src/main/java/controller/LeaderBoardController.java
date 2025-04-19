@@ -29,6 +29,7 @@ public class LeaderBoardController {
   }
 
   public void fill(Collection<LeaderBoardData> c) {
+    this.leaderBoardList.getChildren().setAll();
     for (LeaderBoardData entry : c) {
       System.out.println("got entry for user:" + entry.getUsername());
       try {
