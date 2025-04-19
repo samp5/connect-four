@@ -220,7 +220,12 @@ public class GameController extends Controller {
       overlayPane.getChildren().addAll(draggedPiece);
     }
 
-    draggedPiece.setPoint(e.getSceneX(), e.getSceneY());
+    if (GameLogic.getGameMode() == GameMode.LocalMultiplayer) {
+      // listen,,
+      draggedPiece.setPoint(e.getSceneX() - 180, e.getSceneY());
+    } else {
+      draggedPiece.setPoint(e.getSceneX(), e.getSceneY());
+    }
 
     int col = CoordUtils.toRowCol(draggedPiece.position).map(bp -> {
       return bp.getColumn();

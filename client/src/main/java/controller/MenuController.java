@@ -31,7 +31,7 @@ public class MenuController extends Controller {
     });
     playLocalButton.setOnAction(e -> {
       GameController.setGameMode(GameMode.LocalMultiplayer);
-      SceneManager.showScene("main.fxml");
+      SceneManager.showScene("local_multiplayer.fxml");
     });
     playAIButton.setOnAction(e -> {
       GameController.setGameMode(GameMode.LocalAI);
