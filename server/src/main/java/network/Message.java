@@ -14,7 +14,7 @@ public class Message implements Serializable {
     LOGIN, START, RECONNECT, DISCONNECT, CHAT, MOVE, COMPLETE, DRAW, DRAW_REQUEST, RESIGN, RESIGN_REQUEST,
     RESIGN_RESPONSE, RETURN_TO_LOBBY, OPPONENT_RETURN_TO_LOBBY, OPPONENT_DISCONNECT, REMATCH, REMATCH_REQUEST,
     FETCH_LEADER_BOARD, LEADER_BOARD_DATA, JOIN_GAME, CANCEL_JOIN, GET_SERVER_STATUS, SERVER_STATUS, FETCH_PROFILE,
-    PROFILE_DATA, PROFILE_PIC_UPDATE;
+    PROFILE_DATA, PROFILE_PIC_UPDATE, FRIEND_REQUEST, FRIEND_REQUEST_RESPONSE;
   };
 
   public static enum WinType {
@@ -44,6 +44,9 @@ public class Message implements Serializable {
   private ArrayList<LeaderBoardData> leaderBoardData;
   private UserProfile profile;
   private ProfilePicture profilePicture;
+  private Long befrienderID;
+
+  private Long befriendedID;
 
   private Message() {
   }
@@ -220,6 +223,23 @@ public class Message implements Serializable {
     return toSend;
   }
 
+  public static Message forFriendRequest(Long originPlayerID, Long targetPlayerID) {
+    Message toSend = new Message();
+    toSend.type = Type.FRIEND_REQUEST;
+    toSend.befrienderID = originPlayerID;
+    toSend.befriendedID = targetPlayerID;
+    return toSend;
+  }
+
+  public static Message forFriendRequestReply(Long originPlayerID, Long targetPlayerID, boolean accepted) {
+    Message toSend = new Message();
+    toSend.type = Type.FRIEND_REQUEST_RESPONSE;
+    toSend.success = accepted;
+    toSend.befrienderID = originPlayerID;
+    toSend.befriendedID = targetPlayerID;
+    return toSend;
+  }
+
   /**
    * getters
    */
@@ -303,4 +323,11 @@ public class Message implements Serializable {
     return profilePicture;
   }
 
+  public Long getBefrienderID() {
+    return befrienderID;
+  }
+
+  public Long getBefriendedID() {
+    return befriendedID;
+  }
 }

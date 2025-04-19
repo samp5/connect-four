@@ -104,6 +104,7 @@ public class NetworkClient {
         SceneManager.showScene("main.fxml");
         GameLogic.initialize(msg.getPlayer(), msg.getPlayer2(), msg.getRole());
         gameCTL.showPlayerRoles();
+        chatCTL.fetchOpponentProfiles();
         break;
       case RECONNECT:
         ArrayList<Integer> restoredMoves = msg.getRestoredMoves();
@@ -161,8 +162,25 @@ public class NetworkClient {
       case SERVER_STATUS:
         serverMenuCTL.setPlayerInfo(msg.getNumPlayers(), msg.getNumActiveGames());
         break;
+      case FRIEND_REQUEST:
+        chatCTL.recieveFriendRequest();
+        break;
+      case FRIEND_REQUEST_RESPONSE:
+        chatCTL.recieveFriendRequestResponse(msg.isSuccess());
+        break;
       case PROFILE_DATA:
-        serverMenuCTL.recieveProfileData(msg.getProfile());
+        /*
+         * These might need to be split into different message types if we need to do
+         * anything more than these two things
+         */
+        if (msg.getProfile().getId().equals(player.getID())) {
+          // requesting our own for the server menu
+          serverMenuCTL.recieveProfileData(msg.getProfile());
+        } else {
+          // requesting the opponent for the main game view
+          chatCTL.recieveOpponentProfile(msg.getProfile());
+        }
+        break;
       default:
         break;
     }
@@ -170,6 +188,10 @@ public class NetworkClient {
 
   public static void handleChat(String msg, String username, boolean local) {
     chatCTL.recieveMessage(msg, username, local);
+  }
+
+  public static void sendOpponentFriendRequest() {
+    sendMessage(Message.forFriendRequest(player.getID(), GameLogic.getRemotePlayer().getID()));
   }
 
   // send move to server
@@ -196,6 +218,11 @@ public class NetworkClient {
   // get the profile for this player
   public static void fetchProfile() {
     sendMessage(Message.forFetchProfile(player.getID()));
+  }
+
+  // get the profile for the opponent player
+  public static void fetchOpponentProfile() {
+    sendMessage(Message.forFetchProfile(GameLogic.getRemotePlayer().getID()));
   }
 
   public static void updateProfilePicture(ProfilePicture pic) {
@@ -244,6 +271,10 @@ public class NetworkClient {
       default:
         break;
     }
+  }
+
+  public static void replyFriendRequest(boolean accepted) {
+    sendMessage(Message.forFriendRequestReply(GameLogic.getRemotePlayer().getID(), player.getID(), accepted));
   }
 
   public static void replyDrawRequest(boolean accepted) {

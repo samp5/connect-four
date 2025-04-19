@@ -60,28 +60,9 @@ public class Game {
         // clients
         GameManager.dcGames.remove(disconnectID);
       } catch (IOException e) {
+        e.printStackTrace();
       }
       GameManager.gameCount--;
-    }
-
-    private ServerClient opponent(ServerClient connection) {
-      return connection.getPlayer().getID() == player1.getPlayer().getID() ? player2 : player1;
-    }
-
-    private void sendToOpponent(ServerClient connection, Message msg) throws IOException {
-      // if this player is disconnected do nothing
-      if (connection.getPlayer().getID() == disconnectID) {
-        return;
-      }
-      ServerClient opponent = opponent(connection);
-
-      // if the opponent is already disconnected
-      if (opponent.getPlayer().getID() == disconnectID) {
-        return;
-      }
-
-      opponent.sendMessage(msg);
-
     }
 
     private void handleMessages(ServerClient connection) throws IOException {
@@ -129,6 +110,9 @@ public class Game {
             }
             break;
           case START:
+          case FETCH_PROFILE:
+            ClientManager.sendProfile(connection, msg.getPlayerID());
+            break;
           case LOGIN:
             break;
           case FETCH_LEADER_BOARD:
@@ -141,7 +125,12 @@ public class Game {
           case RESIGN_REQUEST:
           case RESIGN_RESPONSE:
           case REMATCH_REQUEST:
+          case FRIEND_REQUEST:
           case REMATCH:
+          case FRIEND_REQUEST_RESPONSE:
+            // we also want to redirect this
+            PlayerRegistry.addFriends(msg.getBefrienderID(), msg.getBefriendedID());
+            // NO BREAK
           default: // redirect by default
             // only redirect if both players are connected
             if (disconnectID == null) {
@@ -150,6 +139,26 @@ public class Game {
             break;
         }
       }
+    }
+
+    private ServerClient opponent(ServerClient connection) {
+      return connection.getPlayer().getID() == player1.getPlayer().getID() ? player2 : player1;
+    }
+
+    private void sendToOpponent(ServerClient connection, Message msg) throws IOException {
+      // if this player is disconnected do nothing
+      if (connection.getPlayer().getID() == disconnectID) {
+        return;
+      }
+      ServerClient opponent = opponent(connection);
+
+      // if the opponent is already disconnected
+      if (opponent.getPlayer().getID() == disconnectID) {
+        return;
+      }
+
+      opponent.sendMessage(msg);
+
     }
 
     private void reconnectPlayer(ServerClient connection) {

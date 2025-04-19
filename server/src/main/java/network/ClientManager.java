@@ -181,7 +181,7 @@ public class ClientManager {
     }
   }
 
-  private static void sendProfile(ServerClient client, Long playerID) {
+  public static void sendProfile(ServerClient client, Long playerID) {
     try {
       client.sendMessage(Message.forProfileData(PlayerRegistry.getUserProfileByID(playerID).get()));
     } catch (IOException e) {

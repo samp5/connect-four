@@ -34,57 +34,67 @@ public class PlayerRegistry {
    * handle in the client.
    */
   public static PlayerRegistrationInfo getRegisteredPlayer(String username, String password) {
-    Long id = usernameLookup.get(username);
+    synchronized (registeredPlayers) {
+      synchronized (activePlayers) {
+        Long id = usernameLookup.get(username);
 
-    // if the username doesn't match with an ID, register the new player
-    if (id == null) {
-      // register the player
-      Long newId = getNextID();
-      RegistryPlayer newReg = new RegistryPlayer(username, password, newId);
-      registeredPlayers.put(newId, newReg);
-      activePlayers.add(newId);
-      usernameLookup.put(username, newId);
-      return new PlayerRegistrationInfo(true, newReg.getClientPlayer());
-    }
+        // if the username doesn't match with an ID, register the new player
+        if (id == null) {
+          // register the player
+          Long newId = getNextID();
+          RegistryPlayer newReg = new RegistryPlayer(username, password, newId);
+          registeredPlayers.put(newId, newReg);
+          activePlayers.add(newId);
+          usernameLookup.put(username, newId);
+          return new PlayerRegistrationInfo(true, newReg.getClientPlayer());
+        }
 
-    // check if the player is already active
-    if (activePlayers.contains(id)) {
-      return new PlayerRegistrationInfo(false, "Player already logged in.");
-    }
+        // check if the player is already active
+        if (activePlayers.contains(id)) {
+          return new PlayerRegistrationInfo(false, "Player already logged in.");
+        }
 
-    // check if the player is currently registered
-    RegistryPlayer p = registeredPlayers.get(id);
-    if (p.getPassword().equals(password)) {
-      activePlayers.add(id);
-      return new PlayerRegistrationInfo(true, p.getClientPlayer());
+        // check if the player is currently registered
+        RegistryPlayer p = registeredPlayers.get(id);
+        if (p.getPassword().equals(password)) {
+          activePlayers.add(id);
+          return new PlayerRegistrationInfo(true, p.getClientPlayer());
+        }
+      }
     }
     return new PlayerRegistrationInfo(false, "Username and Password do not match.");
   }
 
   public static Optional<RegistryPlayer> getRegistryPlayerByID(Long id) {
-    RegistryPlayer player = registeredPlayers.get(id);
-    if (player == null) {
-      return Optional.empty();
-    } else {
-      return Optional.of(player);
+    synchronized (registeredPlayers) {
+      RegistryPlayer player = registeredPlayers.get(id);
+      if (player == null) {
+        return Optional.empty();
+      } else {
+        return Optional.of(player);
+      }
     }
   }
 
   public static Optional<UserProfile> getUserProfileByID(Long id) {
-    RegistryPlayer player = registeredPlayers.get(id);
-    if (player == null) {
-      return Optional.empty();
-    } else {
-      return Optional.of(player.asUserProfile());
+    synchronized (registeredPlayers) {
+      RegistryPlayer player = registeredPlayers.get(id);
+      if (player == null) {
+        return Optional.empty();
+      } else {
+        return Optional.of(player.asUserProfile());
+      }
     }
   }
 
   public static void updateProfilePicture(Long id, ProfilePicture newPic) {
-    RegistryPlayer player = registeredPlayers.get(id);
-    if (player != null) {
-      player.profilePicture = newPic;
-    } else {
-      System.err.println("PlayerRegistry::updateProfilePicture could not find player with id: " + id.toString());
+    synchronized (registeredPlayers) {
+      RegistryPlayer player = registeredPlayers.get(id);
+      if (player != null) {
+        player.profilePicture = newPic;
+      } else {
+        System.err.println("PlayerRegistry::updateProfilePicture could not find player with id: " + id.toString());
+      }
     }
   }
 
@@ -96,7 +106,9 @@ public class PlayerRegistry {
     if (player == null)
       return;
 
-    activePlayers.remove(player.getID());
+    synchronized (activePlayers) {
+      activePlayers.remove(player.getID());
+    }
     GameManager.removeFromQueue(player);
   }
 
@@ -113,7 +125,21 @@ public class PlayerRegistry {
    * Updates a player's stats
    */
   public static void updatePlayerStats(Player p, WinType win) {
-    registeredPlayers.get(p.getID()).completeGame(win);
+    synchronized (registeredPlayers) {
+      registeredPlayers.get(p.getID()).completeGame(win);
+    }
+  }
+
+  public synchronized static void addFriends(Long id1, Long id2) {
+    synchronized (registeredPlayers) {
+      getRegistryPlayerByID(id1).ifPresent(p1 -> {
+        getRegistryPlayerByID(id2).ifPresent(p2 -> {
+          p1.friends.add(id2);
+          p2.friends.add(id1);
+        });
+      });
+    }
+
   }
 
   /**

@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -27,6 +29,7 @@ import javafx.scene.text.TextFlow;
 import logic.GameLogic;
 import logic.GameLogic.GameMode;
 import network.NetworkClient;
+import network.UserProfile;
 import utils.AudioManager;
 import utils.ToolTipHelper;
 import utils.AudioManager.SoundEffect;
@@ -74,6 +77,22 @@ public class ChatController extends Controller {
   ScrollPane chatHistoryScroll;
   @FXML
   BorderPane chatPane;
+
+  // Opp profile
+  @FXML
+  BorderPane oppProfileButton;
+  @FXML
+  Pane oppProfilePane;
+  @FXML
+  Button oppProfileBackButton;
+  @FXML
+  Text oppUsername;
+  @FXML
+  Text oppElo;
+  @FXML
+  Text oppWinPercent;
+  @FXML
+  Button addFriend;
 
   @FXML
   Pane notificationPane;
@@ -173,6 +192,16 @@ public class ChatController extends Controller {
       });
     });
     requestResignButton.setTooltip(ToolTipHelper.make("Request your opponent resigns"));
+
+    oppProfileButton.setOnMouseClicked(e -> {
+      oppProfilePane.setVisible(true);
+    });
+    oppProfileBackButton.setOnAction(e -> {
+      oppProfilePane.setVisible(false);
+    });
+    addFriend.setOnAction(e -> {
+      NetworkClient.sendOpponentFriendRequest();
+    });
   }
 
   public void opponentDisconnect() {
@@ -187,6 +216,29 @@ public class ChatController extends Controller {
 
   public void recieveResign() {
     notificationManager.recieve("Your opponent has resigned.", NotificationType.INFORMATION);
+  }
+
+  public void recieveFriendRequest() {
+    confirmPopup.setVisible(true);
+    confirmText.setText(GameLogic.getRemotePlayer().getUsername() + " sent you a friend request");
+    popupConfirmButton.setOnAction(e -> {
+      confirmPopup.setVisible(false);
+      addFriend.setText("Already Friends");
+      addFriend.setDisable(true);
+      NetworkClient.replyFriendRequest(true);
+    });
+    EventHandler<ActionEvent> oldHandler = popupCancelButton.getOnAction();
+    popupCancelButton.setOnAction(e -> {
+      NetworkClient.replyFriendRequest(false);
+      confirmPopup.setVisible(false);
+      popupCancelButton.setOnAction(oldHandler);
+    });
+  }
+
+  public void recieveFriendRequestResponse(boolean accepted) {
+    notificationManager.recieve("You opponent accepted your friend request", NotificationType.INFORMATION);
+    addFriend.setText("Already Friends");
+    addFriend.setDisable(true);
   }
 
   public void resignAccepted() {
@@ -208,6 +260,23 @@ public class ChatController extends Controller {
     notificationManager.recieve("Your opponent has declined your draw offer.", NotificationType.INFORMATION);
   }
 
+  public void recieveOpponentProfile(UserProfile profile) {
+    oppProfileButton.setVisible(true);
+    ((ImageView) (oppProfileButton.getCenter())).setImage(new Image(profile.getProfilePicture().getAssetFileName()));
+    if (profile.getFriends().contains(GameLogic.getLocalPlayer().getID())) {
+      addFriend.setText("Already Friends");
+      addFriend.setDisable(true);
+    }
+    populateOpponentProfile(profile);
+  }
+
+  private void populateOpponentProfile(UserProfile profile) {
+    oppElo.setText(String.valueOf((int) profile.getElo()));
+    oppUsername.setText(profile.getUserName());
+    oppWinPercent
+        .setText(String.valueOf((int) ((float) profile.getGamesWon() / (float) profile.getGamesPlayed()) * 100) + "%");
+  }
+
   private void sendMessage() {
     AudioManager.playSoundEffect(SoundEffect.CHAT_SENT);
     String msg = chatEditorInput.getText().trim();
@@ -227,6 +296,12 @@ public class ChatController extends Controller {
   public void recieveMessage(String message, String username, boolean local) {
     AudioManager.playSoundEffect(SoundEffect.CHAT_RECIEVED);
     appendMessage(message, username, local);
+  }
+
+  public void fetchOpponentProfiles() {
+    if (GameLogic.getGameMode() == GameMode.Multiplayer) {
+      NetworkClient.fetchOpponentProfile();
+    }
   }
 
   // // when we need to display a new message
