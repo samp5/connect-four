@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 
 public class RecentConnectionRegistry {
   private static ArrayList<RecentConnection> connections = new ArrayList<>();
@@ -15,6 +16,15 @@ public class RecentConnectionRegistry {
   public static ArrayList<RecentConnection> getConnections() {
     Collections.sort(connections);
     return connections;
+  }
+
+  public static Optional<RecentConnection> getMostRecentConnection() {
+    Collections.sort(connections);
+    if (connections.size() > 0) {
+      return Optional.of(connections.getFirst());
+    } else {
+      return Optional.empty();
+    }
   }
 
   public static void setConnections(ArrayList<RecentConnection> c) {

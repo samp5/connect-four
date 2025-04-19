@@ -59,7 +59,7 @@ public class ClientManager {
     try {
       _connectToClients();
     } catch (IOException | InterruptedException e) {
-      System.out.println("Error connecting to clients. Exiting.");
+      System.err.println("Error connecting to clients. Exiting.");
       System.exit(1);
     }
   }
@@ -76,7 +76,7 @@ public class ClientManager {
 
     // keep accepting clients and getting messages
     while (true) {
-      // animateStatus();
+      animateStatus();
       recieveAllMessages();
       acceptClients();
     }
@@ -105,8 +105,18 @@ public class ClientManager {
           case LOGIN:
             attemptLogin(connection, msg);
             break;
+          case JOIN_GAME:
+            GameManager.addToGameQueue(connection);
+            break;
+          case CANCEL_JOIN:
+            GameManager.removeFromQueue(connection.getPlayer());
+            break;
           case FETCH_LEADER_BOARD:
             sendLeaderBoard(connection, msg);
+            break;
+          case GET_SERVER_STATUS:
+
+            sendServerInfo(connection);
             break;
           default:
             break;
@@ -148,12 +158,19 @@ public class ClientManager {
   }
 
   private static void sendLeaderBoard(ServerClient client, Message msg) {
-    System.out.println("got leaderboard request from " + client.getPlayer().getUsername() + client.getPlayer().getID());
     try {
       client.sendMessage(Message.forLeaderBoardData(msg.getLeaderBoardViewType(),
           new ArrayList<>(Leaderboard.getLeaderBoard(msg.getLeaderBoardViewType()))));
     } catch (IOException e) {
 
+      e.printStackTrace();
+    }
+  }
+
+  private static void sendServerInfo(ServerClient client) {
+    try {
+      client.sendMessage(Message.forServerInfo(PlayerRegistry.loggedInCount(), GameManager.getActiveGameCount()));
+    } catch (IOException e) {
       e.printStackTrace();
     }
   }
@@ -170,7 +187,6 @@ public class ClientManager {
         Player p = loginInfo.getPlayer();
         client.setPlayer(p);
         client.sendMessage(Message.forServerLoginResponse(true, null, p));
-        GameManager.addToGameQueue(client);
       } else {
         client.sendMessage(Message.forServerLoginResponse(false, loginInfo.getReason(), null));
       }

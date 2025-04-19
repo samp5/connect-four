@@ -1,3 +1,6 @@
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+
 import network.ClientManager;
 import registry.PlayerRegistry;
 import registry.Leaderboard;
@@ -8,6 +11,13 @@ import registry.Leaderboard;
  */
 public class Main {
   public static void main(String[] args) {
+    try {
+      PrintStream logFile = new PrintStream("errs.log");
+      System.setErr(logFile);
+    } catch (FileNotFoundException fnf) {
+      fnf.printStackTrace();
+    }
+
     // clear the screen, print "title"
     System.out.println("\033[2J\033[H\033[1;35;40m~~Connect-4 Server~~\033[0m");
 

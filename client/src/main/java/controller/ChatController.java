@@ -42,7 +42,7 @@ import controller.utils.Markup;
  *
  * Bind to Chat.fxml
  */
-public class ChatController {
+public class ChatController extends Controller {
 
   @FXML
   Button sendButton;
@@ -181,7 +181,7 @@ public class ChatController {
   }
 
   public void rematchRequest() {
-    notificationManager.recieve("You opponent want a rematch",
+    notificationManager.recieve("You opponent wants a rematch",
         NotificationType.INFORMATION);
   }
 

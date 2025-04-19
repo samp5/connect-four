@@ -11,7 +11,7 @@ import utils.SceneManager;
  * Bind to Menu.fxml
  *
  */
-public class MenuController {
+public class MenuController extends Controller {
   @FXML
   Pane menuPane;
 

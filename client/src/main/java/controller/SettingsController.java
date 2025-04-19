@@ -26,7 +26,7 @@ import utils.AudioManager;
 import utils.CursorManager;
 import utils.SceneManager;
 
-public class SettingsController {
+public class SettingsController extends Controller {
   @FXML
   Slider volumeSlider;
   @FXML

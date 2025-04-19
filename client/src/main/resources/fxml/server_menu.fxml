@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<Pane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerMenuController">
+   <children>
+      <ImageView fitHeight="720.0" fitWidth="1080.0">
+         <image>
+            <Image url="@../assets/load-background.png" />
+         </image>
+      </ImageView>
+      <HBox alignment="CENTER" layoutX="7.0" layoutY="238.0" prefWidth="1080.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="205.0" spacing="50.0">
+               <children>
+                  <Button fx:id="joinButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="pixel-button" text="Join Game" />
+                  <Button fx:id="leaderBoardButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="pixel-button" text="Leaderboard" />
+                  <Button fx:id="settingsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="pixel-button" text="Settings" />
+                  <Button fx:id="disconnectButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="pixel-button" text="Disconnect" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="-6.0" layoutY="34.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="1080.0">
+         <children>
+            <Text fx:id="serverName" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-text" text="{server-name}" />
+         </children>
+      </HBox>
+      <TextFlow layoutX="373.0" layoutY="154.0" prefHeight="48.0" prefWidth="335.0" textAlignment="CENTER">
+         <children>
+            <Text fx:id="nPlayers" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text="{n}" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text=" players online, " />
+            <Text fx:id="nGames" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text=" {n}" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text=" active games" />
+         </children>
+      </TextFlow>
+      <TextFlow layoutX="373.0" layoutY="648.0" prefHeight="34.0" prefWidth="335.0" textAlignment="CENTER">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text="Connected to " />
+            <Text fx:id="ipText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text="{IP}" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text=" : " />
+            <Text fx:id="portTxt" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text="{PORT}" />
+         </children>
+      </TextFlow>
+   </children>
+   <stylesheets>
+      <URL value="@../css/chat.css" />
+      <URL value="@../css/menu.css" />
+   </stylesheets>
+</Pane>

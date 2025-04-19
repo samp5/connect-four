@@ -52,7 +52,7 @@ import javafx.util.Duration;
  * - Maybe handle game-end events
  *
  */
-public class GameController {
+public class GameController extends Controller {
 
   private Piece draggedPiece = null;
   private Piece dropHint = null;
@@ -189,7 +189,7 @@ public class GameController {
         NetworkClient.returnToLobby();
       }
       rematch.setVisible(false);
-      SceneManager.showScene("loading.fxml");
+      SceneManager.showScene("server_menu.fxml");
     });
 
   }

@@ -15,8 +15,10 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import network.NetworkClient;
+import utils.SceneManager;
 
-public class LoadingController {
+public class LoadingController extends Controller {
   @FXML
   Text loadingText;
 
@@ -25,33 +27,32 @@ public class LoadingController {
 
   @FXML
   Pane backgroundPane;
+
   @FXML
-  Button leaderBoardButton;
+  Button backButton;
 
   Timer timer;
   private int dotState = 0;
   private int loadState = 0;
 
   public void initialize() {
-    leaderBoardButton.setOnAction(e -> {
-      FXMLLoader loader = new FXMLLoader(ChatController.class.getResource("/fxml/leaderboard.fxml"));
-      try {
-        Pane pane = loader.load();
-        this.backgroundPane.getChildren().add(pane);
-      } catch (IOException ioE) {
-        ioE.printStackTrace();
-      }
+    setHandlers();
+    animateLoading();
+  }
 
+  public void setHandlers() {
+    backButton.setOnAction(e -> {
+      NetworkClient.cancelJoinGame();
+      SceneManager.showScene("server_menu.fxml");
     });
+  }
+
+  public void animateLoading() {
     loadingPane.setBackground(
         new Background(new BackgroundImage(new Image("/assets/load-0.png"), BackgroundRepeat.NO_REPEAT,
             BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
             new BackgroundSize(240, 60, false, false, false, false))));
 
-    backgroundPane.setBackground(
-        new Background(new BackgroundImage(new Image("/assets/load-background.png"), BackgroundRepeat.NO_REPEAT,
-            BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            new BackgroundSize(1080, 720, false, false, false, false))));
     timer = new Timer();
     timer.scheduleAtFixedRate(new TimerTask() {
       @Override

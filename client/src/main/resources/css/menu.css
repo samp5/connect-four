@@ -124,11 +124,17 @@
 .leader-board-entry{
   -fx-font-family: "Mota Pixel Regular";
   -fx-font-size:20px;
-  -fx-border-width: 1px;
-  -fx-border-color: black;
 }
 .leader-board-row{
-  -fx-border-width: 2px;
-  -fx-border-color: black;
   -fx-background-color: #c0a36e; 
+}
+
+.text-medium {
+  -fx-font-family: "Mota Pixel Regular";
+  -fx-font-size:20px;
+}
+.text-number {
+  -fx-font-family: "Mota Pixel Regular";
+  -fx-font-size: 20px;
+  -fx-fill: green;
 }

@@ -12,7 +12,7 @@ public class Message implements Serializable {
   public static enum Type {
     LOGIN, START, RECONNECT, DISCONNECT, CHAT, MOVE, COMPLETE, DRAW, DRAW_REQUEST, RESIGN, RESIGN_REQUEST,
     RESIGN_RESPONSE, RETURN_TO_LOBBY, OPPONENT_RETURN_TO_LOBBY, OPPONENT_DISCONNECT, REMATCH, REMATCH_REQUEST,
-    FETCH_LEADER_BOARD, LEADER_BOARD_DATA
+    FETCH_LEADER_BOARD, LEADER_BOARD_DATA, JOIN_GAME, CANCEL_JOIN, GET_SERVER_STATUS, SERVER_STATUS
   };
 
   public static enum WinType {
@@ -26,6 +26,8 @@ public class Message implements Serializable {
   private Type type;
   private String username, password;
   private Integer column;
+  private Integer numberPlayers;
+  private Integer numberActiveGames;
   private String from;
   private Long playerID;
   private Integer winner;
@@ -184,6 +186,14 @@ public class Message implements Serializable {
     return toSend;
   }
 
+  public static Message forServerInfo(int numberPlayer, int numberActiveGames) {
+    Message toSend = new Message();
+    toSend.type = Type.SERVER_STATUS;
+    toSend.numberActiveGames = numberActiveGames;
+    toSend.numberPlayers = numberPlayer;
+    return toSend;
+  }
+
   /**
    * getters
    */
@@ -249,5 +259,13 @@ public class Message implements Serializable {
 
   public LeaderBoardView getLeaderBoardViewType() {
     return viewType;
+  }
+
+  public Integer getNumPlayers() {
+    return numberPlayers;
+  }
+
+  public Integer getNumActiveGames() {
+    return numberActiveGames;
   }
 }

@@ -27,7 +27,7 @@ import utils.NotificationManager.NotificationType;
 import utils.CursorManager;
 import utils.NotificationManager;
 
-public class ConnectionsController {
+public class ConnectionsController extends Controller {
   @FXML
   Pane menuPane;
   @FXML
@@ -79,8 +79,7 @@ public class ConnectionsController {
   public void initialize() {
     NetworkClient.bindConnectionController(this);
 
-    notificationManager =
-        new NotificationManager(notificationPane, notificationText, notificationIcon);
+    notificationManager = new NotificationManager(notificationPane, notificationText, notificationIcon);
 
     // set backgrounds
     connectionListView.setBackground(
@@ -98,9 +97,8 @@ public class ConnectionsController {
     connectionListView
         .setItems(FXCollections.observableArrayList(RecentConnectionRegistry.getConnections()));
 
-    Button[] allButtons =
-        {addNewConnectionButton, addConnectionButton, addConnectionBackButton, connectButton,
-            backButton, loginButton, loginBackButton};
+    Button[] allButtons = { addNewConnectionButton, addConnectionButton, addConnectionBackButton, connectButton,
+        backButton, loginButton, loginBackButton };
 
     for (Button b : allButtons) {
       CursorManager.setHandCursor(b);
@@ -172,8 +170,7 @@ public class ConnectionsController {
   private void addConnection() {
     try {
       Integer port = Integer.valueOf(portInput.getText());
-      RecentConnection c =
-          new RecentConnection(ipInput.getText(), port, connectionNameInput.getText());
+      RecentConnection c = new RecentConnection(ipInput.getText(), port, connectionNameInput.getText());
       connectionListView.getItems().add(c);
       RecentConnectionRegistry.add(c);
       notificationManager.recieve("Added connection");

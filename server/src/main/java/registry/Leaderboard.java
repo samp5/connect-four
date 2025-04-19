@@ -1,6 +1,7 @@
 package registry;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -25,7 +26,6 @@ public class Leaderboard {
   private static Object lock = new Object();
 
   public static void updateElo(Long idA, Long idB, WinType outcomeA) {
-    System.out.println("updating ELO for " + idA + " and " + idB);
     synchronized (lock) {
       // get the current elo
       Double eloA = trackedElo.get(idA);
@@ -71,8 +71,8 @@ public class Leaderboard {
       trackedElo.put(idB, newEloB);
 
       // update the leaderboard
-      LeaderboardEntry currentA = leaderboard.stream().filter(o -> o.id == idA).findFirst().orElse(null);
-      LeaderboardEntry currentB = leaderboard.stream().filter(o -> o.id == idB).findFirst().orElse(null);
+      LeaderboardEntry currentA = leaderboard.stream().filter(o -> o.id.equals(idA)).findFirst().orElse(null);
+      LeaderboardEntry currentB = leaderboard.stream().filter(o -> o.id.equals(idB)).findFirst().orElse(null);
 
       if (currentA == null) {
         currentA = new LeaderboardEntry(idA, newEloA);
@@ -169,7 +169,7 @@ public class Leaderboard {
     } catch (IOException e) {
 
       e.printStackTrace();
-      System.out.println("Leaderboard had an exception on save. Leaderboard not saved.");
+      System.err.println("Leaderboard had an exception on save. Leaderboard not saved.");
 
     }
   }
@@ -194,11 +194,13 @@ public class Leaderboard {
 
       objectin.close();
     } catch (ClassNotFoundException e) {
-      System.out.println("Error loading leaderboard. class not found:");
+      System.err.println("Error loading leaderboard. class not found:");
       e.printStackTrace();
+    } catch (FileNotFoundException fnf) {
+      System.err.println("No leaderboard found, creating leaderboard.registry");
     } catch (Exception e) {
       e.printStackTrace();
-      System.out.println("Leaderboard had an exception on Load. Leaderboard not loaded.");
+      System.err.println("Leaderboard had an exception on Load. Leaderboard not loaded.");
     }
   }
 

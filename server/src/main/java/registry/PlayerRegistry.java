@@ -1,6 +1,7 @@
 package registry;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -146,7 +147,7 @@ public class PlayerRegistry {
       objectout.close();
     } catch (IOException e) {
       e.printStackTrace();
-      System.out.println("Player Registry had an exception on save. Registry not saved.");
+      System.err.println("Player Registry had an exception on save. Registry not saved.");
     }
   }
 
@@ -171,11 +172,13 @@ public class PlayerRegistry {
 
       objectin.close();
     } catch (ClassNotFoundException e) {
-      System.out.println("Error loading player registry. class not found:");
+      System.err.println("Error loading player registry. class not found:");
       e.printStackTrace();
+    } catch (FileNotFoundException fnf) {
+      System.err.println("No PlayerRegistry found, creating player.registry");
     } catch (Exception e) {
       e.printStackTrace();
-      System.out.println("Player Registry had an exception on Load. Registry not loaded.");
+      System.err.println("Player Registry had an exception on Load. Registry not loaded.");
     }
   }
 }

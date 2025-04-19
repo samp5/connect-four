@@ -11,6 +11,8 @@ import controller.ChatController;
 import controller.ConnectionsController;
 import controller.GameController;
 import controller.LeaderBoardController;
+import controller.ServerMenuController;
+import controller.utils.RecentConnectionRegistry;
 import javafx.application.Platform;
 import utils.SceneManager;
 import logic.GameLogic;
@@ -40,6 +42,7 @@ public class NetworkClient {
   private static GameController gameCTL;
   private static LeaderBoardController leaderBoardCTL;
   private static ChatController chatCTL;
+  private static ServerMenuController serverMenuCTL;
   private static ConnectionsController connectionCTL;
   private static Player player;
 
@@ -83,7 +86,9 @@ public class NetworkClient {
       case LOGIN:
         if (msg.isSuccess()) {
           player = msg.getPlayer();
-          SceneManager.showScene("loading.fxml");
+          SceneManager.showScene("server_menu.fxml");
+          ServerMenuController ctl = (ServerMenuController) SceneManager.getCurrentController();
+          ctl.setServerInfo(RecentConnectionRegistry.getMostRecentConnection().get());
         } else {
           connectionCTL.recieveNotification("Error logging in " + msg.getChatMessage());
         }
@@ -151,6 +156,9 @@ public class NetworkClient {
       case LEADER_BOARD_DATA:
         System.out.println("Got leaderboard data");
         leaderBoardCTL.fill(msg.getLeaderBoardData());
+        break;
+      case SERVER_STATUS:
+        serverMenuCTL.setPlayerInfo(msg.getNumPlayers(), msg.getNumActiveGames());
       default:
         break;
     }
@@ -257,6 +265,18 @@ public class NetworkClient {
     }
   }
 
+  public static void joinGame() {
+    sendMessage(Message.forSimpleInstruction(Type.JOIN_GAME));
+  }
+
+  public static void cancelJoinGame() {
+    sendMessage(Message.forSimpleInstruction(Type.CANCEL_JOIN));
+  }
+
+  public static void getServerInfo() {
+    sendMessage(Message.forSimpleInstruction(Type.GET_SERVER_STATUS));
+  }
+
   public static void replyResignRequest(boolean accepted) {
     switch (GameLogic.getGameMode()) {
       case LocalMultiplayer:
@@ -280,6 +300,9 @@ public class NetworkClient {
   }
 
   private static void sendMessage(Message m) {
+    if (socket == null) {
+      return;
+    }
     try {
       out = new ObjectOutputStream(socket.getOutputStream());
       out.writeObject(m);
@@ -308,6 +331,10 @@ public class NetworkClient {
 
   public static void bindChatController(ChatController cc) {
     chatCTL = cc;
+  }
+
+  public static void bindServerMenuController(ServerMenuController sc) {
+    serverMenuCTL = sc;
   }
 
   public static void disconnect() {

@@ -56,6 +56,9 @@ public class Game {
           handleMessages(player1);
           handleMessages(player2);
         }
+        // if the game is ending, always ensure that we don't try and reconnect these
+        // clients
+        GameManager.dcGames.remove(disconnectID);
       } catch (IOException e) {
       }
       GameManager.gameCount--;
@@ -102,7 +105,6 @@ public class Game {
               GameManager.dcGames.put(disconnectID, game);
             } else {
               PlayerRegistry.logoutPlayer(connection.getPlayer());
-              GameManager.dcGames.remove(disconnectID);
               active = false;
             }
             break;
@@ -120,11 +122,9 @@ public class Game {
               sendToOpponent(connection, Message.forOpponentReturnToLobby(opponent(connection).getPlayer()));
               disconnectID = connection.getPlayer().getID();
               ClientManager.addClientListener(connection);
-              GameManager.addToGameQueue(connection);
               return;
             } else {
               ClientManager.addClientListener(connection);
-              GameManager.addToGameQueue(connection);
               active = false;
             }
             break;
