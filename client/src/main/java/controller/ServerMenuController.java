@@ -126,9 +126,13 @@ public class ServerMenuController extends Controller {
     NetworkClient.bindServerMenuController(this);
     NetworkClient.getServerInfo();
 
+    setHandlers();
+
     initProfile();
-    scheduleDataFetch();
     requestFriendsList();
+    fillFriendsList();
+
+    scheduleDataFetch();
 
     notificationManager = new NotificationManager(notificationPane, notificationText, notificationIcon);
 
@@ -145,8 +149,7 @@ public class ServerMenuController extends Controller {
     } else {
       setPlayerInfo(playerInfo.online, playerInfo.activeGames);
     }
-    setHandlers();
-    fillFriendsList();
+
   }
 
   private void setHandlers() {
@@ -226,12 +229,12 @@ public class ServerMenuController extends Controller {
 
   public void recieveProfileData(UserProfile profile) {
     ServerMenuController.profile = profile;
-    profilePicSelector.getSelectionModel().select(profile.getProfilePicture());
     updateProfileDisplay();
   }
 
   private void updateProfileDisplay() {
 
+    profilePicSelector.getSelectionModel().select(profile.getProfilePicture());
     profileUserName.setText(profile.getUserName());
     profileGamesWon.setText(String.valueOf(profile.getGamesWon()));
     profileGamesLost.setText(String.valueOf(profile.getGamesLost()));
@@ -242,10 +245,6 @@ public class ServerMenuController extends Controller {
   }
 
   private void initProfile() {
-    // get profile data + populate profile
-    if (profile == null) {
-      NetworkClient.fetchProfile();
-    }
 
     // setup choice box
     profilePicSelector
@@ -267,6 +266,13 @@ public class ServerMenuController extends Controller {
       }
 
     });
+
+    // get profile data + populate profile
+    if (profile == null) {
+      NetworkClient.fetchProfile();
+    } else {
+      updateProfileDisplay();
+    }
   }
 
   private void fillFriendsList() {

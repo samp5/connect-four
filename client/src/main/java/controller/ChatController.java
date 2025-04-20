@@ -273,8 +273,8 @@ public class ChatController extends Controller {
   private void populateOpponentProfile(UserProfile profile) {
     oppElo.setText(String.valueOf((int) profile.getElo()));
     oppUsername.setText(profile.getUserName());
-    oppWinPercent
-        .setText(String.valueOf((int) ((float) profile.getGamesWon() / (float) profile.getGamesPlayed()) * 100) + "%");
+    oppWinPercent.setText(
+        String.format("%d", (int) ((float) profile.getGamesWon() / (float) profile.getGamesPlayed() * 100)) + "%");
   }
 
   private void sendMessage() {
