@@ -295,19 +295,19 @@ public class ServerMenuController extends Controller {
     }
   }
 
-  public void updateFriendOnlineStatus(String username) {
+  public void updateFriendOnlineView(String username, boolean isOnline) {
     if (friends != null) {
       friends.stream().filter(up -> up.getUserName().equals(username)).forEach(up -> {
-        up.setIsOnline(true);
+        up.setIsOnline(isOnline);
         FriendUtils.update(friendsList, up);
       });
     }
   }
 
-  public static void newFriendOnline(String username) {
+  public static void friendOnlineStatus(String username, boolean isOnline) {
     if (friends != null) {
       friends.stream().filter(up -> up.getUserName().equals(username)).forEach(up -> {
-        up.setIsOnline(true);
+        up.setIsOnline(isOnline);
       });
     }
 

@@ -102,10 +102,11 @@ public class ClientManager {
           case DISCONNECT:
             toStopListening.add(connection);
             PlayerRegistry.logoutPlayer(msg.getPlayer());
+            notifyFriends(connection, false);
             break;
           case LOGIN:
             if (attemptLogin(connection, msg)) {
-              notifyFriends(connection);
+              notifyFriends(connection, true);
             }
             break;
           case JOIN_GAME:
@@ -204,14 +205,14 @@ public class ClientManager {
     }
   }
 
-  private static void notifyFriends(ServerClient client) {
+  private static void notifyFriends(ServerClient client, boolean isOnline) {
     HashSet<Long> friendIDs = PlayerRegistry.getUsersFriendIDs(client.getPlayer().getID());
     for (Long id : friendIDs) {
       if (PlayerRegistry.playerIsOnline(id)) {
         try {
           clients.stream().filter(c -> c.getPlayer().getID().equals(id)).forEach(c -> {
             try {
-              c.sendMessage(Message.forFriendOnline(client.getPlayer().getUsername()));
+              c.sendMessage(Message.forFriendOnlineStatus(client.getPlayer().getUsername(), isOnline));
             } catch (IOException ioe) {
               ioe.printStackTrace();
             }

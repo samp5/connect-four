@@ -169,15 +169,14 @@ public class NetworkClient {
       case FRIEND_REQUEST_RESPONSE:
         chatCTL.recieveFriendRequestResponse(msg.isSuccess());
         break;
-      case FRIEND_ONLINE:
-        ServerMenuController.newFriendOnline(msg.getUsername());
+      case FRIEND_ONLINE_STATUS:
+        ServerMenuController.friendOnlineStatus(msg.getUsername(), msg.isSuccess());
         switch (SceneManager.getCurrentScene()) {
           case SERVER_MENU:
-            serverMenuCTL.recieveNotification(msg.getUsername() + " is online", NotificationType.INFORMATION);
-            serverMenuCTL.updateFriendOnlineStatus(msg.getUsername());
-            break;
+            serverMenuCTL.recieveNotification(msg.getUsername() + " is now " + (msg.isSuccess()? "online" : "offline"), NotificationType.INFORMATION);
+            serverMenuCTL.updateFriendOnlineView(msg.getUsername(), msg.isSuccess()); break;
           case GAME:
-            chatCTL.recieveNotification(msg.getUsername() + " is online", NotificationType.INFORMATION);
+            chatCTL.recieveNotification(msg.getUsername() + " is now " + (msg.isSuccess()? "online" : "offline"), NotificationType.INFORMATION);
             break;
           case LOADING:
             // TODO:

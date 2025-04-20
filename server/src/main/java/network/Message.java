@@ -15,7 +15,7 @@ public class Message implements Serializable {
     RESIGN_RESPONSE, RETURN_TO_LOBBY, OPPONENT_RETURN_TO_LOBBY, OPPONENT_DISCONNECT, REMATCH, REMATCH_REQUEST,
     FETCH_LEADER_BOARD, LEADER_BOARD_DATA, JOIN_GAME, CANCEL_JOIN, GET_SERVER_STATUS, SERVER_STATUS, FETCH_PROFILE,
     PROFILE_DATA, PROFILE_PIC_UPDATE, FRIEND_REQUEST, FRIEND_REQUEST_RESPONSE, FETCH_FRIENDS, FRIEND_LIST_DATA,
-    FRIEND_ONLINE;
+    FRIEND_ONLINE_STATUS;
   };
 
   public static enum WinType {
@@ -248,9 +248,10 @@ public class Message implements Serializable {
     return toSend;
   }
 
-  public static Message forFriendOnline(String friendUserName) {
+  public static Message forFriendOnlineStatus(String friendUserName, boolean isOnline) {
     Message toSend = new Message();
-    toSend.type = Type.FRIEND_ONLINE;
+    toSend.type = Type.FRIEND_ONLINE_STATUS;
+    toSend.success = isOnline;
     toSend.username = friendUserName;
     return toSend;
   }
