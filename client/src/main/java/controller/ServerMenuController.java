@@ -146,6 +146,7 @@ public class ServerMenuController extends Controller {
       setPlayerInfo(playerInfo.online, playerInfo.activeGames);
     }
     setHandlers();
+    fillFriendsList();
   }
 
   private void setHandlers() {
@@ -268,11 +269,22 @@ public class ServerMenuController extends Controller {
     });
   }
 
-  public void recieveFriendsList(ArrayList<UserProfile> friends) {
-    ServerMenuController.friends = friends;
+  private void fillFriendsList() {
+    if (friends == null) {
+      return;
+    }
+    System.out.println("filling friends list");
+
+    friendsList.getChildren().setAll();
     for (UserProfile p : friends) {
+      System.out.println("p is " + p.getUserName());
       friendsList.getChildren().add(FriendUtils.createComponent(p));
     }
+  }
+
+  public void recieveFriendsList(ArrayList<UserProfile> friends) {
+    ServerMenuController.friends = friends;
+    fillFriendsList();
   }
 
   public void recieveNotification(String msg, NotificationType type) {
@@ -286,11 +298,18 @@ public class ServerMenuController extends Controller {
   }
 
   public void updateFriendOnlineStatus(String username) {
-    notificationManager.recieve(username + " is online", NotificationType.INFORMATION);
     if (friends != null) {
       friends.stream().filter(up -> up.getUserName().equals(username)).forEach(up -> {
         up.setIsOnline(true);
         FriendUtils.update(friendsList, up);
+      });
+    }
+  }
+
+  public static void newFriendOnline(String username) {
+    if (friends != null) {
+      friends.stream().filter(up -> up.getUserName().equals(username)).forEach(up -> {
+        up.setIsOnline(true);
       });
     }
 

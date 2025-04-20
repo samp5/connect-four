@@ -103,7 +103,7 @@ public class NetworkClient {
         gameCTL.recieveMove(msg.getColumn());
         break;
       case START:
-        SceneManager.showScene(SceneSelections.MAIN_MENU);
+        SceneManager.showScene(SceneSelections.GAME);
         GameLogic.initialize(msg.getPlayer(), msg.getPlayer2(), msg.getRole());
         gameCTL.showPlayerRoles();
         chatCTL.fetchOpponentProfiles();
@@ -173,9 +173,12 @@ public class NetworkClient {
       case FRIEND_ONLINE:
         switch (SceneManager.getCurrentScene()) {
           case SERVER_MENU:
+            serverMenuCTL.recieveNotification(msg.getUsername() + " is online", NotificationType.INFORMATION);
             serverMenuCTL.updateFriendOnlineStatus(msg.getUsername());
             break;
           case GAME:
+            System.out.println(" game is getting a notifification");
+            ServerMenuController.newFriendOnline(msg.getUsername());
             chatCTL.recieveNotification(msg.getUsername() + " is online", NotificationType.INFORMATION);
             break;
           case LOADING:
