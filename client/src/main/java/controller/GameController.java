@@ -289,13 +289,13 @@ public class GameController extends Controller {
    *
    */
   public void animateClouds() {
-    Path cloudPath = new Path(new MoveTo(0, 0), new LineTo(720, 0));
-    PathTransition cloudAnimation = new PathTransition(Duration.seconds(65), cloudPath, clouds);
+    Path cloudPath = new Path(new MoveTo(0, 0), new LineTo(1440, 0));
+    PathTransition cloudAnimation = new PathTransition(Duration.seconds(120), cloudPath, clouds);
     cloudAnimation.play();
 
     cloudAnimation.onFinishedProperty().set(e -> {
-      Path fullPath = new Path(new MoveTo(-720, 0), new HLineTo(720));
-      PathTransition fullAnimation = new PathTransition(Duration.seconds(130), fullPath, clouds);
+      Path fullPath = new Path(new MoveTo(-720, 0), new HLineTo(1440));
+      PathTransition fullAnimation = new PathTransition(Duration.seconds(240), fullPath, clouds);
       fullAnimation.setCycleCount(PathTransition.INDEFINITE);
       fullAnimation.play();
     });
