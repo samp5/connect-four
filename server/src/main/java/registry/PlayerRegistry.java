@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
@@ -73,6 +74,37 @@ public class PlayerRegistry {
       } else {
         return Optional.of(player);
       }
+    }
+  }
+
+  public static ArrayList<UserProfile> getUsersFriendList(Long id) {
+    synchronized (registeredPlayers) {
+      ArrayList<UserProfile> friends = new ArrayList<>();
+      Optional<UserProfile> playerOpt = getUserProfileByID(id);
+      if (playerOpt.isEmpty()) {
+        return friends;
+      }
+      UserProfile player = playerOpt.get();
+      for (Long friendID : player.getFriends()) {
+        getUserProfileByID(friendID).ifPresent(friend -> {
+          friends.add(friend);
+        });
+      }
+
+      return friends;
+    }
+
+  }
+
+  public static HashSet<Long> getUsersFriendIDs(Long id) {
+    synchronized (registeredPlayers) {
+      return getRegistryPlayerByID(id).map(rp -> rp.getFriendIDs()).orElse(new HashSet<Long>());
+    }
+  }
+
+  public static boolean playerIsOnline(Long id) {
+    synchronized (activePlayers) {
+      return activePlayers.contains(id);
     }
   }
 

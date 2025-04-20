@@ -57,7 +57,7 @@ class RegistryPlayer implements Serializable {
   public UserProfile asUserProfile() {
 
     return new UserProfile(id, this.username, friends, this.stats.gamesWon, this.stats.gamesTied, this.stats.gamesLost,
-        this.stats.gamesPlayed, Leaderboard.getElo(id), this.profilePicture);
+        this.stats.gamesPlayed, Leaderboard.getElo(id), this.profilePicture, PlayerRegistry.playerIsOnline(this.id));
   }
 
   public int getGamesWon() {

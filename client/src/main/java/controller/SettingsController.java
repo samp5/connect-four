@@ -25,6 +25,7 @@ import network.NetworkClient;
 import utils.AudioManager;
 import utils.CursorManager;
 import utils.SceneManager;
+import utils.SceneManager.SceneSelections;
 
 public class SettingsController extends Controller {
   @FXML
@@ -190,7 +191,7 @@ public class SettingsController extends Controller {
       if (GameLogic.getGameMode() == GameMode.Multiplayer) {
         NetworkClient.disconnect();
       }
-      SceneManager.showScene("menu.fxml");
+      SceneManager.showScene(SceneSelections.MAIN_MENU);
     });
 
     customCursorToggle.setOnAction(e -> {

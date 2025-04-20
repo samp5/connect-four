@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import logic.GameLogic.GameMode;
 import utils.SceneManager;
+import utils.SceneManager.SceneSelections;
 
 /**
  * Bind to Menu.fxml
@@ -27,15 +28,15 @@ public class MenuController extends Controller {
   public void initialize() {
     playOnlineButton.setOnAction(e -> {
       GameController.setGameMode(GameMode.Multiplayer);
-      SceneManager.showScene("connections.fxml");
+      SceneManager.showScene(SceneSelections.CONNECTIONS_MENU);
     });
     playLocalButton.setOnAction(e -> {
       GameController.setGameMode(GameMode.LocalMultiplayer);
-      SceneManager.showScene("local_multiplayer.fxml");
+      SceneManager.showScene(SceneSelections.LOCAL_MULTIPLAYER);
     });
     playAIButton.setOnAction(e -> {
       GameController.setGameMode(GameMode.LocalAI);
-      SceneManager.showScene("main.fxml");
+      SceneManager.showScene(SceneSelections.MAIN_MENU);
     });
     settingsButton.setOnAction(e -> {
       GameSettings.loadOnto(menuPane);

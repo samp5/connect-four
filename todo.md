@@ -10,6 +10,7 @@
 - [x] Option to disable custom cursors
 - [x] Button size fix
 - [x] Notification Manager
+- [ ] Check friend online behavior (client on game screen)
 
 ## Features
 - [x] Add AI with levels of difficulty

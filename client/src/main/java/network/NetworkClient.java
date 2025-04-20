@@ -15,12 +15,14 @@ import controller.ServerMenuController;
 import controller.utils.RecentConnectionRegistry;
 import javafx.application.Platform;
 import utils.SceneManager;
+import utils.SceneManager.SceneSelections;
 import logic.GameLogic;
 import logic.GameLogic.GameMode;
 import network.Message.LeaderBoardView;
 import network.Message.Type;
 import network.Message.WinType;
 import network.UserProfile.ProfilePicture;
+import utils.NotificationManager.NotificationType;
 
 /**
  * Connect to server
@@ -87,7 +89,7 @@ public class NetworkClient {
       case LOGIN:
         if (msg.isSuccess()) {
           player = msg.getPlayer();
-          SceneManager.showScene("server_menu.fxml");
+          SceneManager.showScene(SceneSelections.SERVER_MENU);
           ServerMenuController ctl = (ServerMenuController) SceneManager.getCurrentController();
           ctl.setServerInfo(RecentConnectionRegistry.getMostRecentConnection().get());
         } else {
@@ -101,7 +103,7 @@ public class NetworkClient {
         gameCTL.recieveMove(msg.getColumn());
         break;
       case START:
-        SceneManager.showScene("main.fxml");
+        SceneManager.showScene(SceneSelections.MAIN_MENU);
         GameLogic.initialize(msg.getPlayer(), msg.getPlayer2(), msg.getRole());
         gameCTL.showPlayerRoles();
         chatCTL.fetchOpponentProfiles();
@@ -168,6 +170,21 @@ public class NetworkClient {
       case FRIEND_REQUEST_RESPONSE:
         chatCTL.recieveFriendRequestResponse(msg.isSuccess());
         break;
+      case FRIEND_ONLINE:
+        switch (SceneManager.getCurrentScene()) {
+          case SERVER_MENU:
+            serverMenuCTL.updateFriendOnlineStatus(msg.getUsername());
+            break;
+          case GAME:
+            chatCTL.recieveNotification(msg.getUsername() + " is online", NotificationType.INFORMATION);
+            break;
+          case LOADING:
+            // TODO:
+            break;
+          default:
+            break;
+        }
+        break;
       case PROFILE_DATA:
         /*
          * These might need to be split into different message types if we need to do
@@ -180,6 +197,9 @@ public class NetworkClient {
           // requesting the opponent for the main game view
           chatCTL.recieveOpponentProfile(msg.getProfile());
         }
+        break;
+      case FRIEND_LIST_DATA:
+        serverMenuCTL.recieveFriendsList(msg.getFriendsList());
         break;
       default:
         break;
@@ -213,6 +233,10 @@ public class NetworkClient {
   // get the leader board with the specified view
   public static void fetchLeaderBoard(LeaderBoardView view) {
     sendMessage(Message.forFetchLeaderboard(view));
+  }
+
+  public static void fetchFriends() {
+    sendMessage(Message.forSimpleInstruction(Type.FETCH_FRIENDS));
   }
 
   // get the profile for this player

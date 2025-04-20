@@ -10,19 +10,47 @@ import javafx.stage.Stage;
 public class SceneManager {
   private static Stage stage;
   private static Controller ctl;
+  private static SceneSelections currentScene = SceneSelections.MAIN_MENU;
+
+  public static enum SceneSelections {
+    GAME,
+    LOCAL_MULTIPLAYER,
+    MAIN_MENU,
+    CONNECTIONS_MENU,
+    LOADING,
+    SERVER_MENU;
+
+    public String toFileName() {
+      switch (this) {
+        case CONNECTIONS_MENU:
+          return "connections.fxml";
+        case GAME:
+          return "main.fxml";
+        case LOCAL_MULTIPLAYER:
+          return "local_multiplayer.fxml";
+        case LOADING:
+          return "loading.fxml";
+        case MAIN_MENU:
+          return "menu.fxml";
+        case SERVER_MENU:
+          return "server_menu.fxml";
+        default:
+          return "menu.fxml";
+      }
+    }
+
+  }
 
   public static void initialize(Stage primaryStage) {
     stage = primaryStage;
   }
 
-  /**
-   * @param fxmlFile A valid filename from resouces/fxml/
-   */
-  public static void showScene(String fxmlFile) {
+  public static void showScene(SceneSelections selection) {
     try {
-      FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/fxml/" + fxmlFile));
+      FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/fxml/" + selection.toFileName()));
       Scene scene = new Scene(loader.load(), 1080, 720);
       ctl = loader.getController();
+      currentScene = selection;
       CursorManager.setPointerCursor(scene);
       scene.getStylesheets().add("/css/chat.css");
       scene.getStylesheets().add("/css/game.css");
@@ -35,6 +63,10 @@ public class SceneManager {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public static SceneSelections getCurrentScene() {
+    return currentScene;
   }
 
   public static Controller getCurrentController() {

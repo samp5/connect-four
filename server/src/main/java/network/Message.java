@@ -14,7 +14,8 @@ public class Message implements Serializable {
     LOGIN, START, RECONNECT, DISCONNECT, CHAT, MOVE, COMPLETE, DRAW, DRAW_REQUEST, RESIGN, RESIGN_REQUEST,
     RESIGN_RESPONSE, RETURN_TO_LOBBY, OPPONENT_RETURN_TO_LOBBY, OPPONENT_DISCONNECT, REMATCH, REMATCH_REQUEST,
     FETCH_LEADER_BOARD, LEADER_BOARD_DATA, JOIN_GAME, CANCEL_JOIN, GET_SERVER_STATUS, SERVER_STATUS, FETCH_PROFILE,
-    PROFILE_DATA, PROFILE_PIC_UPDATE, FRIEND_REQUEST, FRIEND_REQUEST_RESPONSE;
+    PROFILE_DATA, PROFILE_PIC_UPDATE, FRIEND_REQUEST, FRIEND_REQUEST_RESPONSE, FETCH_FRIENDS, FRIEND_LIST_DATA,
+    FRIEND_ONLINE;
   };
 
   public static enum WinType {
@@ -42,10 +43,10 @@ public class Message implements Serializable {
   private WinType winType;
   private LeaderBoardView viewType;
   private ArrayList<LeaderBoardData> leaderBoardData;
+  private ArrayList<UserProfile> friendList;
   private UserProfile profile;
   private ProfilePicture profilePicture;
   private Long befrienderID;
-
   private Long befriendedID;
 
   private Message() {
@@ -240,6 +241,20 @@ public class Message implements Serializable {
     return toSend;
   }
 
+  public static Message forFriendListData(ArrayList<UserProfile> friendList) {
+    Message toSend = new Message();
+    toSend.type = Type.FRIEND_LIST_DATA;
+    toSend.friendList = friendList;
+    return toSend;
+  }
+
+  public static Message forFriendOnline(String friendUserName) {
+    Message toSend = new Message();
+    toSend.type = Type.FRIEND_ONLINE;
+    toSend.username = friendUserName;
+    return toSend;
+  }
+
   /**
    * getters
    */
@@ -329,5 +344,9 @@ public class Message implements Serializable {
 
   public Long getBefriendedID() {
     return befriendedID;
+  }
+
+  public ArrayList<UserProfile> getFriendsList() {
+    return friendList;
   }
 }

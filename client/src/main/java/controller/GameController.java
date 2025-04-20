@@ -39,6 +39,7 @@ import utils.AudioManager;
 import utils.AudioManager.SoundEffect;
 import utils.CursorManager;
 import utils.SceneManager;
+import utils.SceneManager.SceneSelections;
 import utils.ToolTipHelper;
 import javafx.util.Duration;
 
@@ -181,7 +182,7 @@ public class GameController extends Controller {
       if (GameLogic.getGameMode() == GameMode.Multiplayer) {
         NetworkClient.disconnect();
       }
-      SceneManager.showScene("menu.fxml");
+      SceneManager.showScene(SceneSelections.MAIN_MENU);
     });
 
     rematchToLobby.setOnAction(e -> {
@@ -189,7 +190,7 @@ public class GameController extends Controller {
         NetworkClient.returnToLobby();
       }
       rematch.setVisible(false);
-      SceneManager.showScene("server_menu.fxml");
+      SceneManager.showScene(SceneSelections.SERVER_MENU);
     });
 
   }

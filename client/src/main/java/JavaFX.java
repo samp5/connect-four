@@ -3,6 +3,7 @@ import javafx.stage.Stage;
 import network.NetworkClient;
 import utils.AudioManager;
 import utils.SceneManager;
+import utils.SceneManager.SceneSelections;
 import controller.SettingsController;
 
 /**
@@ -31,7 +32,7 @@ public class JavaFX extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
     SceneManager.initialize(primaryStage);
-    SceneManager.showScene("menu.fxml");
+    SceneManager.showScene(SceneSelections.MAIN_MENU);
     AudioManager.playContinuous("main_theme.mp3");
 
     // load settings

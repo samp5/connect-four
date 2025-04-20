@@ -1,11 +1,13 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import network.UserProfile;
 import network.UserProfile.ProfilePicture;
 import utils.ToolTipHelper;
-
+import utils.SceneManager.SceneSelections;
+import controller.utils.FriendUtils;
 import controller.utils.GameSettings;
 import controller.utils.RecentConnection;
 import javafx.collections.FXCollections;
@@ -17,11 +19,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.StringConverter;
 import network.NetworkClient;
 import utils.NotificationManager;
+import utils.NotificationManager.NotificationType;
 import utils.SceneManager;
 
 /**
@@ -40,7 +44,7 @@ public class ServerMenuController extends Controller {
   @FXML
   Button settingsButton;
   @FXML
-  Button leaderBoardButton;
+  BorderPane leaderBoardButton;
 
   // NOTIFICATIONS
   @FXML
@@ -53,8 +57,6 @@ public class ServerMenuController extends Controller {
 
   // PLAYER PROFILE
   // icon
-  @FXML
-  Text userNameText;
   @FXML
   BorderPane profileButton;
   // profile popup
@@ -79,6 +81,17 @@ public class ServerMenuController extends Controller {
   @FXML
   ChoiceBox<ProfilePicture> profilePicSelector;
   private static UserProfile profile = null;
+
+  // FRIENDS PANE
+  @FXML
+  Pane friendsPane;
+  @FXML
+  BorderPane friendsButton;
+  @FXML
+  Button friendsBackButton;
+  @FXML
+  VBox friendsList;
+  private static ArrayList<UserProfile> friends;
 
   // SERVER INFO
   @FXML
@@ -115,6 +128,8 @@ public class ServerMenuController extends Controller {
 
     initProfile();
     scheduleDataFetch();
+    requestFriendsList();
+
     notificationManager = new NotificationManager(notificationPane, notificationText, notificationIcon);
 
     if (connection == null) {
@@ -137,25 +152,39 @@ public class ServerMenuController extends Controller {
 
     joinButton.setOnAction(e -> {
       NetworkClient.joinGame();
-      SceneManager.showScene("loading.fxml");
+      SceneManager.showScene(SceneSelections.LOADING);
     });
     settingsButton.setOnAction(e -> {
       GameSettings.loadOnto(menuPane);
     });
-    leaderBoardButton.setOnAction(e -> {
+    leaderBoardButton.setOnMouseClicked(e -> {
       LeaderBoardController.loadOnto(menuPane);
     });
     disconnectButton.setOnAction(e -> {
       NetworkClient.disconnect();
-      SceneManager.showScene("menu.fxml");
+      SceneManager.showScene(SceneSelections.MAIN_MENU);
     });
     profileBackButton.setOnAction(e -> {
       profilePane.setVisible(false);
     });
     profileButton.setOnMouseClicked(e -> {
+      profilePane.toFront();
       profilePane.setVisible(true);
     });
+
+    friendsBackButton.setOnAction(e -> {
+      friendsPane.setVisible(false);
+    });
+
+    friendsButton.setOnMouseClicked(e -> {
+      friendsPane.toFront();
+      friendsPane.setVisible(true);
+    });
+
+    Tooltip.install(leaderBoardButton, ToolTipHelper.make("View leaderboard"));
+    Tooltip.install(friendsButton, ToolTipHelper.make("View friends"));
     Tooltip.install(profileButton, ToolTipHelper.make("Open Profile"));
+
     profilePicSelector.setOnAction(e -> {
       ProfilePicture newProfilePic = profilePicSelector.getSelectionModel().getSelectedItem();
       if (newProfilePic != null) {
@@ -197,7 +226,6 @@ public class ServerMenuController extends Controller {
   public void recieveProfileData(UserProfile profile) {
     ServerMenuController.profile = profile;
     profilePicSelector.getSelectionModel().select(profile.getProfilePicture());
-    userNameText.setText(profile.getUserName());
     updateProfileDisplay();
   }
 
@@ -214,7 +242,9 @@ public class ServerMenuController extends Controller {
 
   private void initProfile() {
     // get profile data + populate profile
-    NetworkClient.fetchProfile();
+    if (profile == null) {
+      NetworkClient.fetchProfile();
+    }
 
     // setup choice box
     profilePicSelector
@@ -236,5 +266,33 @@ public class ServerMenuController extends Controller {
       }
 
     });
+  }
+
+  public void recieveFriendsList(ArrayList<UserProfile> friends) {
+    ServerMenuController.friends = friends;
+    for (UserProfile p : friends) {
+      friendsList.getChildren().add(FriendUtils.createComponent(p));
+    }
+  }
+
+  public void recieveNotification(String msg, NotificationType type) {
+    notificationManager.recieve(msg, type);
+  }
+
+  private void requestFriendsList() {
+    if (friends == null) {
+      NetworkClient.fetchFriends();
+    }
+  }
+
+  public void updateFriendOnlineStatus(String username) {
+    notificationManager.recieve(username + " is online", NotificationType.INFORMATION);
+    if (friends != null) {
+      friends.stream().filter(up -> up.getUserName().equals(username)).forEach(up -> {
+        up.setIsOnline(true);
+        FriendUtils.update(friendsList, up);
+      });
+    }
+
   }
 }

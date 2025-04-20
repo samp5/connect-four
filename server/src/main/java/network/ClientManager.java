@@ -104,7 +104,9 @@ public class ClientManager {
             PlayerRegistry.logoutPlayer(msg.getPlayer());
             break;
           case LOGIN:
-            attemptLogin(connection, msg);
+            if (attemptLogin(connection, msg)) {
+              notifyFriends(connection);
+            }
             break;
           case JOIN_GAME:
             GameManager.addToGameQueue(connection);
@@ -123,6 +125,9 @@ public class ClientManager {
             break;
           case PROFILE_PIC_UPDATE:
             PlayerRegistry.updateProfilePicture(msg.getPlayerID(), msg.getProfilePicture());
+            break;
+          case FETCH_FRIENDS:
+            sendFriends(connection);
             break;
           default:
             break;
@@ -173,6 +178,14 @@ public class ClientManager {
     }
   }
 
+  private static void sendFriends(ServerClient client) {
+    try {
+      ArrayList<UserProfile> friends = PlayerRegistry.getUsersFriendList(client.getPlayer().getID());
+      client.sendMessage(Message.forFriendListData(friends));
+    } catch (IOException e) {
+    }
+  }
+
   private static void sendServerInfo(ServerClient client) {
     try {
       client.sendMessage(Message.forServerInfo(PlayerRegistry.loggedInCount(), GameManager.getActiveGameCount()));
@@ -191,10 +204,30 @@ public class ClientManager {
     }
   }
 
+  private static void notifyFriends(ServerClient client) {
+    HashSet<Long> friendIDs = PlayerRegistry.getUsersFriendIDs(client.getPlayer().getID());
+    for (Long id : friendIDs) {
+      if (PlayerRegistry.playerIsOnline(id)) {
+        try {
+          clients.stream().filter(c -> c.getPlayer().getID().equals(id)).forEach(c -> {
+            try {
+              c.sendMessage(Message.forFriendOnline(client.getPlayer().getUsername()));
+            } catch (IOException ioe) {
+              ioe.printStackTrace();
+            }
+          });
+        } catch (Exception e) {
+          e.printStackTrace();
+          return;
+        }
+      }
+    }
+  }
+
   /**
    * Communicate with the player registry to handle logging in
    */
-  private static void attemptLogin(ServerClient client, Message msg) {
+  private static boolean attemptLogin(ServerClient client, Message msg) {
     // get the player associated with the username/password
     PlayerRegistrationInfo loginInfo = PlayerRegistry.getRegisteredPlayer(msg.getUsername(), msg.getPassword());
 
@@ -203,6 +236,7 @@ public class ClientManager {
         Player p = loginInfo.getPlayer();
         client.setPlayer(p);
         client.sendMessage(Message.forServerLoginResponse(true, null, p));
+        return true;
       } else {
         client.sendMessage(Message.forServerLoginResponse(false, loginInfo.getReason(), null));
       }
@@ -210,6 +244,7 @@ public class ClientManager {
       // if an IOException occurs, the client is disconnected
       clients.remove(client);
     }
+    return false;
   }
 
   /**

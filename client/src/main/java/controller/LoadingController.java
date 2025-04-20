@@ -17,6 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import network.NetworkClient;
 import utils.SceneManager;
+import utils.SceneManager.SceneSelections;
 
 public class LoadingController extends Controller {
   @FXML
@@ -43,7 +44,7 @@ public class LoadingController extends Controller {
   public void setHandlers() {
     backButton.setOnAction(e -> {
       NetworkClient.cancelJoinGame();
-      SceneManager.showScene("server_menu.fxml");
+      SceneManager.showScene(SceneSelections.SERVER_MENU);
     });
   }
 

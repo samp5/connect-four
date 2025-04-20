@@ -317,4 +317,8 @@ public class ChatController extends Controller {
     }
   }
 
+  public void recieveNotification(String msg, NotificationType type) {
+    notificationManager.recieve(msg, type);
+  }
+
 }

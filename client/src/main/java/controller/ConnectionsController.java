@@ -23,6 +23,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import network.NetworkClient;
 import utils.SceneManager;
+import utils.SceneManager.SceneSelections;
 import utils.NotificationManager.NotificationType;
 import utils.CursorManager;
 import utils.NotificationManager;
@@ -133,7 +134,7 @@ public class ConnectionsController extends Controller {
 
     backButton.setOnAction(e -> {
       RecentConnectionRegistry.save();
-      SceneManager.showScene("menu.fxml");
+      SceneManager.showScene(SceneSelections.MAIN_MENU);
     });
 
     // enter and escape press handlers
@@ -163,7 +164,7 @@ public class ConnectionsController extends Controller {
     // -- connection screen
     menuPane.addEventHandler(KeyEvent.KEY_RELEASED, e -> {
       if (e.getCode() == KeyCode.ESCAPE)
-        SceneManager.showScene("menu.fxml");
+        SceneManager.showScene(SceneSelections.MAIN_MENU);
     });
   }
 
