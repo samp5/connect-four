@@ -224,7 +224,7 @@
             <Button fx:id="profileBackButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" styleClass="back-button" text="x" />
          </children>
       </Pane>
-      <Pane fx:id="friendsPane" layoutX="340.0" layoutY="150.0" prefHeight="500.0" prefWidth="400.0">
+      <Pane fx:id="friendsPane" layoutX="340.0" layoutY="150.0" prefHeight="500.0" prefWidth="400.0" visible="false">
          <children>
             <ImageView fitHeight="500.0" fitWidth="400.0">
                <image>
