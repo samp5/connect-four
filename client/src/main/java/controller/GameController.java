@@ -623,7 +623,6 @@ public class GameController extends Controller {
           break;
       }
     } else if (GameLogic.getGameMode() == GameMode.LocalAI) {
-      System.out.println("displaying red");
       displayLargeText("/assets/red_player.png", Duration.millis(2000), Optional.empty());
     }
   }

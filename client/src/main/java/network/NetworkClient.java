@@ -158,7 +158,6 @@ public class NetworkClient {
         gameCTL.recieveRematchRequest();
         break;
       case LEADER_BOARD_DATA:
-        System.out.println("Got leaderboard data");
         leaderBoardCTL.fill(msg.getLeaderBoardData());
         break;
       case SERVER_STATUS:
@@ -171,14 +170,13 @@ public class NetworkClient {
         chatCTL.recieveFriendRequestResponse(msg.isSuccess());
         break;
       case FRIEND_ONLINE:
+        ServerMenuController.newFriendOnline(msg.getUsername());
         switch (SceneManager.getCurrentScene()) {
           case SERVER_MENU:
             serverMenuCTL.recieveNotification(msg.getUsername() + " is online", NotificationType.INFORMATION);
             serverMenuCTL.updateFriendOnlineStatus(msg.getUsername());
             break;
           case GAME:
-            System.out.println(" game is getting a notifification");
-            ServerMenuController.newFriendOnline(msg.getUsername());
             chatCTL.recieveNotification(msg.getUsername() + " is online", NotificationType.INFORMATION);
             break;
           case LOADING:

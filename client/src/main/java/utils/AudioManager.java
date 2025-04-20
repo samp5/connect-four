@@ -69,7 +69,6 @@ public class AudioManager {
   public static void play(String file) {
     try {
       String filepath = AudioManager.class.getResource("/assets/sounds/" + file).toURI().toString();
-      System.out.println(filepath);
       Media m = new Media(filepath);
       MediaPlayer player = new MediaPlayer(m);
       player.play();

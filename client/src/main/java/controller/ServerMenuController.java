@@ -273,11 +273,9 @@ public class ServerMenuController extends Controller {
     if (friends == null) {
       return;
     }
-    System.out.println("filling friends list");
 
     friendsList.getChildren().setAll();
     for (UserProfile p : friends) {
-      System.out.println("p is " + p.getUserName());
       friendsList.getChildren().add(FriendUtils.createComponent(p));
     }
   }

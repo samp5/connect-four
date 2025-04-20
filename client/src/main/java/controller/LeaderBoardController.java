@@ -41,7 +41,6 @@ public class LeaderBoardController extends Controller {
   public void fill(Collection<LeaderBoardData> c) {
     this.leaderBoardList.getChildren().setAll();
     for (LeaderBoardData entry : c) {
-      System.out.println("got entry for user:" + entry.getUsername());
       try {
         FXMLLoader loader = new FXMLLoader(ChatController.class.getResource("/fxml/leaderboard_entry.fxml"));
         HBox row = loader.load();
