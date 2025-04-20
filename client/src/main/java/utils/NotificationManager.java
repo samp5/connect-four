@@ -4,6 +4,7 @@ import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -45,7 +46,68 @@ public class NotificationManager {
     this.notificationIcon = notifImage;
   }
 
-  // TODO: update these numbers to be based on the notifPane minWidth
+  private void recieveWithPrompt(Text text, Image icon, EventHandler<ActionEvent> onConfirm,
+      EventHandler<ActionEvent> onDeny) {
+    // queue notifications
+    if (notificationOut) {
+      EventHandler<ActionEvent> current = reverse.getOnFinished();
+      reverse.setOnFinished(e -> {
+        current.handle(null);
+        recieve(text, icon);
+      });
+      return;
+    }
+
+    double shownX = 120;
+    double hiddenX = 600;
+    double y = 40;
+
+    notificationOut = true;
+    notificationText.getChildren().setAll(text);
+    notificationIcon.setImage(icon);
+
+    Path extendPath = new Path(new MoveTo(hiddenX, y), new HLineTo(shownX));
+    PathTransition animation = new PathTransition(Duration.seconds(.5), extendPath, notificationPane);
+    animation.play();
+    Button confirm = new Button("Yes!");
+    Button deny = new Button("No");
+    notificationPane.getChildren().addAll(confirm, deny);
+    notificationPane.setVisible(true);
+    confirm.setLayoutX(36);
+    confirm.setLayoutY(50);
+    deny.setLayoutX(128);
+    deny.setLayoutY(50);
+
+    confirm.getStyleClass().add("pixel-button");
+    confirm.setMaxSize(80, 40);
+    confirm.setMinSize(80, 40);
+    confirm.setPrefSize(80, 40);
+
+    deny.getStyleClass().add("pixel-button");
+    deny.setMaxSize(60, 40);
+    deny.setMinSize(60, 40);
+    deny.setPrefSize(60, 40);
+
+    Path hidePath = new Path(new MoveTo(shownX, y), new HLineTo(hiddenX));
+    reverse = new PathTransition(Duration.seconds(.5), hidePath, notificationPane);
+
+    confirm.setOnAction(e -> {
+      onConfirm.handle(e);
+      reverse.play();
+    });
+    deny.setOnAction(e -> {
+      onDeny.handle(e);
+      reverse.play();
+    });
+
+    reverse.setOnFinished(e -> {
+      notificationPane.getChildren().removeAll(confirm, deny);
+      notificationPane.setVisible(false);
+      notificationOut = false;
+    });
+
+  }
+
   private void recieve(Text text, Image icon) {
 
     // queue notifications
@@ -58,23 +120,21 @@ public class NotificationManager {
       return;
     }
 
-
     double shownX = 120;
     double hiddenX = 600;
     double y = 40;
 
+    notificationOut = true;
     notificationText.getChildren().setAll(text);
     notificationIcon.setImage(icon);
 
     Path extendPath = new Path(new MoveTo(hiddenX, y), new HLineTo(shownX));
-    PathTransition animation =
-        new PathTransition(Duration.seconds(.5), extendPath, notificationPane);
+    PathTransition animation = new PathTransition(Duration.seconds(.5), extendPath, notificationPane);
     animation.play();
     notificationPane.setVisible(true);
     notificationOut = true;
 
-    Path hidePath =
-        new Path(new MoveTo(shownX, y), new HLineTo(hiddenX));
+    Path hidePath = new Path(new MoveTo(shownX, y), new HLineTo(hiddenX));
     reverse = new PathTransition(Duration.seconds(.5), hidePath, notificationPane);
 
     PauseTransition delay = new PauseTransition(Duration.seconds(3));
@@ -104,5 +164,13 @@ public class NotificationManager {
     Text t = new Text(text);
     t.getStyleClass().add("text");
     recieve(t, i);
+  }
+
+  public void recievePrompt(String text, NotificationType type, EventHandler<ActionEvent> onConfirm,
+      EventHandler<ActionEvent> onDeny) {
+    Image i = type.getIcon();
+    Text t = new Text(text);
+    t.getStyleClass().add("text");
+    recieveWithPrompt(t, i, onConfirm, onDeny);
   }
 }

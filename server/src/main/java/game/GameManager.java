@@ -42,6 +42,13 @@ public class GameManager {
     waiting = null;
   }
 
+  public static void acceptInvitation(ServerClient con1, ServerClient con2) {
+    ClientManager.removeClientListener(con1);
+    ClientManager.removeClientListener(con2);
+    new Game(con1, con2);
+    ++gameCount;
+  }
+
   /**
    * Remove a player from queue if they are in it.
    * If they arent in queue, nothing happens.

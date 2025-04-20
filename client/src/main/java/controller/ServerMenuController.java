@@ -3,6 +3,8 @@ package controller;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.Collectors;
+
 import network.UserProfile;
 import network.UserProfile.ProfilePicture;
 import utils.ToolTipHelper;
@@ -11,6 +13,8 @@ import controller.utils.FriendUtils;
 import controller.utils.GameSettings;
 import controller.utils.RecentConnection;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -24,6 +28,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.StringConverter;
 import network.NetworkClient;
+import network.PlayerData;
 import utils.NotificationManager;
 import utils.NotificationManager.NotificationType;
 import utils.SceneManager;
@@ -80,7 +85,6 @@ public class ServerMenuController extends Controller {
   Button profileBackButton;
   @FXML
   ChoiceBox<ProfilePicture> profilePicSelector;
-  private static UserProfile profile = null;
 
   // FRIENDS PANE
   @FXML
@@ -91,7 +95,6 @@ public class ServerMenuController extends Controller {
   Button friendsBackButton;
   @FXML
   VBox friendsList;
-  private static ArrayList<UserProfile> friends;
 
   // SERVER INFO
   @FXML
@@ -109,7 +112,6 @@ public class ServerMenuController extends Controller {
   private static RecentConnection connection;
   private static ServerPlayerInfo playerInfo;
   private Timer timer;
-  private boolean profileVisible;
 
   private static class ServerPlayerInfo {
     int online;
@@ -127,11 +129,13 @@ public class ServerMenuController extends Controller {
     NetworkClient.getServerInfo();
 
     setHandlers();
+    setSelectorBehavior();
 
-    initProfile();
-    requestFriendsList();
-    fillFriendsList();
+    // get friends list and profile
+    populateProfileDisplay();
+    populateFriendsList();
 
+    // this data fetch is for the number of players online
     scheduleDataFetch();
 
     notificationManager = new NotificationManager(notificationPane, notificationText, notificationIcon);
@@ -194,8 +198,7 @@ public class ServerMenuController extends Controller {
       if (newProfilePic != null) {
         profilePicture.setImage(new Image(newProfilePic.getAssetFileName()));
         ((ImageView) profileButton.getCenter()).setImage(new Image(newProfilePic.getAssetFileName()));
-        profile.setProfilePicture(newProfilePic);
-        NetworkClient.updateProfilePicture(newProfilePic);
+        PlayerData.updateProfilePicture(newProfilePic);
       }
     });
   }
@@ -227,24 +230,20 @@ public class ServerMenuController extends Controller {
     }, 5000, 5000);
   }
 
-  public void recieveProfileData(UserProfile profile) {
-    ServerMenuController.profile = profile;
-    updateProfileDisplay();
+  private void populateProfileDisplay() {
+    PlayerData.getProfile(() -> populateProfileDisplay()).ifPresent(profile -> {
+      profilePicSelector.getSelectionModel().select(profile.getProfilePicture());
+      profileUserName.setText(profile.getUserName());
+      profileGamesWon.setText(String.valueOf(profile.getGamesWon()));
+      profileGamesLost.setText(String.valueOf(profile.getGamesLost()));
+      profileGamesTied.setText(String.valueOf(profile.getGamesTied()));
+      profileWinPercent.setText(
+          String.format("%d", (int) ((float) profile.getGamesWon() / (float) profile.getGamesPlayed() * 100)) + "%");
+      profileELO.setText(String.valueOf((int) profile.getElo()));
+    });
   }
 
-  private void updateProfileDisplay() {
-
-    profilePicSelector.getSelectionModel().select(profile.getProfilePicture());
-    profileUserName.setText(profile.getUserName());
-    profileGamesWon.setText(String.valueOf(profile.getGamesWon()));
-    profileGamesLost.setText(String.valueOf(profile.getGamesLost()));
-    profileGamesTied.setText(String.valueOf(profile.getGamesTied()));
-    profileWinPercent.setText(
-        String.format("%d", (int) ((float) profile.getGamesWon() / (float) profile.getGamesPlayed() * 100)) + "%");
-    profileELO.setText(String.valueOf((int) profile.getElo()));
-  }
-
-  private void initProfile() {
+  private void setSelectorBehavior() {
 
     // setup choice box
     profilePicSelector
@@ -266,56 +265,29 @@ public class ServerMenuController extends Controller {
       }
 
     });
-
-    // get profile data + populate profile
-    if (profile == null) {
-      NetworkClient.fetchProfile();
-    } else {
-      updateProfileDisplay();
-    }
   }
 
-  private void fillFriendsList() {
-    if (friends == null) {
-      return;
-    }
-
-    friendsList.getChildren().setAll();
-    for (UserProfile p : friends) {
-      friendsList.getChildren().add(FriendUtils.createComponent(p));
-    }
-  }
-
-  public void recieveFriendsList(ArrayList<UserProfile> friends) {
-    ServerMenuController.friends = friends;
-    fillFriendsList();
+  private void populateFriendsList() {
+    PlayerData.getFriends(() -> populateFriendsList()).ifPresent(frds -> {
+      friendsList.getChildren()
+          .setAll(frds.stream().map(up -> FriendUtils.createComponent(up)).collect(Collectors.toList()));
+    });
   }
 
   public void recieveNotification(String msg, NotificationType type) {
     notificationManager.recieve(msg, type);
   }
 
-  private void requestFriendsList() {
-    if (friends == null) {
-      NetworkClient.fetchFriends();
-    }
+  public void recievePrompt(String msg, NotificationType type, EventHandler<ActionEvent> onAccept,
+      EventHandler<ActionEvent> onDeny) {
+    notificationManager.recievePrompt(msg, type, onAccept, onDeny);
   }
 
   public void updateFriendOnlineView(String username, boolean isOnline) {
-    if (friends != null) {
-      friends.stream().filter(up -> up.getUserName().equals(username)).forEach(up -> {
-        up.setIsOnline(isOnline);
+    PlayerData.getFriends(() -> updateFriendOnlineView(username, isOnline)).ifPresent(frds -> {
+      frds.stream().filter(up -> up.getUserName().equals(username)).forEach(up -> {
         FriendUtils.update(friendsList, up);
       });
-    }
-  }
-
-  public static void friendOnlineStatus(String username, boolean isOnline) {
-    if (friends != null) {
-      friends.stream().filter(up -> up.getUserName().equals(username)).forEach(up -> {
-        up.setIsOnline(isOnline);
-      });
-    }
-
+    });
   }
 }

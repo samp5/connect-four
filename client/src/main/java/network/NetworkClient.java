@@ -167,16 +167,22 @@ public class NetworkClient {
         chatCTL.recieveFriendRequest();
         break;
       case FRIEND_REQUEST_RESPONSE:
+        if (msg.isSuccess()) {
+          PlayerData.friendsUpdated();
+        }
         chatCTL.recieveFriendRequestResponse(msg.isSuccess());
         break;
       case FRIEND_ONLINE_STATUS:
-        ServerMenuController.friendOnlineStatus(msg.getUsername(), msg.isSuccess());
+        PlayerData.friendOnlineStatus(msg.getUsername(), msg.isSuccess());
         switch (SceneManager.getCurrentScene()) {
           case SERVER_MENU:
-            serverMenuCTL.recieveNotification(msg.getUsername() + " is now " + (msg.isSuccess()? "online" : "offline"), NotificationType.INFORMATION);
-            serverMenuCTL.updateFriendOnlineView(msg.getUsername(), msg.isSuccess()); break;
+            serverMenuCTL.recieveNotification(msg.getUsername() + " is now " + (msg.isSuccess() ? "online" : "offline"),
+                NotificationType.INFORMATION);
+            serverMenuCTL.updateFriendOnlineView(msg.getUsername(), msg.isSuccess());
+            break;
           case GAME:
-            chatCTL.recieveNotification(msg.getUsername() + " is now " + (msg.isSuccess()? "online" : "offline"), NotificationType.INFORMATION);
+            chatCTL.recieveNotification(msg.getUsername() + " is now " + (msg.isSuccess() ? "online" : "offline"),
+                NotificationType.INFORMATION);
             break;
           case LOADING:
             // TODO:
@@ -185,21 +191,30 @@ public class NetworkClient {
             break;
         }
         break;
+      case GAME_INVITATION:
+        if (SceneManager.getCurrentScene() == SceneSelections.SERVER_MENU) {
+          serverMenuCTL.recievePrompt(msg.getUsername() + " is inviting you to a game", NotificationType.INFORMATION,
+              (e -> NetworkClient
+                  .sendMessage(Message.forGameInvitationResponse(true, msg.getInvitor(), msg.getInvited()))),
+              (e -> NetworkClient
+                  .sendMessage(Message.forGameInvitationResponse(false, msg.getInvitor(), msg.getInvited()))));
+        }
+        break;
+      // TODO: Handle other scenes
       case PROFILE_DATA:
         /*
          * These might need to be split into different message types if we need to do
          * anything more than these two things
          */
         if (msg.getProfile().getId().equals(player.getID())) {
-          // requesting our own for the server menu
-          serverMenuCTL.recieveProfileData(msg.getProfile());
+          PlayerData.recieveProfile(msg.getProfile());
         } else {
           // requesting the opponent for the main game view
           chatCTL.recieveOpponentProfile(msg.getProfile());
         }
         break;
       case FRIEND_LIST_DATA:
-        serverMenuCTL.recieveFriendsList(msg.getFriendsList());
+        PlayerData.recieveFriends(msg.getFriendsList());
         break;
       default:
         break;
@@ -299,6 +314,10 @@ public class NetworkClient {
 
   public static void replyFriendRequest(boolean accepted) {
     sendMessage(Message.forFriendRequestReply(GameLogic.getRemotePlayer().getID(), player.getID(), accepted));
+
+    if (accepted) {
+      PlayerData.friendsUpdated();
+    }
   }
 
   public static void replyDrawRequest(boolean accepted) {
@@ -407,7 +426,12 @@ public class NetworkClient {
     serverMenuCTL = sc;
   }
 
+  public static void inviteToGame(Long id) {
+    sendMessage(Message.forGameInvitation(player.getUsername(), player.getID(), id));
+  }
+
   public static void disconnect() {
+    PlayerData.reset();
     try {
       out = new ObjectOutputStream(socket.getOutputStream());
       out.writeObject(Message.forServerDisconnect(player));

@@ -9,26 +9,70 @@ import javafx.scene.image.Image;
 
 import java.util.stream.Collectors;
 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import network.NetworkClient;
 import network.UserProfile;
 
 // Generate entries for a userprofile meant for a users friend list
 public class FriendUtils {
 
   public static HBox createComponent(UserProfile profile) {
+
+    Button inviteToGame = new Button("Invite");
+    inviteToGame.setMaxSize(100, 40);
+    inviteToGame.setPrefSize(100, 40);
+    inviteToGame.setMinSize(100, 40);
+    inviteToGame.getStyleClass().add("pixel-button");
+
+    Button chatWithFriend = new Button("Chat");
+    chatWithFriend.setMaxSize(75, 40);
+    chatWithFriend.setPrefSize(75, 40);
+    chatWithFriend.setMinSize(75, 40);
+    chatWithFriend.getStyleClass().add("pixel-button");
+
+    chatWithFriend.setOnAction(e -> {
+      System.out.println("wouldn't that be a cool feature");
+    });
+
+    inviteToGame.setOnAction(e -> {
+      inviteToGame.setDisable(true);
+      inviteToGame.setText("Invited");
+      NetworkClient.inviteToGame(profile.getId());
+    });
+
+    HBox friendActions = new HBox(chatWithFriend, inviteToGame);
+    friendActions.setAlignment(Pos.CENTER_RIGHT);
+    friendActions.setMinWidth(200);
+    friendActions.setMaxWidth(200);
+    friendActions.setSpacing(20);
+    friendActions.setMaxHeight(40);
+
+    Text userNameText = new Text(profile.getUserName() + "  ");
+    userNameText.getStyleClass().add("text-medium-large");
+
     Image indicatorImage;
     if (profile.isOnline()) {
       indicatorImage = new Image("/assets/online.png", 10, 10, false, false);
     } else {
       indicatorImage = new Image("/assets/offline.png", 10, 10, false, false);
+      inviteToGame.setDisable(true);
+      chatWithFriend.setDisable(true);
     }
+
     ImageView onlineIndicator = new ImageView(indicatorImage);
-
-    Text userNameText = new Text(profile.getUserName() + "  ");
-    userNameText.getStyleClass().add("text");
     TextFlow userName = new TextFlow(userNameText, onlineIndicator);
+    userName.setMaxHeight(24);
+    userName.setMinWidth(130);
+    userName.setMaxWidth(130);
 
-    HBox box = new HBox(userName);
+    HBox box = new HBox(userName, friendActions);
+    box.setPrefSize(330, 50);
+    box.setMaxSize(330, 50);
+    box.setMinSize(330, 50);
+    box.setAlignment(Pos.CENTER);
+
     return box;
   }
 

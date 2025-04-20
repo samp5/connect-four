@@ -47,6 +47,13 @@
   -fx-background-color: #337EFF;
 }
 
+.pixel-button-small {
+}
+
+.pixel-button-small:hover {
+  -fx-background-color: #337EFF;
+}
+
 .back-button {
   -fx-border-color: #363646;
   -fx-border-width: 0px;
@@ -133,6 +140,10 @@
 .text-medium {
   -fx-font-family: "Mota Pixel Regular";
   -fx-font-size:20px;
+}
+.text-medium-large {
+  -fx-font-family: "Mota Pixel Regular";
+  -fx-font-size:24px;
 }
 
 .text-bold-medium {

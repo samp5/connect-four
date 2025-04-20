@@ -15,9 +15,9 @@
 ## Features
 - [x] Add AI with levels of difficulty
 - [x] Leaderboard
-- [ ] Friends
+- [x] Friends
 - [x] Turn indicator
-- [ ] Profile pictures
+- [x] Profile pictures
 
 - [ ] Message pane to choose message box from friends
 - [ ] Text emoji drawer

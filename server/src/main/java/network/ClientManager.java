@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 
 import game.GameManager;
@@ -127,6 +128,18 @@ public class ClientManager {
           case PROFILE_PIC_UPDATE:
             PlayerRegistry.updateProfilePicture(msg.getPlayerID(), msg.getProfilePicture());
             break;
+          case GAME_INVITATION:
+            // forward the invitation to the target player
+            sendToByID(msg.getInvited(), msg);
+            break;
+          case GAME_INVITATION_RESPONSE:
+            // send the target player the response
+            sendToByID(msg.getInvitor(), msg);
+            // if we need to start a game, do it
+            if (msg.isSuccess()) {
+              getClientByID(msg.getInvitor()).ifPresent(con2 -> GameManager.acceptInvitation(connection, con2));
+            }
+            break;
           case FETCH_FRIENDS:
             sendFriends(connection);
             break;
@@ -205,23 +218,57 @@ public class ClientManager {
     }
   }
 
+  private static void sendToByID(Long targetPlayer, Message msg) {
+    getClientByID(targetPlayer).ifPresent(target -> {
+      try {
+        target.sendMessage(msg);
+      } catch (IOException ioe) {
+        ioe.printStackTrace();
+      }
+    });
+  }
+
+  private static void sendTo(ServerClient client, Message msg) {
+    try {
+      client.sendMessage(msg);
+    } catch (IOException ioe) {
+      ioe.printStackTrace();
+    }
+  }
+
   private static void notifyFriends(ServerClient client, boolean isOnline) {
-    HashSet<Long> friendIDs = PlayerRegistry.getUsersFriendIDs(client.getPlayer().getID());
-    for (Long id : friendIDs) {
-      if (PlayerRegistry.playerIsOnline(id)) {
-        try {
-          clients.stream().filter(c -> c.getPlayer().getID().equals(id)).forEach(c -> {
-            try {
-              c.sendMessage(Message.forFriendOnlineStatus(client.getPlayer().getUsername(), isOnline));
-            } catch (IOException ioe) {
-              ioe.printStackTrace();
-            }
-          });
-        } catch (Exception e) {
-          e.printStackTrace();
-          return;
+    synchronized (clients) {
+      HashSet<Long> friendIDs = PlayerRegistry.getUsersFriendIDs(client.getPlayer().getID());
+      for (Long id : friendIDs) {
+        if (PlayerRegistry.playerIsOnline(id)) {
+          try {
+            clients.stream().filter(c -> c.getPlayer().getID().equals(id)).forEach(c -> {
+              try {
+                c.sendMessage(Message.forFriendOnlineStatus(client.getPlayer().getUsername(), isOnline));
+              } catch (IOException ioe) {
+                ioe.printStackTrace();
+              }
+            });
+          } catch (Exception e) {
+            e.printStackTrace();
+            return;
+          }
         }
       }
+    }
+  }
+
+  /**
+   * Get the client associated with this ID if it exists.
+   *
+   * It may not exist for one of the following reasons:
+   * 1. The client already disconnected.
+   * 2. The client is in a game
+   * 3. The id never corresponded to any client
+   */
+  public static Optional<ServerClient> getClientByID(Long id) {
+    synchronized (clients) {
+      return clients.stream().filter(c -> c.getPlayer().getID().equals(id)).findFirst();
     }
   }
 
