@@ -95,6 +95,7 @@ public class FriendChatController extends Controller {
 
   public void initialize() {
     setHandlers();
+    oppProfileButton.setVisible(true);
 
     // auto scroll the chat history based on the height of the vbox
     chatHistoryScroll.vvalueProperty().bind(chatHistory.heightProperty());
@@ -157,6 +158,7 @@ public class FriendChatController extends Controller {
   private void populateFriendProfile() {
     PlayerData.getFriends(() -> populateFriendProfile()).ifPresent(friends -> {
       friends.stream().filter(up -> up.getId().equals(friendID)).forEach(profile -> {
+        ((ImageView) oppProfileButton.getCenter()).setImage(new Image(profile.getProfilePicture().getAssetFileName()));
         oppElo.setText(String.valueOf((int) profile.getElo()));
         oppUsername.setText(profile.getUserName());
         oppWinPercent.setText(

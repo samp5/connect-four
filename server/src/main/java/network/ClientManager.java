@@ -25,6 +25,7 @@ public class ClientManager {
   private static final int PORT = 8000;
   private static Selector selector;
   private static HashSet<ServerClient> clients = new HashSet<>();
+  private static HashSet<ServerClient> clientsInGame = new HashSet<>();
   private static HashSet<ServerClient> toStopListening = new HashSet<>();
 
   /**
@@ -34,6 +35,9 @@ public class ClientManager {
     synchronized (clients) {
       clients.remove(connection);
     }
+    synchronized (clientsInGame) {
+      clientsInGame.add(connection);
+    }
   }
 
   /**
@@ -42,6 +46,9 @@ public class ClientManager {
   public static void addClientListener(ServerClient connection) {
     synchronized (clients) {
       clients.add(connection);
+    }
+    synchronized (clientsInGame) {
+      clientsInGame.remove(connection);
     }
   }
 
@@ -221,7 +228,7 @@ public class ClientManager {
     }
   }
 
-  private static void sendToByID(Long targetPlayer, Message msg) {
+  public static void sendToByID(Long targetPlayer, Message msg) {
     getClientByID(targetPlayer).ifPresent(target -> {
       try {
         target.sendMessage(msg);
@@ -270,8 +277,16 @@ public class ClientManager {
    * 3. The id never corresponded to any client
    */
   public static Optional<ServerClient> getClientByID(Long id) {
+    Optional<ServerClient> sc;
     synchronized (clients) {
-      return clients.stream().filter(c -> c.getPlayer().getID().equals(id)).findFirst();
+      sc = clients.stream().filter(c -> c.getPlayer().getID().equals(id)).findFirst();
+    }
+    if (sc.isPresent()) {
+      return sc;
+    } else {
+      synchronized (clientsInGame) {
+        return clientsInGame.stream().filter(c -> c.getPlayer().getID().equals(id)).findFirst();
+      }
     }
   }
 

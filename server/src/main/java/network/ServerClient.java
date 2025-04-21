@@ -22,8 +22,10 @@ public class ServerClient {
    * Send a message to the connection
    */
   public void sendMessage(Message message) throws IOException {
-    ObjectOutputStream out = new ObjectOutputStream(connection.socket().getOutputStream());
-    out.writeObject(message);
+    synchronized (this) {
+      ObjectOutputStream out = new ObjectOutputStream(connection.socket().getOutputStream());
+      out.writeObject(message);
+    }
   }
 
   /**
@@ -31,27 +33,29 @@ public class ServerClient {
    * Non-Blocking.
    */
   public ArrayList<Message> getMessages() {
-    ArrayList<Message> messages = new ArrayList<>();
-    try {
-      // see if data is available
-      InputStream inputStream = this.connection.socket().getInputStream();
-      int sz = inputStream.available();
+    synchronized (this) {
+      ArrayList<Message> messages = new ArrayList<>();
+      try {
+        // see if data is available
+        InputStream inputStream = this.connection.socket().getInputStream();
+        int sz = inputStream.available();
 
-      // if there is, convert to a message
-      if (sz > 0) {
-        ObjectInputStream in = new ObjectInputStream(inputStream);
-        Message message = (Message) in.readObject();
-        messages.add(message);
+        // if there is, convert to a message
+        if (sz > 0) {
+          ObjectInputStream in = new ObjectInputStream(inputStream);
+          Message message = (Message) in.readObject();
+          messages.add(message);
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+        System.err.println("error on getting stream");
+      } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+        System.err.println("error parsing message");
       }
-    } catch (IOException e) {
-      e.printStackTrace();
-      System.err.println("error on getting stream");
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-      System.err.println("error parsing message");
-    }
 
-    return messages;
+      return messages;
+    }
   }
 
   public void setPlayer(Player player) {

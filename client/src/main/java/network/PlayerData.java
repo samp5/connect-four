@@ -84,6 +84,7 @@ public class PlayerData {
   public static void updateProfilePicture(ProfilePicture newPic) {
     synchronized (profileLock) {
       profile.profilePicture = newPic;
+      profileDirty = true;
     }
     NetworkClient.updateProfilePicture(newPic);
   }

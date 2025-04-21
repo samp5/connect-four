@@ -116,8 +116,7 @@ public class Game {
           case LOGIN:
             break;
           case FRIEND_CHAT:
-            // TODO: Waiting on the ability to communicate between clients managed by
-            // different threads
+            ClientManager.sendToByID(msg.getPlayerID(), msg);
             break;
           case FRIEND_REQUEST_RESPONSE:
             // we also want to redirect this
