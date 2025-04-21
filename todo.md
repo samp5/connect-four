@@ -55,12 +55,15 @@
 - [x] Add buttons for forfeit, offer draw, request forfeit
     - [x] with confirmation buttons
 - [x] Style all control elements with pixel art (ART)
+- [ ] When playing AI, chat should show AI icon as user img
+- [ ] Chat should display player name next to icon
 
 ### Menu Screen
 - [x] Style all control elements with pixel art (ART)
 - [x] Design background (ART) 
 - [x] Make settings controller + UI
     - [x] AI difficulty in settings
+- [ ] Full quit button
 
 ### Connections
 - [x] Create FXML scene + Controller
