@@ -4,6 +4,8 @@ import controller.utils.Point;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import controller.utils.BoardPosition;
 import controller.utils.CoordSystem;
@@ -11,9 +13,11 @@ import controller.utils.CoordUtils;
 import controller.utils.GameSettings;
 import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -79,10 +83,17 @@ public class GameController extends Controller {
   private BorderPane settingsButton;
   @FXML
   private ImageView clouds;
+
+  @FXML
+  private ImageView gameBG;
+  private int grassState = 0;
+
   @FXML
   private ImageView redTurnIndicator;
   @FXML
   private ImageView blueTurnIndicator;
+  private int indicatorState = 0;
+
 
   @FXML
   private Pane drawRequest;
@@ -115,6 +126,9 @@ public class GameController extends Controller {
 
     CursorManager.setHandCursor(chipPane1, chipPane2);
     animateClouds();
+
+    animateGrass();
+    animateTurnIndicators();
 
     NetworkClient.bindGameController(this);
     settingsButton.setBackground(SettingsController.getButtonBackground(40));
@@ -387,6 +401,37 @@ public class GameController extends Controller {
       draggedPiece = null;
       canMove = true;
     });
+  }
+
+  private void animateGrass() {
+    Timer timer = new Timer();
+    timer.scheduleAtFixedRate(new TimerTask() {
+      @Override
+      public void run() {
+        grassState = (grassState + 1) % 2;
+        try {
+          Platform.runLater(() -> {
+            gameBG.setViewport(new Rectangle2D((1536 * grassState), 0, 1536, 1536));
+          });
+        } catch (Exception e) {}
+      }
+    }, 0, 1000);
+  }
+
+  private void animateTurnIndicators() {
+    Timer timer = new Timer();
+    timer.scheduleAtFixedRate(new TimerTask() {
+      @Override
+      public void run() {
+        indicatorState = (indicatorState + 1) % 17;
+        try {
+          Platform.runLater(() -> {
+            redTurnIndicator.setViewport(new Rectangle2D(0, (200 * indicatorState), 200, 200));
+            blueTurnIndicator.setViewport(new Rectangle2D(0, (200 * indicatorState), 200, 200));
+          });
+        } catch (Exception e) {}
+      }
+    }, 0, 66);
   }
 
   /************************************************************************

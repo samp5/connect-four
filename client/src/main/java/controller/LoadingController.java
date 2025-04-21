@@ -3,6 +3,7 @@ package controller;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
@@ -41,7 +42,9 @@ public class LoadingController extends Controller {
       @Override
       public void run() {
         loadState = (loadState + 1) % 5;
-        loading.setViewport(new Rectangle2D(0, (HEIGHT * loadState), WIDTH, HEIGHT));
+        Platform.runLater(() -> {
+          loading.setViewport(new Rectangle2D(0, (HEIGHT * loadState), WIDTH, HEIGHT));
+        });
       }
     }, 1000, 1000);
   }

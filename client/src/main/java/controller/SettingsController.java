@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -86,6 +87,10 @@ public class SettingsController extends Controller {
       AudioManager.setSoundEffectVolume(currentSettings.sfxVolume);
       AI.setDifficulty(currentSettings.aiDifficulty);
       CursorManager.setEnabled(currentSettings.cursorsEnabled);
+
+    } catch (FileNotFoundException e) {
+
+      currentSettings = new Settings();
 
     } catch (Exception e) {
 
@@ -205,5 +210,12 @@ public class SettingsController extends Controller {
     Double sfxVolume;
     Integer aiDifficulty;
     Boolean cursorsEnabled;
+
+    Settings() {
+      this.musicVolume = 0.4;
+      this.sfxVolume = 0.4;
+      this.aiDifficulty = 5;
+      this.cursorsEnabled = false;
+    }
   }
 }

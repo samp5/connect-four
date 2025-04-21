@@ -6,9 +6,12 @@
 - [x] Restore moves only does remote player color
 - [x] Player can play for the AI if theyre fast enough
 - [x] Resign on empty board softlocks (at least) local multi
+- [x] Button size fix
+- [ ] disconnect no longer shows notif
+
+## QOL / Cleanup
 - [x] Send AI message every 2nd or third message, not based on rand
 - [x] Option to disable custom cursors
-- [x] Button size fix
 - [x] Notification Manager
 - [ ] Check friend online behavior (client on game screen)
 
