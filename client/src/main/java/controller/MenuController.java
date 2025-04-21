@@ -36,7 +36,7 @@ public class MenuController extends Controller {
     });
     playAIButton.setOnAction(e -> {
       GameController.setGameMode(GameMode.LocalAI);
-      SceneManager.showScene(SceneSelections.MAIN_MENU);
+      SceneManager.showScene(SceneSelections.GAME);
     });
     settingsButton.setOnAction(e -> {
       GameSettings.loadOnto(menuPane);
