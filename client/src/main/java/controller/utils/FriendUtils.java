@@ -5,18 +5,69 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import network.NetworkClient;
 import network.UserProfile;
+import utils.CursorManager;
+import utils.SceneManager;
+import controller.FriendChatController;
+import network.Player;
 
 // Generate entries for a userprofile meant for a users friend list
 public class FriendUtils {
+
+  private static HashMap<Long, FriendChatController> openChats = new HashMap<>();
+
+  public static void receiveChat(Player sender, String chat) {
+    FriendChatController ctl = openChats.get(sender.getID());
+    if (ctl == null) {
+      openChat(sender.getID());
+      ctl = openChats.get(sender.getID());
+    }
+    ctl.recieveMessage(chat, sender.getUsername(), false);
+  }
+
+  public static void openChat(Long ID) {
+    if (openChats.get(ID) != null) {
+      return;
+    }
+    try {
+      FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/fxml/friend_chat.fxml"));
+      Scene scene = new Scene(loader.load(), 360, 720);
+      FriendChatController ctl = loader.getController();
+      openChats.put(ID, ctl);
+      ctl.setFriendID(ID);
+      CursorManager.setPointerCursor(scene);
+      scene.getStylesheets().add("/css/chat.css");
+      scene.getStylesheets().add("/css/game.css");
+      scene.getStylesheets().add("/css/menu.css");
+      Stage chatStage = new Stage();
+      chatStage.setScene(scene);
+      chatStage.setResizable(false);
+      chatStage.show();
+      chatStage.setOnCloseRequest(e -> {
+        openChats.remove(ID);
+      });
+    } catch (IOException ioe) {
+      ioe.printStackTrace();
+    }
+  }
+
+  public static void closeChat(Long ID) {
+    openChats.remove(ID);
+  }
 
   public static HBox createComponent(UserProfile profile) {
 
@@ -33,7 +84,7 @@ public class FriendUtils {
     chatWithFriend.getStyleClass().add("pixel-button");
 
     chatWithFriend.setOnAction(e -> {
-      System.out.println("wouldn't that be a cool feature");
+      openChat(profile.getId());
     });
 
     inviteToGame.setOnAction(e -> {

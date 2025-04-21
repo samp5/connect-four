@@ -14,7 +14,8 @@
 - [x] Option to disable custom cursors
 - [x] Notification Manager
 - [ ] Check friend online behavior (client on game screen)
-    - We probably need to change the server structure for this. If client 1 is in the lobby (managed by ClientManager) and the other client is in game (Managed by Game) there is no currently (safe) way clients to be written to or read from by different threads
+    - [ ] Generally handle sending messages between clients managed by a game and those managed by the lobby (Client manager)
+        - We probably need to change the server structure for this. If client 1 is in the lobby (managed by ClientManager) and the other client is in game (Managed by Game) there is no currently (safe) way clients to be written to or read from by different threads
 
 ## Features
 - [x] Add AI with levels of difficulty

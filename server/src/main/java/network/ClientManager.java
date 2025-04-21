@@ -143,6 +143,9 @@ public class ClientManager {
           case FETCH_FRIENDS:
             sendFriends(connection);
             break;
+          case FRIEND_CHAT:
+            sendToByID(msg.getPlayerID(), msg);
+            break;
           default:
             break;
         }

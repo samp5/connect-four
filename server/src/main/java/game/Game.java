@@ -115,6 +115,14 @@ public class Game {
             break;
           case LOGIN:
             break;
+          case FRIEND_CHAT:
+            // TODO: Waiting on the ability to communicate between clients managed by
+            // different threads
+            break;
+          case FRIEND_REQUEST_RESPONSE:
+            // we also want to redirect this
+            PlayerRegistry.addFriends(msg.getBefrienderID(), msg.getBefriendedID());
+            // NO BREAK
           case FETCH_LEADER_BOARD:
           case CHAT:
           case MOVE:
@@ -127,10 +135,6 @@ public class Game {
           case REMATCH_REQUEST:
           case FRIEND_REQUEST:
           case REMATCH:
-          case FRIEND_REQUEST_RESPONSE:
-            // we also want to redirect this
-            PlayerRegistry.addFriends(msg.getBefrienderID(), msg.getBefriendedID());
-            // NO BREAK
           default: // redirect by default
             // only redirect if both players are connected
             if (disconnectID == null) {
@@ -152,7 +156,7 @@ public class Game {
       }
       ServerClient opponent = opponent(connection);
 
-      // if the opponent is already disconnected
+      // if the opponent is already disconnected do nothing
       if (opponent.getPlayer().getID() == disconnectID) {
         return;
       }

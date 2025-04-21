@@ -13,6 +13,7 @@ import controller.GameController;
 import controller.LeaderBoardController;
 import controller.ServerMenuController;
 import controller.utils.RecentConnectionRegistry;
+import controller.utils.FriendUtils;
 import javafx.application.Platform;
 import utils.SceneManager;
 import utils.SceneManager.SceneSelections;
@@ -191,6 +192,9 @@ public class NetworkClient {
             break;
         }
         break;
+      case FRIEND_CHAT:
+        FriendUtils.receiveChat(msg.getSender(), msg.getChatMessage());
+        break;
       case GAME_INVITATION:
         if (SceneManager.getCurrentScene() == SceneSelections.SERVER_MENU) {
           serverMenuCTL.recievePrompt(msg.getUsername() + " is inviting you to a game", NotificationType.INFORMATION,
@@ -234,6 +238,10 @@ public class NetworkClient {
     Player localPlayer = gameCTL.getLocalPlayer();
     Message toSend = Message.forMove(localPlayer.getUsername(), column, localPlayer.getID());
     sendMessage(toSend);
+  }
+
+  public static void sendChatMessageTo(Long ID, String message) {
+    sendMessage(Message.forChatTo(player, message, ID));
   }
 
   // send chat to server
