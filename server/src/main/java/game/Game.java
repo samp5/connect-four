@@ -76,7 +76,7 @@ public class Game {
           case DISCONNECT:
             if (disconnectID == null) {
               // send our opponent a message that we are disconnecting
-              sendToOpponent(connection, Message.forServerDisconnect(opponent(connection).getPlayer()));
+              sendToOpponent(connection, Message.forOpponentDisconnect(opponent(connection).getPlayer()));
 
               // log out
               PlayerRegistry.logoutPlayer(connection.getPlayer());
