@@ -16,14 +16,17 @@
    <children>
       <ImageView fitHeight="500.0" fitWidth="500.0">
          <image>
-            <Image url="@../assets/load-background.png" />
+            <Image url="@../assets/connections_pane.png" />
          </image>
       </ImageView>
-      <VBox layoutY="31.0">
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0">
          <children>
             <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="500.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-text" text="Settings" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-text" text="Settings">
+                     <HBox.margin>
+                        <Insets top="8.0" />
+                     </HBox.margin></Text>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="75.0">

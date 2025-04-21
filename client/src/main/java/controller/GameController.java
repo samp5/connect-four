@@ -331,8 +331,7 @@ public class GameController extends Controller {
     // construct a path
     Path path = new Path();
     path.getElements().add(new MoveTo(chipPos.getX(), chipPos.getY()));
-    path.getElements().add(new LineTo(topX + CoordUtils.pieceRadius,
-        topY));
+    path.getElements().add(new LineTo(topX + CoordUtils.pieceRadius, topY));
 
     // build the animation
     PathTransition pathTransition = new PathTransition();
@@ -343,17 +342,18 @@ public class GameController extends Controller {
   }
 
   private void animateDrop(Point from, BoardPosition rowCol, PlayerRole role) {
+    from.setY(from.getY() - (2 * CoordUtils.pieceRadius));
     double fromX = from.getX();
-    double fromY = from.getY() - CoordUtils.pieceRadius;
+    double fromY = from.getY();
 
-    Point topSlot = CoordUtils.fromRowCol(GameLogic.numRows() - 1, rowCol.getColumn());
-    Piece pieceToDrop = new Piece(role, topSlot.copy());
+    Piece pieceToDrop = new Piece(role, from);
     Point finalPosition = CoordUtils.fromRowCol(rowCol.getRow(), rowCol.getColumn());
     midgroundPane.getChildren().add(pieceToDrop);
 
-    Path pth = new Path();
-    pth.getElements().add(new MoveTo(fromX, fromY - pieceToDrop.getRadius()));
-    pth.getElements().add(new LineTo(finalPosition.getX(), finalPosition.getY()));
+    Path pth = new Path(
+        new MoveTo(fromX, fromY - pieceToDrop.getRadius()),
+        new LineTo(finalPosition.getX(), finalPosition.getY())
+     );
 
     // build the animation
     PathTransition pTrans = new PathTransition();

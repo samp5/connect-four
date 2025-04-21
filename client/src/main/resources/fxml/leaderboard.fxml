@@ -16,7 +16,7 @@
    <children>
       <ImageView fitHeight="600.0" fitWidth="800.0">
          <image>
-            <Image url="@../assets/load-background.png" />
+            <Image url="@../assets/leaderboard_pane.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="72.0" fitWidth="600.0" layoutX="100.0" layoutY="38.0">
@@ -30,7 +30,7 @@
                <children>
                   <ImageView fitHeight="300.0" fitWidth="600.0">
                      <image>
-                        <Image url="@../assets/load-background.png" />
+                        <Image url="@../assets/leaderboard_rank_pane.png" />
                      </image>
                   </ImageView>
                   <ScrollPane hbarPolicy="NEVER" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: transparent;">
