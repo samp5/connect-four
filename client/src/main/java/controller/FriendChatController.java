@@ -26,6 +26,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 import network.NetworkClient;
 import network.UserProfile;
 import network.PlayerData;
@@ -78,6 +79,8 @@ public class FriendChatController extends Controller {
   @FXML
   Button oppProfileBackButton;
   @FXML
+  Text usernameText;
+  @FXML
   Text oppUsername;
   @FXML
   Text oppElo;
@@ -92,6 +95,28 @@ public class FriendChatController extends Controller {
   ImageView notificationIcon;
 
   private NotificationManager notificationManager;
+
+  public void close() {
+    System.out.println("closing scene");
+    ((Stage) chatPane.getScene().getWindow()).close();
+  }
+
+  public void friendOnlineStatus(boolean isOnline) {
+    if (isOnline) {
+      recieveNotification(oppUsername.getText() + " is back online!", NotificationType.INFORMATION);
+      sendButton.setDisable(false);
+      chatEditorInput.setOnKeyPressed(e -> {
+        if (e.getCode() == KeyCode.ENTER) {
+          sendMessage();
+        }
+        e.consume();
+      });
+    } else {
+      recieveNotification(oppUsername.getText() + " is now offline", NotificationType.INFORMATION);
+      sendButton.setDisable(true);
+      chatEditorInput.setOnKeyPressed(e -> e.consume());
+    }
+  }
 
   public void initialize() {
     setHandlers();
@@ -161,6 +186,7 @@ public class FriendChatController extends Controller {
         ((ImageView) oppProfileButton.getCenter()).setImage(new Image(profile.getProfilePicture().getAssetFileName()));
         oppElo.setText(String.valueOf((int) profile.getElo()));
         oppUsername.setText(profile.getUserName());
+        usernameText.setText(profile.getUserName());
         oppWinPercent.setText(
             String.format("%d", (int) ((float) profile.getGamesWon() / (float) profile.getGamesPlayed() * 100)) + "%");
       });

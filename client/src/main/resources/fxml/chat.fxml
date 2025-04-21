@@ -134,7 +134,7 @@
             </Pane>
          </children>
       </StackPane>
-      <BorderPane fx:id="oppProfileButton" layoutX="270.0" layoutY="15.0" prefHeight="75.0" prefWidth="75.0" visible="false">
+      <BorderPane fx:id="oppProfileButton" layoutX="15.0" layoutY="15.0" prefHeight="75.0" prefWidth="75.0" visible="false">
          <center>
             <ImageView fitHeight="75.0" fitWidth="75.0" BorderPane.alignment="CENTER">
                <image>
@@ -143,6 +143,7 @@
             </ImageView>
          </center>
       </BorderPane>
+      <Text fx:id="userNameText" layoutX="100.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="{username}" />
       <Pane fx:id="oppProfilePane" layoutX="15.0" layoutY="15.0" prefHeight="300.0" prefWidth="200.0" visible="false">
          <children>
             <ImageView fitHeight="300.0" fitWidth="200.0">

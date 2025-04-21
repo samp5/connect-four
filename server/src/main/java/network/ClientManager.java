@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import game.GameManager;
+import network.Message.Type;
 import registry.Leaderboard;
 import registry.PlayerRegistry;
 import registry.PlayerRegistry.PlayerRegistrationInfo;
@@ -110,11 +111,11 @@ public class ClientManager {
           case DISCONNECT:
             toStopListening.add(connection);
             PlayerRegistry.logoutPlayer(msg.getPlayer());
-            notifyFriends(connection, false);
+            notifyFriends(connection, Message.forFriendOnlineStatus(connection.getPlayer(), false));
             break;
           case LOGIN:
             if (attemptLogin(connection, msg)) {
-              notifyFriends(connection, true);
+              notifyFriends(connection, Message.forFriendOnlineStatus(connection.getPlayer(), true));
             }
             break;
           case JOIN_GAME:
@@ -134,6 +135,7 @@ public class ClientManager {
             break;
           case PROFILE_PIC_UPDATE:
             PlayerRegistry.updateProfilePicture(msg.getPlayerID(), msg.getProfilePicture());
+            notifyFriends(connection, Message.forSimpleInstruction(Type.FETCH_FRIENDS));
             break;
           case GAME_INVITATION:
             // forward the invitation to the target player
@@ -231,6 +233,7 @@ public class ClientManager {
   public static void sendToByID(Long targetPlayer, Message msg) {
     getClientByID(targetPlayer).ifPresent(target -> {
       try {
+        System.err.println("send to id was present!");
         target.sendMessage(msg);
       } catch (IOException ioe) {
         ioe.printStackTrace();
@@ -246,7 +249,7 @@ public class ClientManager {
     }
   }
 
-  private static void notifyFriends(ServerClient client, boolean isOnline) {
+  private static void notifyFriends(ServerClient client, Message msg) {
     synchronized (clients) {
       HashSet<Long> friendIDs = PlayerRegistry.getUsersFriendIDs(client.getPlayer().getID());
       for (Long id : friendIDs) {
@@ -254,7 +257,7 @@ public class ClientManager {
           try {
             clients.stream().filter(c -> c.getPlayer().getID().equals(id)).forEach(c -> {
               try {
-                c.sendMessage(Message.forFriendOnlineStatus(client.getPlayer().getUsername(), isOnline));
+                c.sendMessage(msg);
               } catch (IOException ioe) {
                 ioe.printStackTrace();
               }

@@ -39,6 +39,21 @@ public class FriendUtils {
     ctl.recieveMessage(chat, sender.getUsername(), false);
   }
 
+  public static void reset() {
+    for (FriendChatController ctl : openChats.values()) {
+      ctl.close();
+    }
+    openChats.clear();
+  }
+
+  public static void friendOnlineStatus(Long ID, boolean isOnline) {
+    FriendChatController ctl = openChats.get(ID);
+    if (ctl == null) {
+      return;
+    }
+    ctl.friendOnlineStatus(isOnline);
+  }
+
   public static void openChat(Long ID) {
     if (openChats.get(ID) != null) {
       return;
@@ -58,7 +73,7 @@ public class FriendUtils {
       chatStage.setResizable(false);
       chatStage.show();
       chatStage.setOnCloseRequest(e -> {
-        openChats.remove(ID);
+        closeChat(ID);
       });
     } catch (IOException ioe) {
       ioe.printStackTrace();

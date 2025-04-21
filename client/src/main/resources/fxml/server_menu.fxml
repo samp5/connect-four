@@ -176,7 +176,7 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" prefWidth="50.0" styleClass="text-medium">
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Games Lost:" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Games Tied:" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" styleClass="text-medium">
@@ -224,7 +224,7 @@
             <Button fx:id="profileBackButton" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="40.0" styleClass="back-button" text="x" />
          </children>
       </Pane>
-      <Pane fx:id="friendsPane" layoutX="340.0" layoutY="150.0" prefHeight="500.0" prefWidth="400.0">
+      <Pane fx:id="friendsPane" layoutX="340.0" layoutY="150.0" prefHeight="500.0" prefWidth="400.0" visible="false">
          <children>
             <ImageView fitHeight="500.0" fitWidth="400.0">
                <image>

@@ -82,6 +82,8 @@ public class ChatController extends Controller {
   @FXML
   BorderPane oppProfileButton;
   @FXML
+  Text userNameText;
+  @FXML
   Pane oppProfilePane;
   @FXML
   Button oppProfileBackButton;
@@ -106,6 +108,15 @@ public class ChatController extends Controller {
   public void initialize() {
     NetworkClient.bindChatController(this);
     setHandlers();
+
+    if (GameLogic.getGameMode() == GameMode.LocalAI) {
+      userNameText.setText("AI");
+      oppProfileButton.setOnMouseClicked(e -> {
+        recieveMessage("ow stop :cry:", "AI", false);
+      });
+      ((ImageView) oppProfileButton.getCenter()).setImage(new Image("/assets/robot.png"));
+      oppProfileButton.setVisible(true);
+    }
 
     // auto scroll the chat history based on the height of the vbox
     chatHistoryScroll.vvalueProperty().bind(chatHistory.heightProperty());
@@ -273,6 +284,7 @@ public class ChatController extends Controller {
   private void populateOpponentProfile(UserProfile profile) {
     oppElo.setText(String.valueOf((int) profile.getElo()));
     oppUsername.setText(profile.getUserName());
+    userNameText.setText(profile.getUserName());
     oppWinPercent.setText(
         String.format("%d", (int) ((float) profile.getGamesWon() / (float) profile.getGamesPlayed() * 100)) + "%");
   }

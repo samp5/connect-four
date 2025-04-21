@@ -261,11 +261,12 @@ public class Message implements Serializable {
     return toSend;
   }
 
-  public static Message forFriendOnlineStatus(String friendUserName, boolean isOnline) {
+  public static Message forFriendOnlineStatus(Player friend, boolean isOnline) {
     Message toSend = new Message();
     toSend.type = Type.FRIEND_ONLINE_STATUS;
     toSend.success = isOnline;
-    toSend.username = friendUserName;
+    toSend.username = friend.getUsername();
+    toSend.playerID = friend.getID();
     return toSend;
   }
 

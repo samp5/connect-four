@@ -175,6 +175,7 @@ public class NetworkClient {
         break;
       case FRIEND_ONLINE_STATUS:
         PlayerData.friendOnlineStatus(msg.getUsername(), msg.isSuccess());
+        FriendUtils.friendOnlineStatus(msg.getPlayerID(), msg.isSuccess());
         switch (SceneManager.getCurrentScene()) {
           case SERVER_MENU:
             serverMenuCTL.recieveNotification(msg.getUsername() + " is now " + (msg.isSuccess() ? "online" : "offline"),
@@ -194,6 +195,9 @@ public class NetworkClient {
         break;
       case FRIEND_CHAT:
         FriendUtils.receiveChat(msg.getSender(), msg.getChatMessage());
+        break;
+      case FETCH_FRIENDS:
+        PlayerData.friendsUpdated();
         break;
       case GAME_INVITATION:
         if (SceneManager.getCurrentScene() == SceneSelections.SERVER_MENU) {
@@ -440,6 +444,7 @@ public class NetworkClient {
 
   public static void disconnect() {
     PlayerData.reset();
+    FriendUtils.reset();
     try {
       out = new ObjectOutputStream(socket.getOutputStream());
       out.writeObject(Message.forServerDisconnect(player));

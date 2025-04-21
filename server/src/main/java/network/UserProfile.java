@@ -39,7 +39,7 @@ public class UserProfile implements Serializable {
   }
 
   public enum ProfilePicture {
-    BASIC_RED, BASIC_BLUE, MUSCLE_RED, MUSCLE_BLUE, ANGEL_BLUE, DEVIL_RED, SCUBA_BLUE, SUPER_SAIYAN_RED;
+    BASIC_RED, BASIC_BLUE, MUSCLE_RED, MUSCLE_BLUE, ANGEL_BLUE, DEVIL_RED, SCUBA_BLUE, SUPER_SAIYAN_RED, EVAN_MCCARTY;
 
     public String getAssetFileName() {
       return "/assets/" + this.toString().toLowerCase() + ".png";
@@ -63,6 +63,8 @@ public class UserProfile implements Serializable {
           return "SUPER SAIYAN";
         case SCUBA_BLUE:
           return "ScubaBlue";
+        case EVAN_MCCARTY:
+          return "Evan McCarty";
       }
       return "";
     }
