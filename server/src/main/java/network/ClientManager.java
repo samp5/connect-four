@@ -109,9 +109,7 @@ public class ClientManager {
       for (Message msg : recievedMsgs) {
         switch (msg.getType()) {
           case DISCONNECT:
-            toStopListening.add(connection);
-            PlayerRegistry.logoutPlayer(msg.getPlayer());
-            notifyFriends(connection, Message.forFriendOnlineStatus(connection.getPlayer(), false));
+            handlePlayerDisconnect(connection);
             break;
           case LOGIN:
             if (attemptLogin(connection, msg)) {
@@ -305,6 +303,12 @@ public class ClientManager {
       clients.remove(client);
     }
     return false;
+  }
+
+  public static void handlePlayerDisconnect(ServerClient client) {
+    removeClientListener(client);
+    PlayerRegistry.logoutPlayer(client.getPlayer());
+    notifyFriends(client, Message.forFriendOnlineStatus(client.getPlayer(), false));
   }
 
   /**

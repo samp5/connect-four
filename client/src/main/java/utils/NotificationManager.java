@@ -61,7 +61,7 @@ public class NotificationManager {
       EventHandler<ActionEvent> current = reverse.getOnFinished();
       reverse.setOnFinished(e -> {
         current.handle(null);
-        recieve(text, icon);
+        recieveWithPrompt(text, icon, onConfirm, onDeny);
       });
       return;
     }

@@ -78,14 +78,15 @@ public class Game {
               // send our opponent a message that we are disconnecting
               sendToOpponent(connection, Message.forOpponentDisconnect(opponent(connection).getPlayer()));
 
-              // log out
-              PlayerRegistry.logoutPlayer(connection.getPlayer());
+              // handle the disconnect globally
+              ClientManager.handlePlayerDisconnect(connection);
 
-              // set the disconnectID
+              // set the disconnectID for reconnections
               disconnectID = connection.getPlayer().getID();
               GameManager.dcGames.put(disconnectID, game);
+
             } else {
-              PlayerRegistry.logoutPlayer(connection.getPlayer());
+              ClientManager.handlePlayerDisconnect(connection);
               active = false;
             }
             break;
