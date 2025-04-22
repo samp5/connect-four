@@ -10,8 +10,6 @@ import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.stream.Collectors;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -88,17 +86,17 @@ public class FriendUtils {
   public static HBox createComponent(UserProfile profile) {
 
     Button inviteToGame = new Button("Invite");
-    inviteToGame.setMaxSize(100, 40);
-    inviteToGame.setPrefSize(100, 40);
-    inviteToGame.setMinSize(100, 40);
-    inviteToGame.getStyleClass().add("pixel-button");
+    inviteToGame.setMaxSize(100, 48);
+    inviteToGame.setPrefSize(100, 48);
+    inviteToGame.setMinSize(100, 48);
+    inviteToGame.getStyleClass().add("invite-button");
     inviteToGame.setCursor(Cursor.HAND);
 
     Button chatWithFriend = new Button("Chat");
-    chatWithFriend.setMaxSize(75, 40);
-    chatWithFriend.setPrefSize(75, 40);
-    chatWithFriend.setMinSize(75, 40);
-    chatWithFriend.getStyleClass().add("pixel-button");
+    chatWithFriend.setMaxSize(75, 48);
+    chatWithFriend.setPrefSize(75, 48);
+    chatWithFriend.setMinSize(75, 48);
+    chatWithFriend.getStyleClass().add("login-button");
     chatWithFriend.setCursor(Cursor.HAND);
 
     chatWithFriend.setOnAction(e -> {

@@ -49,7 +49,7 @@
                         <Font name="Atkinson Hyperlegible Regular" size="28.0" />
                      </font>
                      <styleClass>
-                        <String fx:value="pixel-button" />
+                        <String fx:value="connection-button" />
                         <String fx:value="big-button-text" />
                      </styleClass>
                      <padding>
@@ -64,7 +64,7 @@
                         <Font name="Atkinson Hyperlegible Regular" size="28.0" />
                      </font>
                      <styleClass>
-                        <String fx:value="pixel-button" />
+                        <String fx:value="connection-button" />
                         <String fx:value="big-button-text" />
                      </styleClass>
                      <padding>
@@ -120,7 +120,7 @@
                               <Insets />
                            </VBox.margin>
                         </VBox>
-                        <Button fx:id="addConnectionButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="64.0" styleClass="pixel-button" text="Add">
+                        <Button fx:id="addConnectionButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="64.0" styleClass="connection-button-small" text="Add">
                            <VBox.margin>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </VBox.margin>
@@ -170,7 +170,7 @@
                               <Insets />
                            </VBox.margin>
                         </VBox>
-                        <Button fx:id="loginButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="44.0" prefWidth="80.0" styleClass="pixel-button" text="Login">
+                        <Button fx:id="loginButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="80.0" styleClass="login-button" text="Login">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>

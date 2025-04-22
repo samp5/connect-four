@@ -114,7 +114,7 @@
                         </Text>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-spacing: 12px;">
                            <children>
-                              <Button fx:id="popupCancelButton" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" styleClass="pixel-button" text="Cancel" textAlignment="CENTER">
+                              <Button fx:id="popupCancelButton" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" styleClass="confirm-button" text="Cancel" textAlignment="CENTER">
                                  <font>
                                     <Font name="Mota Pixel Regular" size="20.0" />
                                  </font>
@@ -125,7 +125,7 @@
                                     <Insets top="-4.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button fx:id="popupConfirmButton" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" styleClass="pixel-button" text="Confirm" textAlignment="CENTER">
+                              <Button fx:id="popupConfirmButton" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" styleClass="confirm-button" text="Confirm" textAlignment="CENTER">
                                  <font>
                                     <Font name="Mota Pixel Regular" size="20.0" />
                                  </font>
@@ -210,7 +210,7 @@
                         <Insets left="10.0" />
                      </padding>
                   </HBox>
-                  <Button fx:id="addFriend" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="128.0" styleClass="pixel-button" text="Add Friend">
+                  <Button fx:id="addFriend" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="menu-button" text="Add Friend">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>

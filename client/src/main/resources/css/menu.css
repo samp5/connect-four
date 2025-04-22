@@ -40,6 +40,209 @@
   -fx-text-fill: #B21313;
 }
 
+.confirm-button {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/confirm_button.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 96 32; 
+  -fx-border-color: transparent;
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+.confirm-button:hover {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/confirm_button_hover.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-border-color: transparent;
+  -fx-background-size: 96 32; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+.confirm-button:pressed {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/confirm_button_pressed.png');
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 96 32; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+
+.invite-button {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/invite_button.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 100 48; 
+  -fx-border-color: transparent;
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+.invite-button:hover {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/invite_button_hover.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-border-color: transparent;
+  -fx-background-size: 100 48; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+.invite-button:pressed {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/invite_button_pressed.png');
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 100 48; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+.login-button {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/login_button.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 80 48; 
+  -fx-border-color: transparent;
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+.login-button:hover {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/login_button_hover.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-border-color: transparent;
+  -fx-background-size: 80 48; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+.login-button:pressed {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/login_button_pressed.png');
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 80 48; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+
+.connection-button-small {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/connnection_button_small.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 64 40; 
+  -fx-border-color: transparent;
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 10 0;
+}
+.connection-button-small:hover {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/connnection_button_small_hover.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-border-color: transparent;
+  -fx-background-size: 64 40; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 10 0;
+}
+.connection-button-small:pressed {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/connnection_button_small_pressed.png');
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 64 40; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 10 0;
+}
+
+.connection-button {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/connections_button.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 144 52; 
+  -fx-border-color: transparent;
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 10 0;
+}
+.connection-button:hover {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/connections_button_hover.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-border-color: transparent;
+  -fx-background-size: 144 52; 
+  -fx-label-padding: 0 0 10 0;
+  -fx-background-position: center top;
+}
+.connection-button:pressed {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/connections_button_pressed.png');
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 144 52; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 10 0;
+}
+
+.menu-button {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/menu_button.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 128 48; 
+  -fx-border-color: transparent;
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 10 0;
+}
+.menu-button:hover {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/menu_button_hover.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-border-color: transparent;
+  -fx-background-size: 128 48; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 10 0;
+}
+.menu-button:pressed {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/menu_button_down.png');
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 128 48; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 10 0;
+}
+>>>>>>> 10422eb (buttons)
 .pixel-button {
   -fx-border-color: #363646;
   -fx-border-width: 3px;

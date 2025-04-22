@@ -86,7 +86,7 @@
                <children>
                   <VBox spacing="10.0">
                      <children>
-                        <Button fx:id="mainMenuButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="128.0" styleClass="pixel-button" text="Main Menu">
+                        <Button fx:id="mainMenuButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="menu-button" text="Main Menu">
                            <padding>
                               <Insets top="-1.0" />
                            </padding>
@@ -99,7 +99,7 @@
             </HBox>
          </children>
       </VBox>
-      <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x" >
+      <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
          <cursor>
             <Cursor fx:constant="HAND" />
       </cursor>

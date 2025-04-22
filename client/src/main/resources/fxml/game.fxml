@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="720.0" stylesheets="@../css/menu.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameController">
    <children>
       <ImageView fx:id="gameBG" fitHeight="720.0" fitWidth="720.0">
          <image>
@@ -225,7 +225,7 @@
                   <Text fx:id="rematchTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Rematch?" textAlignment="CENTER" wrappingWidth="224.0" />
                   <VBox alignment="CENTER" spacing="20.0">
                      <children>
-                        <Button fx:id="rematchYes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="88.0" styleClass="pixel-button" text="Yes">
+                        <Button fx:id="rematchYes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" styleClass="confirm-button" text="Yes">
                            <padding>
                               <Insets top="1.0" />
                            </padding>
@@ -233,7 +233,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button fx:id="rematchToLobby" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="88.0" styleClass="pixel-button" text="To lobby">
+                        <Button fx:id="rematchToLobby" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" styleClass="confirm-button" text="To lobby">
                            <padding>
                               <Insets top="1.0" />
                            </padding>
@@ -241,7 +241,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button fx:id="rematchMainMenu" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="88.0" styleClass="pixel-button" text="Main Menu">
+                        <Button fx:id="rematchMainMenu" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" styleClass="confirm-button" text="Main Menu">
                            <padding>
                               <Insets top="1.0" />
                            </padding>
