@@ -55,13 +55,12 @@
 }
 
 .back-button {
-  -fx-border-color: #363646;
-  -fx-border-width: 2px;
-  -fx-border-radius: 2px;
-  -fx-background-color: #a08662;
-  -fx-background-insets: 0;
-  -fx-font-fill: black;
-  -fx-padding: 0 0 1 2;
+  -fx-background-image: url('/assets/exit_button.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 20 20; 
+  -fx-background-position: center center;
+  -fx-text-fill: transparent;
 }
 
 .back-button:hover .text {
@@ -128,9 +127,7 @@
   -fx-text-fill: black;
 }
 .column-header {
-  -fx-border-width: 2px;
-  -fx-border-color: black;
-  -fx-background-color: #c0a36e; 
+  -fx-background-color: transparent; 
 
 }
 .leader-board-entry{

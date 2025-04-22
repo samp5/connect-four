@@ -31,7 +31,7 @@ public class LeaderBoardRow {
   }
 
   public void build(int rank, String username, double elo, int games_won, int games_lost, double win_percentage) {
-    this.rank.setText(String.valueOf(rank));
+    this.rank.setText("# " + String.valueOf(rank));
     this.username.setText(username);
     this.elo.setText(String.format("%d", (int) elo));
     this.games_won.setText(String.valueOf(games_won));
