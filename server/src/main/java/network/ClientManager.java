@@ -229,13 +229,19 @@ public class ClientManager {
   }
 
   public static void sendToByID(Long targetPlayer, Message msg) {
-    getClientByID(targetPlayer).ifPresent(target -> {
-      try {
-        target.sendMessage(msg);
-      } catch (IOException ioe) {
-        ioe.printStackTrace();
+    // lock both clients and clientsInGame in game to ensure that
+    // nothting is modifed while we are in the lambda
+    synchronized (clients) {
+      synchronized (clientsInGame) {
+        getClientByID(targetPlayer).ifPresent(target -> {
+          try {
+            target.sendMessage(msg);
+          } catch (IOException ioe) {
+            ioe.printStackTrace();
+          }
+        });
       }
-    });
+    }
   }
 
   private static void sendTo(ServerClient client, Message msg) {
@@ -271,13 +277,13 @@ public class ClientManager {
   public static Optional<ServerClient> getClientByID(Long id) {
     Optional<ServerClient> sc;
     synchronized (clients) {
-      sc = clients.stream().filter(c -> c.getPlayer().getID().equals(id)).findFirst();
-    }
-    if (sc.isPresent()) {
-      return sc;
-    } else {
       synchronized (clientsInGame) {
-        return clientsInGame.stream().filter(c -> c.getPlayer().getID().equals(id)).findFirst();
+        sc = clients.stream().filter(c -> c.getPlayer().getID().equals(id)).findFirst();
+        if (sc.isPresent()) {
+          return sc;
+        } else {
+          return clientsInGame.stream().filter(c -> c.getPlayer().getID().equals(id)).findFirst();
+        }
       }
     }
   }
