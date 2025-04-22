@@ -27,11 +27,11 @@
          <children>
             <HBox alignment="CENTER" prefWidth="1080.0">
                <children>
-                  <Text smooth="false" strokeType="OUTSIDE" styleClass="title-text" text="Connections" textAlignment="CENTER">
-                     <font>
-                        <Font name="Atkinson Hyperlegible Regular" size="46.0" />
-                     </font>
-                  </Text>
+                  <ImageView fitHeight="112.0" fitWidth="800.0">
+                     <image>
+                        <Image url="@../assets/connections_title.png" />
+                     </image>
+                  </ImageView>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefWidth="1080.0">

@@ -155,3 +155,17 @@
   -fx-font-size: 20px;
   -fx-fill: green;
 }
+
+/*  Background color of the whole context menu */
+.choice-box .context-menu { -fx-background-color: #938056; }
+
+ /* Focused item background color in the list */
+.choice-box .menu-item:focused { -fx-background-color: #639bff; }
+
+/*  Background color of the control itself */
+.choice-box {
+  -fx-border-color: #363646;
+  -fx-border-width: 2px;
+  -fx-background-insets: 0;
+  -fx-mark-color: #45a218;
+}

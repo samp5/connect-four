@@ -252,22 +252,14 @@ public class ClientManager {
   private static void notifyFriends(ServerClient client, Message msg) {
     synchronized (clients) {
       HashSet<Long> friendIDs = PlayerRegistry.getUsersFriendIDs(client.getPlayer().getID());
-      for (Long id : friendIDs) {
-        if (PlayerRegistry.playerIsOnline(id)) {
-          try {
-            clients.stream().filter(c -> c.getPlayer().getID().equals(id)).forEach(c -> {
-              try {
-                c.sendMessage(msg);
-              } catch (IOException ioe) {
-                ioe.printStackTrace();
-              }
-            });
-          } catch (Exception e) {
-            e.printStackTrace();
-            return;
-          }
-        }
-      }
+      friendIDs.stream().filter(id -> PlayerRegistry.playerIsOnline(id))
+          .forEach(id -> getClientByID(id).ifPresent(c -> {
+            try {
+              c.sendMessage(msg);
+            } catch (IOException ioe) {
+              ioe.printStackTrace();
+            }
+          }));
     }
   }
 

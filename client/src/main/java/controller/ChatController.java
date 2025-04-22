@@ -247,8 +247,12 @@ public class ChatController extends Controller {
   }
 
   public void recieveFriendRequestResponse(boolean accepted) {
-    notificationManager.recieve("You opponent accepted your friend request", NotificationType.INFORMATION);
-    addFriend.setText("Already Friends");
+    if (accepted) {
+      notificationManager.recieve("You opponent accepted your friend request", NotificationType.FRIEND_GOOD);
+      addFriend.setText("Already Friends");
+    } else {
+      notificationManager.recieve("You opponent denied your friend request", NotificationType.FRIEND_BAD);
+    }
     addFriend.setDisable(true);
   }
 

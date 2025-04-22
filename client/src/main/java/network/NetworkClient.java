@@ -176,15 +176,15 @@ public class NetworkClient {
       case FRIEND_ONLINE_STATUS:
         PlayerData.friendOnlineStatus(msg.getUsername(), msg.isSuccess());
         FriendUtils.friendOnlineStatus(msg.getPlayerID(), msg.isSuccess());
+        String notificationStr = msg.getUsername() + " is now " + (msg.isSuccess() ? "online" : "offline");
+        NotificationType type = msg.isSuccess() ? NotificationType.FRIEND_GOOD : NotificationType.FRIEND_BAD;
         switch (SceneManager.getCurrentScene()) {
           case SERVER_MENU:
-            serverMenuCTL.recieveNotification(msg.getUsername() + " is now " + (msg.isSuccess() ? "online" : "offline"),
-                NotificationType.INFORMATION);
+            serverMenuCTL.recieveNotification(notificationStr, type);
             serverMenuCTL.updateFriendOnlineView(msg.getUsername(), msg.isSuccess());
             break;
           case GAME:
-            chatCTL.recieveNotification(msg.getUsername() + " is now " + (msg.isSuccess() ? "online" : "offline"),
-                NotificationType.INFORMATION);
+            chatCTL.recieveNotification(notificationStr, type);
             break;
           case LOADING:
             // TODO:
@@ -201,7 +201,7 @@ public class NetworkClient {
         break;
       case GAME_INVITATION:
         if (SceneManager.getCurrentScene() == SceneSelections.SERVER_MENU) {
-          serverMenuCTL.recievePrompt(msg.getUsername() + " is inviting you to a game", NotificationType.INFORMATION,
+          serverMenuCTL.recievePrompt(msg.getUsername() + " is inviting you to a game", NotificationType.FRIEND_GOOD,
               (e -> NetworkClient
                   .sendMessage(Message.forGameInvitationResponse(true, msg.getInvitor(), msg.getInvited()))),
               (e -> NetworkClient
