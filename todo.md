@@ -11,3 +11,6 @@
 
 ### Game Screen
 - [ ] Add move effects
+
+
+- [x] Full quit button

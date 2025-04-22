@@ -33,6 +33,7 @@ import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.scene.text.Text;
 import logic.GameLogic;
 import logic.GameLogic.GameMode;
 import logic.AI;
@@ -95,7 +96,6 @@ public class GameController extends Controller {
   private ImageView blueTurnIndicator;
   private int indicatorState = 0;
 
-
   @FXML
   private Pane drawRequest;
   @FXML
@@ -112,6 +112,8 @@ public class GameController extends Controller {
 
   @FXML
   private Pane rematch;
+  @FXML
+  private Text rematchTitle;
   @FXML
   private Button rematchYes;
   @FXML
@@ -353,8 +355,7 @@ public class GameController extends Controller {
 
     Path pth = new Path(
         new MoveTo(fromX, fromY - pieceToDrop.getRadius()),
-        new LineTo(finalPosition.getX(), finalPosition.getY())
-     );
+        new LineTo(finalPosition.getX(), finalPosition.getY()));
 
     // build the animation
     PathTransition pTrans = new PathTransition();
@@ -414,7 +415,8 @@ public class GameController extends Controller {
           Platform.runLater(() -> {
             gameBG.setViewport(new Rectangle2D((1536 * grassState), 0, 1536, 1536));
           });
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
       }
     }, 0, 1000);
   }
@@ -430,7 +432,8 @@ public class GameController extends Controller {
             redTurnIndicator.setViewport(new Rectangle2D(0, (200 * indicatorState), 200, 200));
             blueTurnIndicator.setViewport(new Rectangle2D(0, (200 * indicatorState), 200, 200));
           });
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
       }
     }, 0, 66);
   }
@@ -736,6 +739,28 @@ public class GameController extends Controller {
 
   public void recieveResignRequest() {
     resignRequest.setVisible(true);
+  }
+
+  public void recieveOpponentReconnect() {
+    rematch.setVisible(false);
+    rematchYes.setDisable(false);
+    rematchYes.setText("Yes");
+    rematchYes.setOnAction(e -> {
+      rematchYes.setText("Wating...");
+      if (GameLogic.getGameMode() == GameMode.Multiplayer) {
+        NetworkClient.rematchRequest();
+      }
+    });
+  }
+
+  public void recieveOpponentDisconnect() {
+    rematchTitle.setText("Opponent fleed");
+    rematchYes.setText("Wait...");
+    rematchYes.setOnAction(e -> {
+      rematchYes.setText("Waiting...");
+      rematchYes.setDisable(true);
+    });
+    rematch.setVisible(true);
   }
 
   public void recieveOpponentReturnToLobby() {

@@ -222,7 +222,7 @@
             </ImageView>
             <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="128.0" prefWidth="256.0" spacing="20.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Rematch?" textAlignment="CENTER" wrappingWidth="224.0" />
+                  <Text fx:id="rematchTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Rematch?" textAlignment="CENTER" wrappingWidth="224.0" />
                   <VBox alignment="CENTER" spacing="20.0">
                      <children>
                         <Button fx:id="rematchYes" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="88.0" styleClass="pixel-button" text="Yes">

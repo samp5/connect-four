@@ -114,6 +114,8 @@ public class NetworkClient {
         if (restoredMoves == null) {
           // get moves to send to other player
           sendMessage(Message.forServerReconnect(gameCTL.getMoveHistory()));
+          gameCTL.recieveOpponentReconnect();
+          chatCTL.recieveNotification("Opponent has reconnected", NotificationType.INFORMATION);
         } else {
           // restore moves from other player
           gameCTL.restoreGameBoard(restoredMoves);
@@ -131,6 +133,7 @@ public class NetworkClient {
         break;
       case OPPONENT_DISCONNECT:
         chatCTL.opponentDisconnect();
+        gameCTL.recieveOpponentDisconnect();
         break;
       case OPPONENT_RETURN_TO_LOBBY:
         chatCTL.opponentDisconnect();

@@ -35,6 +35,8 @@ import utils.ToolTipHelper;
 import utils.AudioManager.SoundEffect;
 import utils.NotificationManager;
 import utils.NotificationManager.NotificationType;
+import utils.SceneManager;
+import utils.SceneManager.SceneSelections;
 import controller.utils.ChatMessage;
 import controller.utils.Markup;
 
@@ -218,6 +220,7 @@ public class ChatController extends Controller {
   public void opponentDisconnect() {
     notificationManager.recieve("Your opponent has disconnected",
         NotificationType.CONNECTION_ERROR);
+
   }
 
   public void rematchRequest() {
