@@ -24,6 +24,8 @@ public class MenuController extends Controller {
   Button playAIButton;
   @FXML
   Button settingsButton;
+  @FXML
+  Button quitButton;
 
   public void initialize() {
     playOnlineButton.setOnAction(e -> {
@@ -40,6 +42,9 @@ public class MenuController extends Controller {
     });
     settingsButton.setOnAction(e -> {
       GameSettings.loadOnto(menuPane);
+    });
+    quitButton.setOnAction(e -> {
+      SceneManager.performClose();
     });
   }
 }
