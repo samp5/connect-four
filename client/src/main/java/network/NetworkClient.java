@@ -445,6 +445,10 @@ public class NetworkClient {
   public static void disconnect() {
     PlayerData.reset();
     FriendUtils.reset();
+
+    if (socket == null) {
+      return;
+    }
     try {
       out = new ObjectOutputStream(socket.getOutputStream());
       out.writeObject(Message.forServerDisconnect(player));

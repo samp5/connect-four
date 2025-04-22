@@ -86,5 +86,6 @@ public class SceneManager {
     SettingsController.save();
     NetworkClient.disconnect();
     Platform.exit();
+    System.exit(0);
   }
 }
