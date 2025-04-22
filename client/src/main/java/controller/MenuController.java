@@ -56,5 +56,22 @@ public class MenuController extends Controller {
     quitButton.setOnAction(e -> {
       SceneManager.performClose();
     });
+
+    animateGrass();
+  }
+
+  private void animateGrass() {
+    Timer timer = new Timer();
+    timer.scheduleAtFixedRate(new TimerTask() {
+      @Override
+      public void run() {
+        grassState = (grassState + 1) % 2;
+        try {
+          Platform.runLater(() -> {
+            background.setViewport(new Rectangle2D((3840 * grassState), 0, 3840, 2560));
+          });
+        } catch (Exception e) {}
+      }
+    }, 0, 1000);
   }
 }

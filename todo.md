@@ -11,6 +11,3 @@
 
 ### Game Screen
 - [ ] Add move effects
-
-### Menu Screen
-- [ ] Full quit button
