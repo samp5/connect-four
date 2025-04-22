@@ -24,7 +24,7 @@ public class NotificationManager {
   private PathTransition reverse;
 
   public enum NotificationType {
-    CONNECTION_ERROR, INFORMATION, FRIEND_GOOD, FRIEND_BAD;
+    CONNECTION_ERROR, INFORMATION, ERROR, FRIEND_GOOD, FRIEND_BAD;
 
     public Image getIcon() {
       Image i = null;
@@ -34,6 +34,9 @@ public class NotificationManager {
           break;
         case INFORMATION:
           i = new Image("/assets/information_icon.png", 25, 25, false, false);
+          break;
+        case ERROR:
+          i = new Image("/assets/error_icon.png", 25, 25, false, false);
           break;
         case FRIEND_GOOD:
           i = new Image("/assets/friend_notification.png", 20, 20, false, false);

@@ -1,11 +1,15 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import controller.utils.RecentConnection;
 import controller.utils.RecentConnectionRegistry;
+import controller.utils.ValidatedInput;
+import controller.utils.ValidatedInput.ValidationMethod;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -71,6 +75,12 @@ public class ConnectionsController extends Controller {
   ListView<RecentConnection> connectionListView;
   RecentConnection selectedConnection;
 
+  ValidatedInput validIpInput;
+  ValidatedInput validPortInput;
+  ValidatedInput validConnNameInput;
+  ValidatedInput validUsernameInput;
+  ValidatedInput validPasswordInput;
+
   @FXML
   Button joinButton;
 
@@ -88,6 +98,12 @@ public class ConnectionsController extends Controller {
     NetworkClient.bindConnectionController(this);
 
     notificationManager = new NotificationManager(notificationPane, notificationText, notificationIcon);
+
+    validIpInput = new ValidatedInput(ipInput, ValidationMethod.IP_ADDRESS);
+    validPortInput = new ValidatedInput(portInput, ValidationMethod.PORT);
+    validConnNameInput = new ValidatedInput(connectionNameInput, ValidationMethod.LENGTH, ValidationMethod.NOT_EMPTY);
+    validUsernameInput = new ValidatedInput(usernameInput, ValidationMethod.NO_SPACES, ValidationMethod.LENGTH, ValidationMethod.NOT_EMPTY);
+    validPasswordInput = new ValidatedInput(passwordInput, ValidationMethod.NO_SPACES, ValidationMethod.NOT_EMPTY);
 
     // set backgrounds
     connectionListView.setBackground(
@@ -107,6 +123,7 @@ public class ConnectionsController extends Controller {
     RecentConnectionRegistry.load();
     connectionListView
         .setItems(FXCollections.observableArrayList(RecentConnectionRegistry.getConnections()));
+    connectionListView.getSelectionModel().select(0);
 
     Button[] allButtons = { addNewConnectionButton, addConnectionButton, addConnectionBackButton, connectButton,
         backButton, loginButton, loginBackButton };
@@ -194,6 +211,22 @@ public class ConnectionsController extends Controller {
   }
 
   private void addConnection() {
+    if (!validIpInput.isValid()) {
+      notificationManager.recieve(
+          String.format("Input IP %s", validIpInput.getReason()), NotificationType.ERROR);
+      return;
+    }
+    if (!validPortInput.isValid()) {
+      notificationManager.recieve(
+          String.format("Input Port %s", validPortInput.getReason()), NotificationType.ERROR);
+      return;
+    }
+    if (!validConnNameInput.isValid()) {
+      notificationManager.recieve(
+          String.format("Input name %s", validConnNameInput.getReason()), NotificationType.ERROR);
+      return;
+    }
+
     try {
       Integer port = Integer.valueOf(portInput.getText());
       RecentConnection c = new RecentConnection(ipInput.getText(), port, connectionNameInput.getText());
@@ -202,13 +235,23 @@ public class ConnectionsController extends Controller {
       notificationManager.recieve("Added connection");
     } catch (NumberFormatException f) {
 
-      // TODO: Add cool format validation on textinput
       return;
     }
     addConnectionPane.setVisible(false);
   }
 
   private void attemptLogin() {
+    if (!validUsernameInput.isValid()) {
+      notificationManager.recieve(
+          String.format("Input Username %s", validUsernameInput.getReason()), NotificationType.ERROR);
+      return;
+    }
+    if (!validPasswordInput.isValid()) {
+      notificationManager.recieve(
+          String.format("Input Password %s", validPasswordInput.getReason()), NotificationType.ERROR);
+      return;
+    }
+
     RecentConnection c = connectionListView.getSelectionModel().getSelectedItem();
     String username = usernameInput.getText();
     String password = passwordInput.getText();

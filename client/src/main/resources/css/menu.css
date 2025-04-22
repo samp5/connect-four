@@ -36,10 +36,14 @@
   -fx-background-color: #dcd7ba;
 }
 
+.invalid-text {
+  -fx-text-fill: #B21313;
+}
+
 .pixel-button {
   -fx-border-color: #363646;
   -fx-border-width: 3px;
-  -fx-background-color: #639bff;
+  -fx-background-color: #639bFF;
   -fx-background-insets: 0;
 }
 
