@@ -136,7 +136,7 @@
             </ImageView>
          </center>
       </BorderPane>
-      <Text fx:id="userNameText" layoutX="100.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="{username}" />
+      <Text fx:id="usernameText" layoutX="100.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="{username}" />
       <Pane fx:id="oppProfilePane" layoutX="15.0" layoutY="15.0" prefHeight="300.0" prefWidth="200.0" visible="false">
          <children>
             <ImageView fitHeight="300.0" fitWidth="200.0">
