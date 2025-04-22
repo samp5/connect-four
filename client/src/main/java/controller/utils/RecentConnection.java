@@ -57,7 +57,7 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
               Text connectionLabel = new Text(
                   "\u261e " + connection.name);
               Text details = new Text(
-                  "\tIP: " + connection.getIp() + "Port:" + String.valueOf(connection.getPort()));
+                  "\tIP: " + connection.getIp() + " Port:" + String.valueOf(connection.getPort()));
 
               HBox boxLeft = new HBox(connectionLabel);
               boxLeft.setAlignment(Pos.CENTER_LEFT);

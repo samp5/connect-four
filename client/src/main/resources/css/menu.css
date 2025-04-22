@@ -59,10 +59,12 @@
   -fx-border-width: 2px;
   -fx-border-radius: 2px;
   -fx-background-color: #a08662;
+  -fx-background-insets: 0;
   -fx-font-fill: black;
+  -fx-padding: 0 0 1 2;
 }
 
-.back-button .text:hover {
+.back-button:hover .text {
   -fx-font-family: "Mota Pixel Bold";
 }
 

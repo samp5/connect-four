@@ -17,6 +17,10 @@ public class LoadingController extends Controller {
   ImageView loading;
 
   @FXML
+  ImageView background;
+  int grassState = 0;
+
+  @FXML
   Button backButton;
 
   Timer timer;
@@ -27,6 +31,7 @@ public class LoadingController extends Controller {
   public void initialize() {
     setHandlers();
     animateLoading();
+    animateGrass();
   }
 
   public void setHandlers() {
@@ -34,6 +39,21 @@ public class LoadingController extends Controller {
       NetworkClient.cancelJoinGame();
       SceneManager.showScene(SceneSelections.SERVER_MENU);
     });
+  }
+
+  private void animateGrass() {
+    Timer timer = new Timer();
+    timer.scheduleAtFixedRate(new TimerTask() {
+      @Override
+      public void run() {
+        grassState = (grassState + 1) % 2;
+        try {
+          Platform.runLater(() -> {
+            background.setViewport(new Rectangle2D((3840 * grassState), 0, 3840, 2560));
+          });
+        } catch (Exception e) {}
+      }
+    }, 0, 1000);
   }
 
   public void animateLoading() {

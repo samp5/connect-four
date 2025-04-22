@@ -2,6 +2,7 @@
 
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
@@ -18,10 +19,13 @@
 
 <Pane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerMenuController">
    <children>
-      <ImageView fitHeight="720.0" fitWidth="1080.0">
+      <ImageView fx:id="background" fitHeight="720.0" fitWidth="1080.0">
          <image>
             <Image url="@../assets/server_menu_background.png" />
          </image>
+         <viewport>
+            <Rectangle2D height="2560.0" width="3840.0" />
+         </viewport>
       </ImageView>
       <VBox spacing="20.0">
          <children>
@@ -243,7 +247,7 @@
                   <Insets top="20.0" />
                </padding>
             </VBox>
-            <Button fx:id="profileBackButton" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x" >
+            <Button fx:id="profileBackButton" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
                <cursor>
                   <Cursor fx:constant="HAND" />
               </cursor>
@@ -257,7 +261,7 @@
                   <Image url="@../assets/server_menu_pane.png" />
                </image>
             </ImageView>
-            <Button fx:id="friendsBackButton" alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x" >
+            <Button fx:id="friendsBackButton" alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
                <cursor>
                   <Cursor fx:constant="HAND" />
               </cursor>

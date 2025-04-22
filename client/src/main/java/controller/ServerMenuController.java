@@ -12,10 +12,12 @@ import utils.SceneManager.SceneSelections;
 import controller.utils.FriendUtils;
 import controller.utils.GameSettings;
 import controller.utils.RecentConnection;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Tooltip;
@@ -40,6 +42,10 @@ import utils.SceneManager;
  *
  */
 public class ServerMenuController extends Controller {
+  @FXML
+  ImageView background;
+  int grassState = 0;
+
   @FXML
   Pane menuPane;
 
@@ -132,6 +138,7 @@ public class ServerMenuController extends Controller {
 
     setHandlers();
     setSelectorBehavior();
+    animateGrass();
 
     // get friends list and profile
     populateProfileDisplay();
@@ -155,7 +162,21 @@ public class ServerMenuController extends Controller {
     } else {
       setPlayerInfo(playerInfo.online, playerInfo.activeGames);
     }
+  }
 
+  private void animateGrass() {
+    Timer timer = new Timer();
+    timer.scheduleAtFixedRate(new TimerTask() {
+      @Override
+      public void run() {
+        grassState = (grassState + 1) % 2;
+        try {
+          Platform.runLater(() -> {
+            background.setViewport(new Rectangle2D((3840 * grassState), 0, 3840, 2560));
+          });
+        } catch (Exception e) {}
+      }
+    }, 0, 1000);
   }
 
   private void setHandlers() {

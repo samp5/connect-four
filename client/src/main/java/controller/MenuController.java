@@ -1,8 +1,14 @@
 package controller;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import controller.utils.GameSettings;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import logic.GameLogic.GameMode;
 import utils.SceneManager;
@@ -13,6 +19,10 @@ import utils.SceneManager.SceneSelections;
  *
  */
 public class MenuController extends Controller {
+  @FXML
+  ImageView background;
+  int grassState = 0;
+
   @FXML
   Pane menuPane;
 

@@ -2,7 +2,7 @@
 
 ## Features
 - [ ] Text emoji drawer
-- [ ] Art overhaul
+- [>] Art overhaul
 
 ## Client
 

@@ -1,11 +1,15 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import controller.utils.RecentConnection;
 import controller.utils.RecentConnectionRegistry;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -50,6 +54,10 @@ public class ConnectionsController extends Controller {
   Pane loginPane;
 
   @FXML
+  ImageView background;
+  int grassState = 0;
+
+  @FXML
   TextField usernameInput;
   @FXML
   TextField passwordInput;
@@ -92,6 +100,9 @@ public class ConnectionsController extends Controller {
     // set our custom cell factory
     connectionListView.setCellFactory(new RecentConnection.ConnectionCellFactory());
 
+    // animate grass
+    animateGrass();
+
     // load recent connections
     RecentConnectionRegistry.load();
     connectionListView
@@ -105,6 +116,21 @@ public class ConnectionsController extends Controller {
     }
 
     setHandlers();
+  }
+
+  private void animateGrass() {
+    Timer timer = new Timer();
+    timer.scheduleAtFixedRate(new TimerTask() {
+      @Override
+      public void run() {
+        grassState = (grassState + 1) % 2;
+        try {
+          Platform.runLater(() -> {
+            background.setViewport(new Rectangle2D((3840 * grassState), 0, 3840, 2560));
+          });
+        } catch (Exception e) {}
+      }
+    }, 0, 1000);
   }
 
   private void setHandlers() {

@@ -10,10 +10,13 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" stylesheets="@../css/menu.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoadingController">
    <children>
-      <ImageView fitHeight="720.0" fitWidth="1080.0">
+      <ImageView fx:id="background" fitHeight="720.0" fitWidth="1080.0">
          <image>
-            <Image url="@../assets/loading_background2.png" />
+            <Image url="@../assets/loading_background.png" />
          </image>
+         <viewport>
+            <Rectangle2D height="2560.0" width="3840.0" />
+         </viewport>
       </ImageView>
       <Pane fx:id="loadingPane" layoutX="435.0" layoutY="330.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="220.0">
          <children>
