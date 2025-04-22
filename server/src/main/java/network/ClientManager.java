@@ -233,7 +233,6 @@ public class ClientManager {
   public static void sendToByID(Long targetPlayer, Message msg) {
     getClientByID(targetPlayer).ifPresent(target -> {
       try {
-        System.err.println("send to id was present!");
         target.sendMessage(msg);
       } catch (IOException ioe) {
         ioe.printStackTrace();
