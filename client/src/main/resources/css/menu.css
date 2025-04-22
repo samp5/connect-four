@@ -56,8 +56,10 @@
 
 .back-button {
   -fx-border-color: #363646;
-  -fx-border-width: 0px;
-  -fx-background-color: transparent;
+  -fx-border-width: 2px;
+  -fx-border-radius: 2px;
+  -fx-background-color: #a08662;
+  -fx-font-fill: black;
 }
 
 .back-button .text:hover {

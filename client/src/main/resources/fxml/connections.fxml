@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -17,24 +18,16 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<Pane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" stylesheets="@../css/chat.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ConnectionsController">
+<Pane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ConnectionsController">
    <children>
       <ImageView fitHeight="720.0" fitWidth="1080.0">
          <image>
-            <Image url="@../assets/load-background.png" />
+            <Image url="@../assets/conections_background.png" />
          </image>
       </ImageView>
-      <VBox layoutY="79.0" spacing="50.0">
+      <VBox layoutY="190.0" spacing="50.0">
          <children>
-            <HBox alignment="CENTER" prefWidth="1080.0">
-               <children>
-                  <ImageView fitHeight="112.0" fitWidth="800.0">
-                     <image>
-                        <Image url="@../assets/connections_title.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </HBox>
+            <HBox alignment="CENTER" prefWidth="1080.0" />
             <HBox alignment="CENTER" prefWidth="1080.0">
                <children>
                   <StackPane>
@@ -186,10 +179,11 @@
             </HBox>
          </children>
       </Pane>
-      <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="36.0" prefWidth="36.0" styleClass="back-button" text="x">
+      <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x" >
          <cursor>
             <Cursor fx:constant="HAND" />
-         </cursor></Button>
+      </cursor>
+    </Button>
       <Pane fx:id="notificationPane" layoutX="810.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" visible="false">
          <children>
             <ImageView fitHeight="64.0" fitWidth="256.0">
@@ -213,4 +207,8 @@
          </children>
       </Pane>
    </children>
+   <stylesheets>
+      <URL value="@../css/chat.css" />
+      <URL value="@../css/menu.css" />
+   </stylesheets>
 </Pane>
