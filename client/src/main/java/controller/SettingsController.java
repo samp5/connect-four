@@ -7,12 +7,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -116,6 +119,18 @@ public class SettingsController extends Controller {
     this.parent = parent;
     this.root = root;
     isAttached = true;
+
+    EventHandler<? super KeyEvent> curHandler = parent.getOnKeyReleased();
+    root.requestFocus();
+    parent.setOnKeyReleased((e) -> {
+      if (e.getCode() == KeyCode.ESCAPE) {
+        parent.setOnKeyReleased(curHandler);
+        detach();
+        e.consume();
+      } else {
+        curHandler.handle(e);
+      }
+    });
   }
 
   private void detach() {

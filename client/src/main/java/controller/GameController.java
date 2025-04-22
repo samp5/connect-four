@@ -18,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -498,14 +499,20 @@ public class GameController extends Controller {
       case None:
         redTurnIndicator.setVisible(false);
         blueTurnIndicator.setVisible(false);
+        chipPane1.setCursor(Cursor.DEFAULT);
+        chipPane2.setCursor(Cursor.DEFAULT);
         break;
       case PlayerOne:
         redTurnIndicator.setVisible(true);
         blueTurnIndicator.setVisible(false);
+        chipPane1.setCursor(Cursor.HAND);
+        chipPane2.setCursor(Cursor.DEFAULT);
         break;
       case PlayerTwo:
         redTurnIndicator.setVisible(false);
         blueTurnIndicator.setVisible(true);
+        chipPane1.setCursor(Cursor.DEFAULT);
+        chipPane2.setCursor(Cursor.HAND);
         break;
     }
 

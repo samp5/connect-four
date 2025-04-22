@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalTime;
 
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -37,7 +38,6 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
     public ListCell<RecentConnection> call(ListView<RecentConnection> param) {
 
       return new ListCell<>() {
-
         /**
          * custom {@code updateItem} function for {@code ListCell<City>}
          */
@@ -49,9 +49,9 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
             setGraphic(null);
 
           } else if (connection != null) {
-
             // determine whether this city is selected
             boolean isSelected = getListView().getSelectionModel().getSelectedItem() == connection;
+            VBox info;
 
             if (isSelected) {
               Text connectionLabel = new Text(
@@ -68,6 +68,7 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
               HBox boxRight = new HBox(bp);
               boxRight.setAlignment(Pos.CENTER_RIGHT);
               boxRight.setMinWidth(25);
+              bp.setCursor(Cursor.HAND);
 
               HBox top = new HBox(boxLeft, boxRight);
               top.setMinWidth(280);
@@ -85,7 +86,7 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
               });
 
               // construct our HBox and label
-              VBox info = new VBox(top, details);
+              info = new VBox(top, details);
 
               // Add the appropriate style classes
               connectionLabel.getStyleClass().add("recent-connection-cell-text-selected");
@@ -108,7 +109,7 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
               top.setMinWidth(280);
 
               // construct our HBox and label
-              VBox info = new VBox(top, details);
+              info = new VBox(top, details);
 
               // Add the appropriate style classes
               connectionLabel.getStyleClass().add("recent-connection-cell-text");
@@ -118,6 +119,7 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
               // set the graphic for this cell
               setGraphic(info);
             }
+            info.setCursor(Cursor.HAND);
           } else {
 
             /**

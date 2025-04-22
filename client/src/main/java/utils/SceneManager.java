@@ -3,9 +3,12 @@ package utils;
 import java.io.IOException;
 
 import controller.Controller;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import controller.SettingsController;
+import network.NetworkClient;
 
 public class SceneManager {
   private static Stage stage;
@@ -58,6 +61,11 @@ public class SceneManager {
 
       stage.setScene(scene);
       stage.setResizable(false);
+
+      stage.setOnCloseRequest(r -> {
+        performClose();
+        r.consume();
+      });
       stage.show();
 
     } catch (IOException e) {
@@ -71,5 +79,12 @@ public class SceneManager {
 
   public static Controller getCurrentController() {
     return ctl;
+  }
+
+  // save close function
+  public static void performClose() {
+    SettingsController.save();
+    NetworkClient.disconnect();
+    Platform.exit();
   }
 }

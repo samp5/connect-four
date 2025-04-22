@@ -21,7 +21,12 @@ class RegistryPlayer implements Serializable {
     this.id = id;
     this.stats = new PlayerStats();
     this.friends = new HashSet<>();
-    this.profilePicture = ProfilePicture.BASIC_BLUE;
+
+    if (username.equals("uaq")) {
+      this.profilePicture = ProfilePicture.UAQ;
+    } else {
+      this.profilePicture = ProfilePicture.BASIC_BLUE;
+    }
   }
 
   public Player getClientPlayer() {

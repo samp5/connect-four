@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -91,12 +92,14 @@ public class FriendUtils {
     inviteToGame.setPrefSize(100, 40);
     inviteToGame.setMinSize(100, 40);
     inviteToGame.getStyleClass().add("pixel-button");
+    inviteToGame.setCursor(Cursor.HAND);
 
     Button chatWithFriend = new Button("Chat");
     chatWithFriend.setMaxSize(75, 40);
     chatWithFriend.setPrefSize(75, 40);
     chatWithFriend.setMinSize(75, 40);
     chatWithFriend.getStyleClass().add("pixel-button");
+    chatWithFriend.setCursor(Cursor.HAND);
 
     chatWithFriend.setOnAction(e -> {
       openChat(profile.getId());

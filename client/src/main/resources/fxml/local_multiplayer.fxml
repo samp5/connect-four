@@ -5,15 +5,14 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-
 <StackPane prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
     <fx:include fx:id="gamePane" source="game.fxml" />
-      <Pane minWidth="-Infinity" mouseTransparent="true" prefHeight="200.0" prefWidth="180.0">
+      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mouseTransparent="true" prefHeight="720.0" prefWidth="1080.0">
          <children>
             <ImageView fitHeight="720.0" fitWidth="180.0">
                <image>
-                  <Image url="@../assets/chat_background.png" />
+                  <Image url="@../assets/local_multi_padding.png" />
                </image>
             </ImageView>
          </children>
@@ -22,7 +21,7 @@
          <children>
             <ImageView fitHeight="720.0" fitWidth="180.0">
                <image>
-                  <Image url="@../assets/chat_background.png" />
+                  <Image url="@../assets/local_multi_padding.png" />
                </image>
             </ImageView>
          </children>

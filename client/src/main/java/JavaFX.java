@@ -1,6 +1,6 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
-import network.NetworkClient;
+import sun.misc.Signal;
 import utils.AudioManager;
 import utils.SceneManager;
 import utils.SceneManager.SceneSelections;
@@ -13,17 +13,10 @@ import controller.SettingsController;
 public class JavaFX extends Application {
 
   public static void main(String[] args) {
-    // add shut down disconnect and settings protection
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      // this happens often when not doing anything over network
-      try {
-        SettingsController.save();
-
-        Class.forName("network.NetworkClient");
-        NetworkClient.disconnect();
-      } catch (ClassNotFoundException e) {
-      }
-    }));
+    // sig-int handler
+    Signal.handle(new Signal("INT"), sig -> {
+      SceneManager.performClose();
+    });
 
     // attempt to connect to localhost server
     launch(args);

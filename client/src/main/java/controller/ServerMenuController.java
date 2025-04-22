@@ -21,6 +21,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -172,14 +174,28 @@ public class ServerMenuController extends Controller {
       NetworkClient.disconnect();
       SceneManager.showScene(SceneSelections.MAIN_MENU);
     });
+
+    profilePane.setOnKeyReleased(e -> {
+      if (e.getCode() == KeyCode.ESCAPE) {
+        profilePane.setVisible(false);
+        e.consume();
+      }
+    });
     profileBackButton.setOnAction(e -> {
       profilePane.setVisible(false);
     });
     profileButton.setOnMouseClicked(e -> {
       profilePane.toFront();
       profilePane.setVisible(true);
+      profilePane.requestFocus();
     });
 
+    friendsPane.setOnKeyReleased(e -> {
+      if (e.getCode() == KeyCode.ESCAPE) {
+        friendsPane.setVisible(false);
+        e.consume();
+      }
+    });
     friendsBackButton.setOnAction(e -> {
       friendsPane.setVisible(false);
     });
@@ -187,6 +203,7 @@ public class ServerMenuController extends Controller {
     friendsButton.setOnMouseClicked(e -> {
       friendsPane.toFront();
       friendsPane.setVisible(true);
+      friendsPane.requestFocus();
     });
 
     Tooltip.install(leaderBoardButton, ToolTipHelper.make("View leaderboard"));
@@ -247,8 +264,8 @@ public class ServerMenuController extends Controller {
 
     // setup choice box
     profilePicSelector
-        .setItems(FXCollections.observableArrayList(ProfilePicture.values()));
-
+        .setItems(FXCollections.observableArrayList(ProfilePicture.values())
+            .filtered(o -> o != ProfilePicture.UAQ));
     profilePicSelector.setConverter(new StringConverter<UserProfile.ProfilePicture>() {
       public String toString(ProfilePicture object) {
         if (object != null) {

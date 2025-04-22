@@ -4,6 +4,7 @@ import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -89,11 +90,13 @@ public class NotificationManager {
     confirm.setMaxSize(80, 40);
     confirm.setMinSize(80, 40);
     confirm.setPrefSize(80, 40);
+    confirm.setCursor(Cursor.HAND);
 
     deny.getStyleClass().add("pixel-button");
     deny.setMaxSize(60, 40);
     deny.setMinSize(60, 40);
     deny.setPrefSize(60, 40);
+    deny.setCursor(Cursor.HAND);
 
     Path hidePath = new Path(new MoveTo(shownX, y), new HLineTo(hiddenX));
     reverse = new PathTransition(Duration.seconds(.5), hidePath, notificationPane);

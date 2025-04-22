@@ -6,10 +6,12 @@ import controller.utils.LeaderBoardRow;
 import network.LeaderBoardData;
 import network.Message.LeaderBoardView;
 import network.NetworkClient;
-
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -81,6 +83,18 @@ public class LeaderBoardController extends Controller {
     root.toFront();
     this.parent = parent;
     isAttached = true;
+
+    EventHandler<? super KeyEvent> curHandler = parent.getOnKeyReleased();
+    root.requestFocus();
+    parent.setOnKeyReleased((e) -> {
+      if (e.getCode() == KeyCode.ESCAPE) {
+        parent.setOnKeyReleased(curHandler);
+        detach();
+        e.consume();
+      } else {
+        curHandler.handle(e);
+      }
+    });
   }
 
   private void detach() {
