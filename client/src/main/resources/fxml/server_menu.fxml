@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
@@ -130,17 +131,33 @@
                   <Insets top="20.0" />
                </padding>
             </HBox>
-            <TextFlow prefHeight="34.0" prefWidth="335.0" textAlignment="CENTER">
+            <HBox alignment="CENTER">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text="Connected to " />
-                  <Text fx:id="ipText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text="{IP}" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text=" : " />
-                  <Text fx:id="portTxt" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text="{PORT}" />
+                  <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="256.0">
+                     <children>
+                        <ImageView fitHeight="32.0" fitWidth="256.0">
+                           <image>
+                              <Image url="@../assets/connection_info_background.png" />
+                           </image>
+                        </ImageView>
+                        <TextFlow prefHeight="34.0" prefWidth="335.0" textAlignment="CENTER">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text="Connected to " />
+                              <Text fx:id="ipText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text="{IP}" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text=" : " />
+                              <Text fx:id="portTxt" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text="{PORT}" />
+                           </children>
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
+                        </TextFlow>
+                     </children>
+                     <padding>
+                        <Insets top="44.0" />
+                     </padding>
+                  </StackPane>
                </children>
-               <padding>
-                  <Insets top="30.0" />
-               </padding>
-            </TextFlow>
+            </HBox>
          </children>
       </VBox>
       <Pane fx:id="profilePane" layoutX="340.0" layoutY="150.0" prefHeight="500.0" prefWidth="400.0" visible="false">
