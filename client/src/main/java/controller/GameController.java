@@ -754,7 +754,7 @@ public class GameController extends Controller {
   }
 
   public void recieveOpponentDisconnect() {
-    rematchTitle.setText("Opponent fleed");
+    rematchTitle.setText("Opponent fled");
     rematchYes.setText("Wait...");
     rematchYes.setOnAction(e -> {
       rematchYes.setText("Waiting...");

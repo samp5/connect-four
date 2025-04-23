@@ -89,16 +89,16 @@ public class NotificationManager {
     deny.setLayoutX(128);
     deny.setLayoutY(50);
 
-    confirm.getStyleClass().add("pixel-button");
-    confirm.setMaxSize(80, 40);
-    confirm.setMinSize(80, 40);
-    confirm.setPrefSize(80, 40);
+    confirm.getStyleClass().addAll("connection-button-small", "button-bottom-padded");
+    confirm.setMaxSize(64, 50);
+    confirm.setMinSize(64, 50);
+    confirm.setPrefSize(64, 50);
     confirm.setCursor(Cursor.HAND);
 
-    deny.getStyleClass().add("pixel-button");
-    deny.setMaxSize(60, 40);
-    deny.setMinSize(60, 40);
-    deny.setPrefSize(60, 40);
+    deny.getStyleClass().addAll("connection-button-small", "button-bottom-padded");
+    deny.setMaxSize(64, 50);
+    deny.setMinSize(64, 50);
+    deny.setPrefSize(64, 50);
     deny.setCursor(Cursor.HAND);
 
     Path hidePath = new Path(new MoveTo(shownX, y), new HLineTo(hiddenX));
