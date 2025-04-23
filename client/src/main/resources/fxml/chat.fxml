@@ -43,11 +43,14 @@
                                  <children>
                                     <ImageView fitHeight="80.0" fitWidth="220.0">
                                        <image>
-                                          <Image url="@../assets/chat_message_local.png" />
+                                          <Image url="@../assets/chat_message.png" />
                                        </image>
                                     </ImageView>
-                                    <TextFlow fx:id="chatEditorDisplay" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mouseTransparent="true" prefHeight="80.0" prefWidth="220.0" />
-                                    <TextArea fx:id="chatEditorInput" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="80.0" prefWidth="220.0" wrapText="true" />
+                                    <TextFlow fx:id="chatEditorDisplay" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mouseTransparent="true" prefHeight="80.0" prefWidth="210.0" translateX="5.0" />
+                                    <TextArea fx:id="chatEditorInput" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="80.0" prefWidth="210.0" translateX="5.0" wrapText="true">
+                                       <StackPane.margin>
+                                          <Insets />
+                                       </StackPane.margin></TextArea>
                                  </children>
                                  <HBox.margin>
                                     <Insets />
@@ -148,19 +151,19 @@
          </cursor>
       </BorderPane>
       <Text fx:id="userNameText" layoutX="115.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="{username}" />
-      <HBox layoutX="210.0" layoutY="30.0" spacing="10.0">
+      <HBox layoutX="190.0" layoutY="30.0" spacing="10.0">
          <children>
-            <Button fx:id="resignButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="33.0" stylesheets="@../css/chat.css">
+            <Button fx:id="resignButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="33.0" prefWidth="39.0" styleClass="resign-button" stylesheets="@../css/chat.css">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="drawButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="34.0">
+            <Button fx:id="drawButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="33.0" prefWidth="39.0" styleClass="draw-button">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="requestResignButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="33.0">
+            <Button fx:id="requestResignButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="33.0" prefWidth="39.0" styleClass="request-resign-button">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

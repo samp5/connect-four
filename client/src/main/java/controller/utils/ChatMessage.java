@@ -13,6 +13,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 
 public class ChatMessage {
@@ -49,23 +50,13 @@ public class ChatMessage {
     senderFlow.getChildren().setAll(senderTxt);
 
     if (local) {
-      messageBox.setBackground(
-          new Background(new BackgroundImage(new Image("/assets/chat_message_local.png"),
-              BackgroundRepeat.NO_REPEAT,
-              BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-              new BackgroundSize(100, 100, true, true,
-                  false,
-                  false))));
+      messageFlow.setTextAlignment(TextAlignment.RIGHT);
+      messageBox.getStyleClass().add("message-local");
       messageRowBox.setAlignment(Pos.CENTER_RIGHT);
       timeStampBox.setAlignment(Pos.CENTER_RIGHT);
     } else {
-      messageBox.setBackground(
-          new Background(new BackgroundImage(new Image("/assets/chat_message_remote.png"),
-              BackgroundRepeat.NO_REPEAT,
-              BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-              new BackgroundSize(100, 100, true, true,
-                  false,
-                  false))));
+      messageFlow.setTextAlignment(TextAlignment.LEFT);
+      messageBox.getStyleClass().add("message-remote");
       messageRowBox.setAlignment(Pos.CENTER_LEFT);
       timeStampBox.setAlignment(Pos.CENTER_LEFT);
     }

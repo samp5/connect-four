@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<HBox fx:id="messageRowBox" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="320.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.utils.ChatMessage">
+<HBox fx:id="messageRowBox" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="320.0" stylesheets="@../css/chat.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.utils.ChatMessage">
    <children>
-      <HBox fx:id="messageBox">
+      <HBox fx:id="messageBox" styleClass="message">
          <children>
             <VBox alignment="CENTER_RIGHT">
                <children>
@@ -32,11 +32,11 @@
                      </children>
                   </HBox>
                </children>
+               <padding>
+                  <Insets left="5.0" right="5.0" />
+               </padding>
             </VBox>
          </children>
-         <padding>
-            <Insets left="20.0" right="20.0" />
-         </padding>
       </HBox>
    </children>
    <padding>

@@ -30,6 +30,22 @@
 .big-button-text .text {
   -fx-font-size: 28px;
 }
+.message-local{
+  -fx-background-color: #E4D2AA;
+  -fx-background-radius: 15;
+  -fx-border-image-source: url("/assets/chat_message_local.png");
+  -fx-border-image-repeat: stretch;
+  -fx-border-image-slice: 20;
+  -fx-border-image-width: 4;
+}
+.message-remote{
+  -fx-background-color: #C7B08B;
+  -fx-background-radius: 15;
+  -fx-border-image-source: url("/assets/chat_message_local.png");
+  -fx-border-image-repeat: stretch;
+  -fx-border-image-slice: 20;
+  -fx-border-image-width: 4;
+}
 
 /* Text that is displayed in the TextFlow for user input */
 .text-chat-input-display {

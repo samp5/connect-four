@@ -40,6 +40,146 @@
   -fx-text-fill: #B21313;
 }
 
+.draw-button {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/buttons/draw1.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 39 33; 
+  -fx-border-color: transparent;
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+.draw-button:hover {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/buttons/draw2.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-border-color: transparent;
+  -fx-background-size: 39 33; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+
+.draw-button:pressed {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/buttons/draw3.png');
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 39 33; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 4 0;
+}
+
+.request-resign-button {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/buttons/red-flag1.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 39 33; 
+  -fx-border-color: transparent;
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+.request-resign-button:hover {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/buttons/red-flag2.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-border-color: transparent;
+  -fx-background-size: 39 33; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+
+.request-resign-button:pressed {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/buttons/red-flag3.png');
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 39 33; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 4 0;
+}
+
+.resign-button {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/buttons/surrender-flag1.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 39 33; 
+  -fx-border-color: transparent;
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+.resign-button:hover {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/buttons/surrender-flag2.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-border-color: transparent;
+  -fx-background-size: 39 33; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+
+.resign-button:pressed {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/buttons/surrender-flag3.png');
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 39 33; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 4 0;
+}
+
+.send-button {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/buttons/send_button1.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 75 50; 
+  -fx-border-color: transparent;
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+.send-button:hover {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/buttons/send_button2.png');
+  -fx-background-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-border-color: transparent;
+  -fx-background-size: 75 50; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 8 0;
+}
+
+.send-button:pressed {
+  -fx-background-insets: 0;
+  -fx-border-width: 0px;
+  -fx-background-image: url('/assets/buttons/send_button3.png');
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-repeat: no-repeat; 
+  -fx-background-size: 75 50; 
+  -fx-background-position: center top;
+  -fx-label-padding: 0 0 4 0;
+}
+
 .confirm-button {
   -fx-background-insets: 0;
   -fx-border-width: 0px;

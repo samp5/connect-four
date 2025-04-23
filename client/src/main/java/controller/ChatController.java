@@ -132,14 +132,6 @@ public class ChatController extends Controller {
     notificationManager = new NotificationManager(notificationPane, notificationText, notificationIcon);
 
     // can't do this in fxml easily
-    sendButton
-        .setBackground(new Background(new BackgroundImage(new Image("/assets/send_button.png"),
-            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            new BackgroundSize(100, 50, false, false, false, false))));
-    resignButton
-        .setBackground(new Background(new BackgroundImage(new Image("/assets/surrender-flag.png"),
-            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            new BackgroundSize(33, 28, false, false, false, false))));
     drawButton
         .setBackground(new Background(new BackgroundImage(new Image("/assets/draw.png"),
             BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
@@ -368,7 +360,7 @@ public class ChatController extends Controller {
         try {
           Platform.runLater(() -> {
             ((ImageView) oppProfileButton.getCenter())
-              .setViewport(new Rectangle2D((75 * aiProfileState), 0, 75, 75));
+                .setViewport(new Rectangle2D((75 * aiProfileState), 0, 75, 75));
           });
         } catch (Exception e) {
         }
