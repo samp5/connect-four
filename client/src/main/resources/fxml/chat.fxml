@@ -30,7 +30,7 @@
                   </ImageView>
                   <BorderPane fx:id="chatPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="360.0">
                      <center>
-                        <ScrollPane fx:id="chatHistoryScroll" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minViewportHeight="500.0" minViewportWidth="315.0" minWidth="-Infinity" prefHeight="500.0" prefViewportHeight="500.0" prefViewportWidth="315.0" prefWidth="315.0" style="-fx-background-color: transparent;" styleClass="chat-history-scroll" stylesheets="@../css/chat.css" translateY="50.0" BorderPane.alignment="CENTER">
+                        <ScrollPane fx:id="chatHistoryScroll" fitToHeight="true" hbarPolicy="NEVER" hmax="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minViewportHeight="500.0" minViewportWidth="315.0" minWidth="-Infinity" prefHeight="500.0" prefViewportHeight="500.0" prefViewportWidth="315.0" prefWidth="340.0" style="-fx-background-color: transparent;" styleClass="chat-history-scroll" stylesheets="@../css/chat.css" translateX="10.0" translateY="50.0" BorderPane.alignment="CENTER">
                            <content>
                               <VBox fx:id="chatHistory" alignment="TOP_CENTER" maxWidth="320.0" minWidth="-Infinity" prefWidth="320.0" />
                            </content>

@@ -74,3 +74,42 @@
 .scroll-pane .viewport {
        -fx-background-color: transparent;
 }
+
+.scroll-pane .scroll-bar:vertical {
+}
+
+
+.scroll-pane .scroll-bar:vertical .thumb{
+  -fx-background-image: url("../assets/red_chip.png");
+  -fx-background-repeat: no-repeat;
+  -fx-background-size: contain;
+  -fx-background-color: #422433;
+  -fx-background-position: center;
+}
+.scroll-pane .scroll-bar:vertical .increment-button{
+  -fx-background-color: transparent;
+  -fx-background-image: url("../assets/decrement-button.png");
+  -fx-background-repeat: no-repeat;
+  -fx-background-size: contain;
+  -fx-text-fill: transparent;
+}
+.scroll-pane .scroll-bar:vertical .increment-arrow{
+  -fx-background-color: transparent;
+  -fx-text-fill: transparent;
+}
+.scroll-pane .scroll-bar:vertical .decrement-arrow{
+  -fx-background-color: transparent;
+  -fx-text-fill: transparent;
+}
+.scroll-pane .scroll-bar:vertical .decrement-button{
+  -fx-background-color: transparent;
+  -fx-background-image: url("../assets/increment-button.png");
+  -fx-background-repeat: no-repeat;
+  -fx-background-size: contain;
+}
+.scroll-pane .scroll-bar:vertical .track{
+  -fx-background-color: #c0a36e; 
+  -fx-border-color: #363646; 
+  -fx-border-style: solid; 
+  -fx-border-width: 2px; 
+}
