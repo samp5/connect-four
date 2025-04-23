@@ -1,13 +1,17 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
@@ -26,6 +30,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import logic.AI;
 import logic.GameLogic;
 import logic.GameLogic.GameMode;
 import network.NetworkClient;
@@ -35,8 +40,6 @@ import utils.ToolTipHelper;
 import utils.AudioManager.SoundEffect;
 import utils.NotificationManager;
 import utils.NotificationManager.NotificationType;
-import utils.SceneManager;
-import utils.SceneManager.SceneSelections;
 import controller.utils.ChatMessage;
 import controller.utils.Markup;
 
@@ -97,6 +100,7 @@ public class ChatController extends Controller {
   Text oppWinPercent;
   @FXML
   Button addFriend;
+  int aiProfileState = 0;
 
   @FXML
   Pane notificationPane;
@@ -112,12 +116,33 @@ public class ChatController extends Controller {
     setHandlers();
 
     if (GameLogic.getGameMode() == GameMode.LocalAI) {
+      ((ImageView) oppProfileButton.getCenter()).setImage(new Image("/assets/robot.png"));
+      oppProfileButton.setVisible(true);
       userNameText.setText("AI");
       oppProfileButton.setOnMouseClicked(e -> {
         recieveMessage("ow stop :cry:", "AI", false);
       });
-      ((ImageView) oppProfileButton.getCenter()).setImage(new Image("/assets/robot.png"));
-      oppProfileButton.setVisible(true);
+      if (AI.getDifficulty() == 7) {
+        ((ImageView) oppProfileButton.getCenter()).setImage(new Image("/assets/robot_max.png", 150, 75, false, false));
+        ((ImageView) oppProfileButton.getCenter()).setViewport(new Rectangle2D(0, 0, 75, 75));
+        Timer timer = new Timer();
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+          @Override
+          public void run() {
+            aiProfileState = (aiProfileState + 1) % 2;
+            try {
+              Platform.runLater(() -> {
+                ((ImageView) oppProfileButton.getCenter())
+                    .setViewport(new Rectangle2D((75 * aiProfileState), 0, 75, 75));
+              });
+            } catch (Exception e) {
+            }
+          }
+        }, 0, 1000);
+
+      }
+
     }
 
     // auto scroll the chat history based on the height of the vbox
