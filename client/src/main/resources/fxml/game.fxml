@@ -182,7 +182,7 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Your opponent has requested that you resign..." wrappingWidth="224.0" />
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-spacing: 32;">
                      <children>
-                        <Button fx:id="resignRequestReject" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="88.0" styleClass="pixel-button" text="Decline">
+                        <Button fx:id="resignRequestReject" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" styleClass="confirm-button" text="Decline">
                            <padding>
                               <Insets top="1.0" />
                            </padding>
@@ -190,7 +190,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
-                        <Button fx:id="resignRequestAccept" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="88.0" styleClass="pixel-button" text="Accept">
+                        <Button fx:id="resignRequestAccept" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" styleClass="confirm-button" text="Accept">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
