@@ -43,7 +43,7 @@
 .confirm-button {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/confirm_button.png');
+  -fx-background-image: url('/assets/buttons/confirm_button1.png');
   -fx-background-color: transparent;
   -fx-background-repeat: no-repeat; 
   -fx-background-size: 96 32; 
@@ -54,7 +54,7 @@
 .confirm-button:hover {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/confirm_button_hover.png');
+  -fx-background-image: url('/assets/buttons/confirm_button2.png');
   -fx-background-color: transparent;
   -fx-background-repeat: no-repeat; 
   -fx-border-color: transparent;
@@ -65,7 +65,7 @@
 .confirm-button:pressed {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/confirm_button_pressed.png');
+  -fx-background-image: url('/assets/buttons/confirm_button3.png');
   -fx-background-color: transparent;
   -fx-border-color: transparent;
   -fx-background-repeat: no-repeat; 
@@ -77,7 +77,7 @@
 .invite-button {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/invite_button.png');
+  -fx-background-image: url('/assets/buttons/invite_button1.png');
   -fx-background-color: transparent;
   -fx-background-repeat: no-repeat; 
   -fx-background-size: 100 48; 
@@ -88,7 +88,7 @@
 .invite-button:hover {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/invite_button_hover.png');
+  -fx-background-image: url('/assets/buttons/invite_button2.png');
   -fx-background-color: transparent;
   -fx-background-repeat: no-repeat; 
   -fx-border-color: transparent;
@@ -99,7 +99,7 @@
 .invite-button:pressed {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/invite_button_pressed.png');
+  -fx-background-image: url('/assets/buttons/invite_button3.png');
   -fx-background-color: transparent;
   -fx-border-color: transparent;
   -fx-background-repeat: no-repeat; 
@@ -110,7 +110,7 @@
 .login-button {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/login_button.png');
+  -fx-background-image: url('/assets/buttons/login_button1.png');
   -fx-background-color: transparent;
   -fx-background-repeat: no-repeat; 
   -fx-background-size: 80 48; 
@@ -121,7 +121,7 @@
 .login-button:hover {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/login_button_hover.png');
+  -fx-background-image: url('/assets/buttons/login_button2.png');
   -fx-background-color: transparent;
   -fx-background-repeat: no-repeat; 
   -fx-border-color: transparent;
@@ -132,7 +132,7 @@
 .login-button:pressed {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/login_button_pressed.png');
+  -fx-background-image: url('/assets/buttons/login_button3.png');
   -fx-background-color: transparent;
   -fx-border-color: transparent;
   -fx-background-repeat: no-repeat; 
@@ -144,7 +144,7 @@
 .connection-button-small {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/connnection_button_small.png');
+  -fx-background-image: url('/assets/buttons/connection_button_small1.png');
   -fx-background-color: transparent;
   -fx-background-repeat: no-repeat; 
   -fx-background-size: 64 40; 
@@ -155,7 +155,7 @@
 .connection-button-small:hover {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/connnection_button_small_hover.png');
+  -fx-background-image: url('/assets/buttons/connection_button_small2.png');
   -fx-background-color: transparent;
   -fx-background-repeat: no-repeat; 
   -fx-border-color: transparent;
@@ -166,7 +166,7 @@
 .connection-button-small:pressed {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/connnection_button_small_pressed.png');
+  -fx-background-image: url('/assets/buttons/connection_button_small3.png');
   -fx-background-color: transparent;
   -fx-border-color: transparent;
   -fx-background-repeat: no-repeat; 
@@ -178,7 +178,7 @@
 .connection-button {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/connections_button.png');
+  -fx-background-image: url('/assets/buttons/connections_button1.png');
   -fx-background-color: transparent;
   -fx-background-repeat: no-repeat; 
   -fx-background-size: 144 52; 
@@ -189,7 +189,7 @@
 .connection-button:hover {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/connections_button_hover.png');
+  -fx-background-image: url('/assets/buttons/connections_button2.png');
   -fx-background-color: transparent;
   -fx-background-repeat: no-repeat; 
   -fx-border-color: transparent;
@@ -200,7 +200,7 @@
 .connection-button:pressed {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/connections_button_pressed.png');
+  -fx-background-image: url('/assets/buttons/connections_button3.png');
   -fx-background-color: transparent;
   -fx-border-color: transparent;
   -fx-background-repeat: no-repeat; 
@@ -212,7 +212,7 @@
 .menu-button {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/menu_button.png');
+  -fx-background-image: url('/assets/buttons/menu_button1.png');
   -fx-background-color: transparent;
   -fx-background-repeat: no-repeat; 
   -fx-background-size: 128 48; 
@@ -223,7 +223,7 @@
 .menu-button:hover {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/menu_button_hover.png');
+  -fx-background-image: url('/assets/buttons/menu_button2.png');
   -fx-background-color: transparent;
   -fx-background-repeat: no-repeat; 
   -fx-border-color: transparent;
@@ -234,7 +234,7 @@
 .menu-button:pressed {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
-  -fx-background-image: url('/assets/menu_button_down.png');
+  -fx-background-image: url('/assets/buttons/menu_button3.png');
   -fx-background-color: transparent;
   -fx-border-color: transparent;
   -fx-background-repeat: no-repeat; 

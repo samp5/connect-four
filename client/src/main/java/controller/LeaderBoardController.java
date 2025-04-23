@@ -91,9 +91,7 @@ public class LeaderBoardController extends Controller {
         parent.setOnKeyReleased(curHandler);
         detach();
         e.consume();
-      } else {
-        curHandler.handle(e);
-      }
+      } else if (curHandler != null) curHandler.handle(e);
     });
   }
 
