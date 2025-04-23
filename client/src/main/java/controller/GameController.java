@@ -189,7 +189,8 @@ public class GameController extends Controller {
     });
 
     rematchYes.setOnAction(e -> {
-      rematchYes.setText("Wating...");
+      rematchYes.setText("Waiting...");
+      rematchYes.setDisable(true);
       if (GameLogic.getGameMode() == GameMode.Multiplayer) {
         NetworkClient.rematchRequest();
       }
@@ -718,6 +719,7 @@ public class GameController extends Controller {
       rematch.setVisible(false);
       // reset our text
       rematchYes.setText("Yes");
+      rematchYes.setDisable(false);
       // rest the game logic
       resetGameState();
       gameLogic.swapLocalRemotePlayerRoles();

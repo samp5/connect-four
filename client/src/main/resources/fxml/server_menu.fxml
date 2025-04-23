@@ -147,9 +147,6 @@
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text=" : " />
                               <Text fx:id="portTxt" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text="{PORT}" />
                            </children>
-                           <padding>
-                              <Insets top="5.0" />
-                           </padding>
                         </TextFlow>
                      </children>
                      <padding>

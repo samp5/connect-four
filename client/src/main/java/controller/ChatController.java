@@ -100,6 +100,7 @@ public class ChatController extends Controller {
   Text oppWinPercent;
   @FXML
   Button addFriend;
+  Timer profileTimer;
   int aiProfileState = 0;
 
   @FXML
@@ -116,33 +117,14 @@ public class ChatController extends Controller {
     setHandlers();
 
     if (GameLogic.getGameMode() == GameMode.LocalAI) {
-      ((ImageView) oppProfileButton.getCenter()).setImage(new Image("/assets/robot.png"));
+      profileTimer = new Timer();
       oppProfileButton.setVisible(true);
       userNameText.setText("AI");
       oppProfileButton.setOnMouseClicked(e -> {
         recieveMessage("ow stop :cry:", "AI", false);
       });
-      if (AI.getDifficulty() == 7) {
-        ((ImageView) oppProfileButton.getCenter()).setImage(new Image("/assets/robot_max.png", 150, 75, false, false));
-        ((ImageView) oppProfileButton.getCenter()).setViewport(new Rectangle2D(0, 0, 75, 75));
-        Timer timer = new Timer();
 
-        timer.scheduleAtFixedRate(new TimerTask() {
-          @Override
-          public void run() {
-            aiProfileState = (aiProfileState + 1) % 2;
-            try {
-              Platform.runLater(() -> {
-                ((ImageView) oppProfileButton.getCenter())
-                    .setViewport(new Rectangle2D((75 * aiProfileState), 0, 75, 75));
-              });
-            } catch (Exception e) {
-            }
-          }
-        }, 0, 1000);
-
-      }
-
+      checkAIMaxMode();
     }
 
     // auto scroll the chat history based on the height of the vbox
@@ -365,4 +347,38 @@ public class ChatController extends Controller {
     notificationManager.recieve(msg, type);
   }
 
+  public void checkAIMaxMode() {
+    if (AI.getDifficulty() == 7) {
+      setAIMaxMode();
+    } else {
+      setAIDefaultMode();
+    }
+  }
+
+  private void setAIMaxMode() {
+    ((ImageView) oppProfileButton.getCenter()).setImage(new Image("/assets/robot_max.png", 150, 75, false, false));
+    ((ImageView) oppProfileButton.getCenter()).setViewport(new Rectangle2D(0, 0, 75, 75));
+    profileTimer.cancel();
+    profileTimer = new Timer();
+
+    profileTimer.scheduleAtFixedRate(new TimerTask() {
+      @Override
+      public void run() {
+        aiProfileState = (aiProfileState + 1) % 2;
+        try {
+          Platform.runLater(() -> {
+            ((ImageView) oppProfileButton.getCenter())
+              .setViewport(new Rectangle2D((75 * aiProfileState), 0, 75, 75));
+          });
+        } catch (Exception e) {
+        }
+      }
+    }, 0, 1000);
+  }
+
+  private void setAIDefaultMode() {
+    profileTimer.cancel();
+    ((ImageView) oppProfileButton.getCenter()).setImage(new Image("/assets/robot.png"));
+    ((ImageView) oppProfileButton.getCenter()).setViewport(null);
+  }
 }

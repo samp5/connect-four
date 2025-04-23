@@ -2,9 +2,7 @@ package controller.utils;
 
 import controller.SettingsController;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import utils.SceneManager;
 
 public class GameSettings {
   public static void loadOnto(Pane onto) {

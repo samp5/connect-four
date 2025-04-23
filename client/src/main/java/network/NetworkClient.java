@@ -128,6 +128,7 @@ public class NetworkClient {
         } else {
           chatCTL.drawDeclined();
         }
+        break;
       case DRAW_REQUEST:
         gameCTL.recieveDrawRequest();
         break;
@@ -413,6 +414,10 @@ public class NetworkClient {
         ioe.printStackTrace();
       }
     }
+  }
+
+  public static void checkAIMaxMode() {
+    chatCTL.checkAIMaxMode();
   }
 
   // set controllers so that the network client can "message" the ui

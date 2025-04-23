@@ -1,6 +1,5 @@
 package controller;
 
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.stream.Collectors;
@@ -24,7 +23,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -196,12 +194,14 @@ public class ServerMenuController extends Controller {
       SceneManager.showScene(SceneSelections.MAIN_MENU);
     });
 
-    profilePane.setOnKeyReleased(e -> {
+    menuPane.setOnKeyPressed(e -> {
       if (e.getCode() == KeyCode.ESCAPE) {
         profilePane.setVisible(false);
+        friendsPane.setVisible(false);
         e.consume();
       }
     });
+
     profileBackButton.setOnAction(e -> {
       profilePane.setVisible(false);
     });
@@ -211,12 +211,6 @@ public class ServerMenuController extends Controller {
       profilePane.requestFocus();
     });
 
-    friendsPane.setOnKeyReleased(e -> {
-      if (e.getCode() == KeyCode.ESCAPE) {
-        friendsPane.setVisible(false);
-        e.consume();
-      }
-    });
     friendsBackButton.setOnAction(e -> {
       friendsPane.setVisible(false);
     });

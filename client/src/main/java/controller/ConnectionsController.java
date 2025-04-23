@@ -1,8 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -181,33 +179,46 @@ public class ConnectionsController extends Controller {
 
     // enter and escape press handlers
     // -- login screen
-    usernameInput.setOnAction(e -> attemptLogin());
-    passwordInput.setOnAction(e -> attemptLogin());
-    loginButton.addEventHandler(KeyEvent.KEY_PRESSED, e -> {
-      if (e.getCode() == KeyCode.ENTER)
-        attemptLogin();
-    });
-    loginPane.addEventHandler(KeyEvent.KEY_RELEASED, e -> {
+    loginPane.setVisible(false);
+    loginPane.setOnKeyReleased(e -> {
+      if (loginPane.isVisible()) {
+        e.consume();
+      }
+
       if (e.getCode() == KeyCode.ESCAPE) {
         loginPane.setVisible(false);
-        e.consume();
+      } else if (e.getCode() == KeyCode.ENTER) {
+        attemptLogin();
       }
     });
+
     // -- add connection screen
-    ipInput.setOnAction(e -> addConnection());
-    portInput.setOnAction(e -> addConnection());
-    connectionNameInput.setOnAction(e -> addConnection());
-    addConnectionPane.addEventHandler(KeyEvent.KEY_RELEASED, e -> {
+    addConnectionPane.setVisible(false);
+    addConnectionPane.setOnKeyReleased(e -> {
+      if (addConnectionPane.isVisible()) {
+        e.consume();
+      }
+
       if (e.getCode() == KeyCode.ESCAPE) {
         addConnectionPane.setVisible(false);
-        e.consume();
+      } else if (e.getCode() == KeyCode.ENTER) {
+        addConnection();
       }
     });
+
     // -- connection screen
-    menuPane.addEventHandler(KeyEvent.KEY_RELEASED, e -> {
-      if (e.getCode() == KeyCode.ESCAPE)
+    menuPane.setOnKeyReleased(e -> {
+      if (e.getCode() == KeyCode.ESCAPE) {
         SceneManager.showScene(SceneSelections.MAIN_MENU);
+      } else if (e.getCode() == KeyCode.ENTER) {
+        if (connectionListView.getSelectionModel().getSelectedItem() != null) {
+          loginPane.setVisible(true);
+          usernameInput.requestFocus();
+        }
+      }
     });
+
+    menuPane.requestFocus();
   }
 
   private void addConnection() {
@@ -231,6 +242,7 @@ public class ConnectionsController extends Controller {
       Integer port = Integer.valueOf(portInput.getText());
       RecentConnection c = new RecentConnection(ipInput.getText(), port, connectionNameInput.getText());
       connectionListView.getItems().add(c);
+      connectionListView.getSelectionModel().select(c);
       RecentConnectionRegistry.add(c);
       notificationManager.recieve("Added connection");
     } catch (NumberFormatException f) {

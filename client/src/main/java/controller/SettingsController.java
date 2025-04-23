@@ -198,6 +198,12 @@ public class SettingsController extends Controller {
       if (newValue != null) {
         currentSettings.aiDifficulty = newValue.intValue();
         AI.setDifficulty(currentSettings.aiDifficulty);
+
+        if (this.parent != null 
+            && this.parent.getId().equals("foregroundPane")
+            && GameLogic.getGameMode() == GameMode.LocalAI) {
+          NetworkClient.checkAIMaxMode();
+        }
       }
     });
 
