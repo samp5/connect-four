@@ -31,6 +31,7 @@ import javafx.scene.text.TextFlow;
 import javafx.util.StringConverter;
 import network.NetworkClient;
 import network.PlayerData;
+import utils.CursorManager;
 import utils.NotificationManager;
 import utils.NotificationManager.NotificationType;
 import utils.SceneManager;
@@ -160,6 +161,8 @@ public class ServerMenuController extends Controller {
     } else {
       setPlayerInfo(playerInfo.online, playerInfo.activeGames);
     }
+
+    CursorManager.setHandCursor(profileButton, leaderBoardButton, friendsButton, joinButton, settingsButton, disconnectButton, profileBackButton, profilePicSelector, friendsBackButton);
   }
 
   private void animateGrass() {

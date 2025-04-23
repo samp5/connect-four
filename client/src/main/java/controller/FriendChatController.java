@@ -4,8 +4,6 @@ import java.io.IOException;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -28,9 +26,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import network.NetworkClient;
-import network.UserProfile;
 import network.PlayerData;
 import utils.AudioManager;
+import utils.CursorManager;
 import utils.ToolTipHelper;
 import utils.AudioManager.SoundEffect;
 import utils.NotificationManager;
@@ -131,6 +129,8 @@ public class FriendChatController extends Controller {
         .setBackground(new Background(new BackgroundImage(new Image("/assets/send_button.png"),
             BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
             new BackgroundSize(100, 50, false, false, false, false))));
+
+    CursorManager.setHandCursor(sendButton, oppProfileBackButton, oppProfileButton);
   }
 
   public void setFriendID(Long friendID) {

@@ -4,36 +4,36 @@
 <?import javafx.scene.text.Text?>
 
 <HBox alignment="CENTER_LEFT" minWidth="-Infinity" styleClass="leader-board-row" stylesheets="@../css/menu.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.utils.LeaderBoardRow">
-   <children>
-      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="leader-board-entry">
-         <children>
-            <Text fx:id="rank" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="Rank" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="leader-board-entry">
-         <children>
-            <Text fx:id="username" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="name" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="leader-board-entry">
-         <children>
-            <Text fx:id="elo" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="elo" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="leader-board-entry">
-         <children>
-            <Text fx:id="games_won" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="won" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="leader-board-entry">
-         <children>
-            <Text fx:id="games_lost" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="lost" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="leader-board-entry">
-         <children>
-            <Text fx:id="win_percentage" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="xx %" />
-         </children>
-      </HBox>
-   </children>
+  <children>
+    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="leader-board-entry">
+      <children>
+        <Text fx:id="rank" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="Rank" />
+      </children>
+    </HBox>
+    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="leader-board-entry">
+      <children>
+        <Text fx:id="username" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="name" />
+      </children>
+    </HBox>
+    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="leader-board-entry">
+      <children>
+        <Text fx:id="elo" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="elo" />
+      </children>
+    </HBox>
+    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="leader-board-entry">
+      <children>
+        <Text fx:id="games_won" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="won" />
+      </children>
+    </HBox>
+    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="leader-board-entry">
+      <children>
+        <Text fx:id="games_lost" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="lost" />
+      </children>
+    </HBox>
+    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="leader-board-entry">
+      <children>
+        <Text fx:id="win_percentage" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="xx %" />
+      </children>
+    </HBox>
+  </children>
 </HBox>

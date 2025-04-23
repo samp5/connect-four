@@ -2,7 +2,6 @@
 
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
@@ -15,95 +14,92 @@
 <?import javafx.scene.text.Text?>
 
 <Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LeaderBoardController">
-   <children>
-      <ImageView fitHeight="600.0" fitWidth="800.0">
-         <image>
-            <Image url="@../assets/leaderboard_pane.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="72.0" fitWidth="600.0" layoutX="100.0" layoutY="38.0">
-         <image>
-            <Image url="@../assets/leaderboard.png" />
-         </image>
-      </ImageView>
-      <BorderPane layoutX="100.0" layoutY="135.0" prefHeight="300.0" prefWidth="600.0">
-         <center>
-            <StackPane>
-               <children>
-                  <ImageView fitHeight="300.0" fitWidth="600.0">
-                     <image>
-                        <Image url="@../assets/leaderboard_rank_pane.png" />
-                     </image>
-                  </ImageView>
-                  <ScrollPane hbarPolicy="NEVER" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: transparent;">
-                     <content>
-                        <VBox fx:id="leaderBoardList" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="600.0" />
-                     </content>
-                  </ScrollPane>
-               </children>
-            </StackPane>
-         </center>
-         <top>
-            <StackPane BorderPane.alignment="CENTER">
-               <children>
-                  <ImageView fitHeight="10.0" fitWidth="600.0" translateY="15.0">
-                     <image>
-                        <Image url="@../assets/leaderboard_divider.png" />
-                     </image>
-                     <StackPane.margin>
-                        <Insets />
-                     </StackPane.margin>
-                  </ImageView>
-                  <HBox alignment="CENTER_LEFT" minWidth="-Infinity" stylesheets="@../css/chat.css">
-                     <children>
-                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="column-header">
-                           <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="Rank" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="column-header">
-                           <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="Username" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="column-header">
-                           <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="ELO" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="column-header">
-                           <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="Won" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="column-header">
-                           <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="Lost" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="column-header">
-                           <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="Win %" />
-                           </children>
-                        </HBox>
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" />
-                     </padding>
-                  </HBox>
-               </children>
-            </StackPane>
-         </top>
-      </BorderPane>
-      <Button fx:id="backButton" layoutX="20.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-        </cursor>
-      </Button>
-   </children>
-   <stylesheets>
-      <URL value="@../css/menu.css" />
-      <URL value="@../css/game.css" />
-      <URL value="@../css/chat.css" />
-   </stylesheets>
+  <children>
+    <ImageView fitHeight="600.0" fitWidth="800.0">
+      <image>
+        <Image url="@../assets/leaderboard_pane.png" />
+      </image>
+    </ImageView>
+    <ImageView fitHeight="72.0" fitWidth="600.0" layoutX="100.0" layoutY="38.0">
+      <image>
+        <Image url="@../assets/leaderboard.png" />
+      </image>
+    </ImageView>
+    <BorderPane layoutX="100.0" layoutY="135.0" prefHeight="300.0" prefWidth="600.0">
+      <center>
+        <StackPane>
+          <children>
+            <ImageView fitHeight="300.0" fitWidth="600.0">
+              <image>
+                <Image url="@../assets/leaderboard_rank_pane.png" />
+              </image>
+            </ImageView>
+            <ScrollPane hbarPolicy="NEVER" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: transparent;">
+              <content>
+                <VBox fx:id="leaderBoardList" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="600.0" />
+              </content>
+            </ScrollPane>
+          </children>
+        </StackPane>
+      </center>
+      <top>
+        <StackPane BorderPane.alignment="CENTER">
+          <children>
+            <ImageView fitHeight="10.0" fitWidth="600.0" translateY="15.0">
+              <image>
+                <Image url="@../assets/leaderboard_divider.png" />
+              </image>
+              <StackPane.margin>
+                <Insets />
+              </StackPane.margin>
+            </ImageView>
+            <HBox alignment="CENTER_LEFT" minWidth="-Infinity" stylesheets="@../css/chat.css">
+              <children>
+                <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="column-header">
+                  <children>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="Rank" />
+                  </children>
+                </HBox>
+                <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="column-header">
+                  <children>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="Username" />
+                  </children>
+                </HBox>
+                <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="column-header">
+                  <children>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="ELO" />
+                  </children>
+                </HBox>
+                <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="column-header">
+                  <children>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="Won" />
+                  </children>
+                </HBox>
+                <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="column-header">
+                  <children>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="Lost" />
+                  </children>
+                </HBox>
+                <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="column-header">
+                  <children>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="Win %" />
+                  </children>
+                </HBox>
+              </children>
+              <padding>
+                <Insets bottom="10.0" />
+              </padding>
+            </HBox>
+          </children>
+        </StackPane>
+      </top>
+    </BorderPane>
+    <Button fx:id="backButton" layoutX="20.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
+    </Button>
+  </children>
+  <stylesheets>
+    <URL value="@../css/menu.css" />
+    <URL value="@../css/game.css" />
+    <URL value="@../css/chat.css" />
+  </stylesheets>
 </Pane>

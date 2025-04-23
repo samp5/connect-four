@@ -9,31 +9,31 @@
 <?import javafx.scene.text.Text?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" stylesheets="@../css/menu.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoadingController">
-   <children>
-      <ImageView fx:id="background" fitHeight="720.0" fitWidth="1080.0">
-         <image>
-            <Image url="@../assets/loading_background.png" />
-         </image>
-         <viewport>
-            <Rectangle2D height="2560.0" width="3840.0" />
-         </viewport>
-      </ImageView>
-      <Pane fx:id="loadingPane" layoutX="435.0" layoutY="330.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="220.0">
-         <children>
-            <ImageView fx:id="loading" fitHeight="60.0" fitWidth="220.0" pickOnBounds="true" preserveRatio="true" smooth="false">
-               <image>
-                  <Image url="@../assets/load.png" />
-               </image>
-               <viewport>
-                  <Rectangle2D height="180.0" width="660.0" />
-               </viewport>
-            </ImageView>
-         </children></Pane>
-      <Text layoutX="450.0" layoutY="425.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="loading-text" text="Waiting for Players ...">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Text>
-      <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x" />
-   </children>
+  <children>
+    <ImageView fx:id="background" fitHeight="720.0" fitWidth="1080.0">
+      <image>
+        <Image url="@../assets/loading_background.png" />
+      </image>
+      <viewport>
+        <Rectangle2D height="2560.0" width="3840.0" />
+      </viewport>
+    </ImageView>
+    <Pane fx:id="loadingPane" layoutX="435.0" layoutY="330.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="220.0">
+      <children>
+        <ImageView fx:id="loading" fitHeight="60.0" fitWidth="220.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+          <image>
+            <Image url="@../assets/load.png" />
+          </image>
+          <viewport>
+            <Rectangle2D height="180.0" width="660.0" />
+          </viewport>
+        </ImageView>
+    </children></Pane>
+    <Text layoutX="450.0" layoutY="425.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="loading-text" text="Waiting for Players ...">
+      <font>
+        <Font size="18.0" />
+      </font>
+    </Text>
+    <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x" />
+  </children>
 </Pane>

@@ -3,7 +3,6 @@
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
@@ -19,302 +18,279 @@
 <?import javafx.scene.text.TextFlow?>
 
 <Pane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerMenuController">
-   <children>
-      <ImageView fx:id="background" fitHeight="720.0" fitWidth="1080.0">
-         <image>
-            <Image url="@../assets/server_menu_background.png" />
-         </image>
-         <viewport>
-            <Rectangle2D height="2560.0" width="3840.0" />
-         </viewport>
-      </ImageView>
-      <VBox spacing="20.0">
-         <children>
-            <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="1080.0">
-               <children>
-                  <Text fx:id="serverName" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-text" text="{server-name}">
-                     <HBox.margin>
-                        <Insets top="20.0" />
-                     </HBox.margin>
-                  </Text>
-               </children>
+  <children>
+    <ImageView fx:id="background" fitHeight="720.0" fitWidth="1080.0">
+      <image>
+        <Image url="@../assets/server_menu_background.png" />
+      </image>
+      <viewport>
+        <Rectangle2D height="2560.0" width="3840.0" />
+      </viewport>
+    </ImageView>
+    <VBox spacing="20.0">
+      <children>
+        <HBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="1080.0">
+          <children>
+            <Text fx:id="serverName" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-text" text="{server-name}">
+              <HBox.margin>
+                <Insets top="20.0" />
+              </HBox.margin>
+            </Text>
+          </children>
+        </HBox>
+        <TextFlow prefHeight="48.0" prefWidth="335.0" textAlignment="CENTER">
+          <children>
+            <Text fx:id="nPlayers" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text="{n}" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text=" players online, " />
+            <Text fx:id="nGames" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text=" {n}" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text=" active games" />
+          </children>
+        </TextFlow>
+        <HBox alignment="CENTER" prefWidth="1080.0">
+          <children>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="205.0" spacing="50.0">
+              <children>
+                <Button fx:id="joinButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="menu-button" text="Join Game">
+                </Button>
+                <Button fx:id="settingsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="menu-button" text="Settings">
+                </Button>
+                <Button fx:id="disconnectButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="menu-button" text="Disconnect">
+                </Button>
+              </children>
+            </VBox>
+          </children>
+        </HBox>
+        <HBox alignment="CENTER" minWidth="1080.0" spacing="200.0">
+          <children>
+            <BorderPane fx:id="profileButton" minWidth="-Infinity" prefHeight="75.0" prefWidth="75.0">
+              <center>
+                <ImageView fitHeight="75.0" fitWidth="75.0" BorderPane.alignment="CENTER">
+                  <image>
+                    <Image url="@../assets/basic_red.png" />
+                  </image>
+                </ImageView>
+              </center>
+              <top>
+                <Text fx:id="userNameText1" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-bold-medium" text="My Profile" textAlignment="CENTER" underline="true" BorderPane.alignment="CENTER">
+                  <BorderPane.margin>
+                    <Insets bottom="5.0" />
+                  </BorderPane.margin>
+                </Text>
+              </top>
+            </BorderPane>
+            <BorderPane fx:id="leaderBoardButton" minWidth="-Infinity" prefHeight="75.0" prefWidth="75.0">
+              <top>
+                <Text fx:id="userNameText11" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-bold-medium" text="Leaderboard" textAlignment="CENTER" underline="true" BorderPane.alignment="CENTER">
+                  <BorderPane.margin>
+                    <Insets bottom="5.0" />
+                  </BorderPane.margin>
+                </Text>
+              </top>
+              <center>
+                <ImageView fitHeight="75.0" fitWidth="75.0" BorderPane.alignment="CENTER">
+                  <image>
+                    <Image url="@../assets/trophy.png" />
+                  </image>
+                </ImageView>
+              </center>
+            </BorderPane>
+            <BorderPane fx:id="friendsButton" minWidth="-Infinity" prefHeight="75.0" prefWidth="75.0">
+              <top>
+                <Text fx:id="userNameText111" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-bold-medium" text="Friends" textAlignment="CENTER" underline="true" BorderPane.alignment="CENTER">
+                  <BorderPane.margin>
+                    <Insets bottom="5.0" />
+                  </BorderPane.margin>
+                </Text>
+              </top>
+              <center>
+                <ImageView fitHeight="75.0" fitWidth="75.0" BorderPane.alignment="CENTER">
+                  <image>
+                    <Image url="@../assets/friend.png" />
+                  </image>
+                </ImageView>
+              </center>
+            </BorderPane>
+          </children>
+          <padding>
+            <Insets top="20.0" />
+          </padding>
+        </HBox>
+        <HBox alignment="CENTER">
+          <children>
+            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="256.0">
+              <children>
+                <ImageView fitHeight="32.0" fitWidth="256.0">
+                  <image>
+                    <Image url="@../assets/connection_info_background.png" />
+                  </image>
+                </ImageView>
+                <TextFlow prefHeight="34.0" prefWidth="335.0" textAlignment="CENTER">
+                  <children>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text="Connected to " />
+                    <Text fx:id="ipText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text="{IP}" />
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text=" : " />
+                    <Text fx:id="portTxt" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text="{PORT}" />
+                  </children>
+                </TextFlow>
+              </children>
+              <padding>
+                <Insets top="44.0" />
+              </padding>
+            </StackPane>
+          </children>
+        </HBox>
+      </children>
+    </VBox>
+    <Pane fx:id="profilePane" layoutX="340.0" layoutY="150.0" prefHeight="500.0" prefWidth="400.0" visible="false">
+      <children>
+        <ImageView fitHeight="500.0" fitWidth="400.0">
+          <image>
+            <Image url="@../assets/server_menu_pane.png" />
+          </image>
+        </ImageView>
+        <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="400.0" spacing="10.0">
+          <children>
+            <Text fx:id="profileUserName" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text="{user name}" />
+            <ImageView fx:id="profilePicture" fitHeight="100.0" fitWidth="100.0">
+              <image>
+                <Image url="@../assets/basic_red.png" />
+              </image>
+            </ImageView>
+            <HBox alignment="CENTER" spacing="5.0">
+              <children>
+                <Label text="Profile Picture:" />
+                <ChoiceBox fx:id="profilePicSelector" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: transparent;">
+                </ChoiceBox>
+              </children>
             </HBox>
-            <TextFlow prefHeight="48.0" prefWidth="335.0" textAlignment="CENTER">
-               <children>
-                  <Text fx:id="nPlayers" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text="{n}" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text=" players online, " />
-                  <Text fx:id="nGames" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text=" {n}" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text=" active games" />
-               </children>
+            <VBox alignment="TOP_CENTER" spacing="10.0">
+              <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text="Player Stats" underline="true" />
+                <HBox alignment="CENTER" spacing="10.0">
+                  <children>
+                    <HBox alignment="CENTER_LEFT" prefWidth="50.0" styleClass="text-medium">
+                      <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Games Won:" />
+                      </children>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" styleClass="text-medium">
+                      <children>
+                        <Text fx:id="profileGamesWon" strokeType="OUTSIDE" strokeWidth="0.0" text="{won}" />
+                      </children>
+                    </HBox>
+                  </children>
+                </HBox>
+                <HBox alignment="CENTER" spacing="10.0">
+                  <children>
+                    <HBox alignment="CENTER_LEFT" prefWidth="50.0" styleClass="text-medium">
+                      <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Games Lost:" />
+                      </children>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" styleClass="text-medium">
+                      <children>
+                        <Text fx:id="profileGamesLost" strokeType="OUTSIDE" strokeWidth="0.0" text="{lost}" />
+                      </children>
+                    </HBox>
+                  </children>
+                </HBox>
+                <HBox alignment="CENTER" spacing="10.0">
+                  <children>
+                    <HBox alignment="CENTER_LEFT" prefWidth="50.0" styleClass="text-medium">
+                      <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Games Tied:" />
+                      </children>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" styleClass="text-medium">
+                      <children>
+                        <Text fx:id="profileGamesTied" strokeType="OUTSIDE" strokeWidth="0.0" text="{tied}" />
+                      </children>
+                    </HBox>
+                  </children>
+                </HBox>
+                <HBox alignment="CENTER" spacing="10.0">
+                  <children>
+                    <HBox alignment="CENTER_LEFT" prefWidth="50.0" styleClass="text-medium">
+                      <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Win %:" />
+                      </children>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" styleClass="text-medium">
+                      <children>
+                        <Text fx:id="profileWinPercent" strokeType="OUTSIDE" strokeWidth="0.0" text="{percent}" />
+                      </children>
+                    </HBox>
+                  </children>
+                </HBox>
+                <HBox alignment="CENTER" spacing="10.0">
+                  <children>
+                    <HBox alignment="CENTER_LEFT" prefWidth="50.0" styleClass="text-medium">
+                      <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ELO:" />
+                      </children>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" styleClass="text-medium">
+                      <children>
+                        <Text fx:id="profileELO" strokeType="OUTSIDE" strokeWidth="0.0" text="{elo}" />
+                      </children>
+                    </HBox>
+                  </children>
+                </HBox>
+              </children>
+            </VBox>
+          </children>
+          <padding>
+            <Insets top="20.0" />
+          </padding>
+        </VBox>
+        <Button fx:id="profileBackButton" layoutX="20.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
+        </Button>
+      </children>
+    </Pane>
+    <Pane fx:id="friendsPane" layoutX="340.0" layoutY="150.0" prefHeight="500.0" prefWidth="400.0" visible="false">
+      <children>
+        <ImageView fitHeight="500.0" fitWidth="400.0">
+          <image>
+            <Image url="@../assets/server_menu_pane.png" />
+          </image>
+        </ImageView>
+        <Button fx:id="friendsBackButton" alignment="CENTER" layoutX="20.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
+        </Button>
+        <Text layoutX="155.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-bold-medium" text="Friends" />
+        <ScrollPane layoutX="17.0" layoutY="67.0" minViewportHeight="400.0" minViewportWidth="350.0" prefHeight="400.0" prefWidth="350.0" style="-fx-background-color: transparent;">
+          <content>
+            <VBox fx:id="friendsList" prefHeight="400.0" prefWidth="350.0" spacing="10.0">
+              <padding>
+                <Insets left="30.0" top="5.0" />
+              </padding>
+            </VBox>
+          </content>
+        </ScrollPane>
+      </children>
+    </Pane>
+    <Pane fx:id="notificationPane" layoutX="810.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" visible="false">
+      <children>
+        <ImageView fitHeight="64.0" fitWidth="256.0">
+          <image>
+            <Image url="@../assets/offer_reject.png" />
+          </image>
+        </ImageView>
+        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0">
+          <children>
+            <TextFlow fx:id="notificationText" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="236.0">
+              <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Your opponent has declined your draw offer." wrappingWidth="224.0" />
+              </children>
             </TextFlow>
-            <HBox alignment="CENTER" prefWidth="1080.0">
-               <children>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="205.0" spacing="50.0">
-                     <children>
-                        <Button fx:id="joinButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="menu-button" text="Join Game">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor></Button>
-                        <Button fx:id="settingsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="menu-button" text="Settings">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor></Button>
-                        <Button fx:id="disconnectButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="menu-button" text="Disconnect">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor></Button>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" minWidth="1080.0" spacing="200.0">
-               <children>
-                  <BorderPane fx:id="profileButton" minWidth="-Infinity" prefHeight="75.0" prefWidth="75.0">
-                     <center>
-                        <ImageView fitHeight="75.0" fitWidth="75.0" BorderPane.alignment="CENTER">
-                           <image>
-                              <Image url="@../assets/basic_red.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                     </center>
-                     <top>
-                        <Text fx:id="userNameText1" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-bold-medium" text="My Profile" textAlignment="CENTER" underline="true" BorderPane.alignment="CENTER">
-                           <BorderPane.margin>
-                              <Insets bottom="5.0" />
-                           </BorderPane.margin>
-                        </Text>
-                     </top>
-                  </BorderPane>
-                  <BorderPane fx:id="leaderBoardButton" minWidth="-Infinity" prefHeight="75.0" prefWidth="75.0">
-                     <top>
-                        <Text fx:id="userNameText11" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-bold-medium" text="Leaderboard" textAlignment="CENTER" underline="true" BorderPane.alignment="CENTER">
-                           <BorderPane.margin>
-                              <Insets bottom="5.0" />
-                           </BorderPane.margin>
-                        </Text>
-                     </top>
-                     <center>
-                        <ImageView fitHeight="75.0" fitWidth="75.0" BorderPane.alignment="CENTER">
-                           <image>
-                              <Image url="@../assets/trophy.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                     </center>
-                  </BorderPane>
-                  <BorderPane fx:id="friendsButton" minWidth="-Infinity" prefHeight="75.0" prefWidth="75.0">
-                     <top>
-                        <Text fx:id="userNameText111" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-bold-medium" text="Friends" textAlignment="CENTER" underline="true" BorderPane.alignment="CENTER">
-                           <BorderPane.margin>
-                              <Insets bottom="5.0" />
-                           </BorderPane.margin>
-                        </Text>
-                     </top>
-                     <center>
-                        <ImageView fitHeight="75.0" fitWidth="75.0" BorderPane.alignment="CENTER">
-                           <image>
-                              <Image url="@../assets/friend.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                     </center>
-                  </BorderPane>
-               </children>
-               <padding>
-                  <Insets top="20.0" />
-               </padding>
-            </HBox>
-            <HBox alignment="CENTER">
-               <children>
-                  <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="256.0">
-                     <children>
-                        <ImageView fitHeight="32.0" fitWidth="256.0">
-                           <image>
-                              <Image url="@../assets/connection_info_background.png" />
-                           </image>
-                        </ImageView>
-                        <TextFlow prefHeight="34.0" prefWidth="335.0" textAlignment="CENTER">
-                           <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text="Connected to " />
-                              <Text fx:id="ipText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text="{IP}" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text=" : " />
-                              <Text fx:id="portTxt" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-number" text="{PORT}" />
-                           </children>
-                        </TextFlow>
-                     </children>
-                     <padding>
-                        <Insets top="44.0" />
-                     </padding>
-                  </StackPane>
-               </children>
-            </HBox>
-         </children>
-      </VBox>
-      <Pane fx:id="profilePane" layoutX="340.0" layoutY="150.0" prefHeight="500.0" prefWidth="400.0" visible="false">
-         <children>
-            <ImageView fitHeight="500.0" fitWidth="400.0">
-               <image>
-                  <Image url="@../assets/server_menu_pane.png" />
-               </image>
-            </ImageView>
-            <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="400.0" spacing="10.0">
-               <children>
-                  <Text fx:id="profileUserName" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text="{user name}" />
-                  <ImageView fx:id="profilePicture" fitHeight="100.0" fitWidth="100.0">
-                     <image>
-                        <Image url="@../assets/basic_red.png" />
-                     </image>
-                  </ImageView>
-                  <HBox alignment="CENTER" spacing="5.0">
-                     <children>
-                        <Label text="Profile Picture:" />
-                        <ChoiceBox fx:id="profilePicSelector" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: transparent;">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor></ChoiceBox>
-                     </children>
-                  </HBox>
-                  <VBox alignment="TOP_CENTER" spacing="10.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text="Player Stats" underline="true" />
-                        <HBox alignment="CENTER" spacing="10.0">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" prefWidth="50.0" styleClass="text-medium">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Games Won:" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" styleClass="text-medium">
-                                 <children>
-                                    <Text fx:id="profileGamesWon" strokeType="OUTSIDE" strokeWidth="0.0" text="{won}" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" spacing="10.0">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" prefWidth="50.0" styleClass="text-medium">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Games Lost:" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" styleClass="text-medium">
-                                 <children>
-                                    <Text fx:id="profileGamesLost" strokeType="OUTSIDE" strokeWidth="0.0" text="{lost}" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" spacing="10.0">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" prefWidth="50.0" styleClass="text-medium">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Games Tied:" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" styleClass="text-medium">
-                                 <children>
-                                    <Text fx:id="profileGamesTied" strokeType="OUTSIDE" strokeWidth="0.0" text="{tied}" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" spacing="10.0">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" prefWidth="50.0" styleClass="text-medium">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Win %:" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" styleClass="text-medium">
-                                 <children>
-                                    <Text fx:id="profileWinPercent" strokeType="OUTSIDE" strokeWidth="0.0" text="{percent}" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" spacing="10.0">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" prefWidth="50.0" styleClass="text-medium">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ELO:" />
-                                 </children>
-                              </HBox>
-                              <HBox alignment="CENTER_LEFT" styleClass="text-medium">
-                                 <children>
-                                    <Text fx:id="profileELO" strokeType="OUTSIDE" strokeWidth="0.0" text="{elo}" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </children>
-               <padding>
-                  <Insets top="20.0" />
-               </padding>
-            </VBox>
-            <Button fx:id="profileBackButton" layoutX="20.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-              </cursor>
-            </Button>
-         </children>
-      </Pane>
-      <Pane fx:id="friendsPane" layoutX="340.0" layoutY="150.0" prefHeight="500.0" prefWidth="400.0" visible="false">
-         <children>
-            <ImageView fitHeight="500.0" fitWidth="400.0">
-               <image>
-                  <Image url="@../assets/server_menu_pane.png" />
-               </image>
-            </ImageView>
-            <Button fx:id="friendsBackButton" alignment="CENTER" layoutX="20.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-              </cursor>
-            </Button>
-            <Text layoutX="155.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-bold-medium" text="Friends" />
-            <ScrollPane layoutX="17.0" layoutY="67.0" minViewportHeight="400.0" minViewportWidth="350.0" prefHeight="400.0" prefWidth="350.0" style="-fx-background-color: transparent;">
-               <content>
-                  <VBox fx:id="friendsList" prefHeight="400.0" prefWidth="350.0" spacing="10.0">
-                     <padding>
-                        <Insets left="30.0" top="5.0" />
-                     </padding>
-                  </VBox>
-               </content>
-            </ScrollPane>
-         </children>
-      </Pane>
-      <Pane fx:id="notificationPane" layoutX="810.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" visible="false">
-         <children>
-            <ImageView fitHeight="64.0" fitWidth="256.0">
-               <image>
-                  <Image url="@../assets/offer_reject.png" />
-               </image>
-            </ImageView>
-            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0">
-               <children>
-                  <TextFlow fx:id="notificationText" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="236.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Your opponent has declined your draw offer." wrappingWidth="224.0" />
-                     </children>
-                  </TextFlow>
-               </children>
-            </VBox>
-            <ImageView fx:id="notificationIcon" fitHeight="30.0" fitWidth="30.0" layoutX="-15.0" layoutY="-15.0" pickOnBounds="true" preserveRatio="true" smooth="false" />
-         </children>
-      </Pane>
-   </children>
-   <stylesheets>
-      <URL value="@../css/chat.css" />
-      <URL value="@../css/menu.css" />
-      <URL value="@../css/game.css" />
-   </stylesheets>
+          </children>
+        </VBox>
+        <ImageView fx:id="notificationIcon" fitHeight="30.0" fitWidth="30.0" layoutX="-15.0" layoutY="-15.0" pickOnBounds="true" preserveRatio="true" smooth="false" />
+      </children>
+    </Pane>
+  </children>
+  <stylesheets>
+    <URL value="@../css/chat.css" />
+    <URL value="@../css/menu.css" />
+    <URL value="@../css/game.css" />
+  </stylesheets>
 </Pane>

@@ -8,21 +8,21 @@
 <?import javafx.scene.text.TextFlow?>
 
 <Pane fx:id="notificationPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <ImageView fitHeight="64.0" fitWidth="256.0">
-         <image>
-            <Image url="@../assets/offer_reject.png" />
-         </image>
-      </ImageView>
-      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0">
-         <children>
-            <TextFlow fx:id="notificationText" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="236.0">
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Your opponent has declined your draw offer." wrappingWidth="224.0" />
-               </children>
-            </TextFlow>
-         </children>
-      </VBox>
-      <ImageView fx:id="notificationIcon" fitHeight="30.0" fitWidth="30.0" layoutX="-15.0" layoutY="-15.0" pickOnBounds="true" preserveRatio="true" smooth="false" />
-   </children>
+  <children>
+    <ImageView fitHeight="64.0" fitWidth="256.0">
+      <image>
+        <Image url="@../assets/offer_reject.png" />
+      </image>
+    </ImageView>
+    <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0">
+      <children>
+        <TextFlow fx:id="notificationText" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="236.0">
+          <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Your opponent has declined your draw offer." wrappingWidth="224.0" />
+          </children>
+        </TextFlow>
+      </children>
+    </VBox>
+    <ImageView fx:id="notificationIcon" fitHeight="30.0" fitWidth="30.0" layoutX="-15.0" layoutY="-15.0" pickOnBounds="true" preserveRatio="true" smooth="false" />
+  </children>
 </Pane>

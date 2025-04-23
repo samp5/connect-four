@@ -18,7 +18,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -127,7 +126,7 @@ public class GameController extends Controller {
     gameLogic = new GameLogic();
     updateTurnIndicator();
 
-    CursorManager.setHandCursor(chipPane1, chipPane2);
+    CursorManager.setHandCursor(settingsButton, drawRequestAccept, drawRequestReject, resignRequestAccept, resignRequestReject, rematchYes, rematchToLobby, rematchMainMenu);
     animateClouds();
 
     animateGrass();
@@ -503,20 +502,19 @@ public class GameController extends Controller {
       case None:
         redTurnIndicator.setVisible(false);
         blueTurnIndicator.setVisible(false);
-        chipPane1.setCursor(Cursor.DEFAULT);
-        chipPane2.setCursor(Cursor.DEFAULT);
+        CursorManager.setPointerCursor(chipPane1, chipPane2);
         break;
       case PlayerOne:
         redTurnIndicator.setVisible(true);
         blueTurnIndicator.setVisible(false);
-        chipPane1.setCursor(Cursor.HAND);
-        chipPane2.setCursor(Cursor.DEFAULT);
+        CursorManager.setHandCursor(chipPane1);
+        CursorManager.setPointerCursor(chipPane2);
         break;
       case PlayerTwo:
         redTurnIndicator.setVisible(false);
         blueTurnIndicator.setVisible(true);
-        chipPane1.setCursor(Cursor.DEFAULT);
-        chipPane2.setCursor(Cursor.HAND);
+        CursorManager.setPointerCursor(chipPane1);
+        CursorManager.setHandCursor(chipPane2);
         break;
     }
 

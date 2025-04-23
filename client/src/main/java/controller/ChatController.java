@@ -36,6 +36,7 @@ import logic.GameLogic.GameMode;
 import network.NetworkClient;
 import network.UserProfile;
 import utils.AudioManager;
+import utils.CursorManager;
 import utils.ToolTipHelper;
 import utils.AudioManager.SoundEffect;
 import utils.NotificationManager;
@@ -130,6 +131,8 @@ public class ChatController extends Controller {
     // auto scroll the chat history based on the height of the vbox
     chatHistoryScroll.vvalueProperty().bind(chatHistory.heightProperty());
     notificationManager = new NotificationManager(notificationPane, notificationText, notificationIcon);
+
+    CursorManager.setHandCursor(resignButton, drawButton, requestResignButton, sendButton, oppProfileButton, oppProfileBackButton, popupConfirmButton, popupCancelButton);
 
     // can't do this in fxml easily
     drawButton

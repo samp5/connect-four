@@ -93,13 +93,13 @@ public class NotificationManager {
     confirm.setMaxSize(64, 50);
     confirm.setMinSize(64, 50);
     confirm.setPrefSize(64, 50);
-    confirm.setCursor(Cursor.HAND);
 
     deny.getStyleClass().addAll("connection-button-small", "button-bottom-padded");
     deny.setMaxSize(64, 50);
     deny.setMinSize(64, 50);
     deny.setPrefSize(64, 50);
-    deny.setCursor(Cursor.HAND);
+
+    CursorManager.setHandCursor(confirm, deny);
 
     Path hidePath = new Path(new MoveTo(shownX, y), new HLineTo(hiddenX));
     reverse = new PathTransition(Duration.seconds(.5), hidePath, notificationPane);

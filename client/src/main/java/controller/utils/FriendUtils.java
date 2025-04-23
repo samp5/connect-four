@@ -90,14 +90,14 @@ public class FriendUtils {
     inviteToGame.setPrefSize(100, 48);
     inviteToGame.setMinSize(100, 48);
     inviteToGame.getStyleClass().add("invite-button");
-    inviteToGame.setCursor(Cursor.HAND);
 
     Button chatWithFriend = new Button("Chat");
     chatWithFriend.setMaxSize(75, 48);
     chatWithFriend.setPrefSize(75, 48);
     chatWithFriend.setMinSize(75, 48);
     chatWithFriend.getStyleClass().add("login-button");
-    chatWithFriend.setCursor(Cursor.HAND);
+
+    CursorManager.setHandCursor(inviteToGame, chatWithFriend);
 
     chatWithFriend.setOnAction(e -> {
       openChat(profile.getId());
@@ -106,6 +106,7 @@ public class FriendUtils {
     inviteToGame.setOnAction(e -> {
       inviteToGame.setDisable(true);
       inviteToGame.setText("Invited");
+      CursorManager.setPointerCursor(inviteToGame);
       NetworkClient.inviteToGame(profile.getId());
     });
 

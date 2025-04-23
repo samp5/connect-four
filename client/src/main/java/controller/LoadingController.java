@@ -9,6 +9,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import network.NetworkClient;
+import utils.CursorManager;
 import utils.SceneManager;
 import utils.SceneManager.SceneSelections;
 
@@ -32,6 +33,8 @@ public class LoadingController extends Controller {
     setHandlers();
     animateLoading();
     animateGrass();
+
+    CursorManager.setHandCursor(backButton);
   }
 
   public void setHandlers() {

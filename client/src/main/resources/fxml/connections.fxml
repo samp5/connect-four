@@ -4,7 +4,6 @@
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -21,199 +20,179 @@
 <?import javafx.scene.text.TextFlow?>
 
 <Pane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ConnectionsController">
-   <children>
-      <ImageView fx:id="background" fitHeight="720.0" fitWidth="1080.0">
-         <image>
-            <Image url="@../assets/conections_background.png" />
-         </image>
-         <viewport>
-            <Rectangle2D height="2560.0" width="3840.0" />
-         </viewport>
-      </ImageView>
-      <VBox layoutY="190.0" spacing="50.0">
-         <children>
-            <HBox alignment="CENTER" prefWidth="1080.0" />
-            <HBox alignment="CENTER" prefWidth="1080.0">
-               <children>
-                  <StackPane>
-                     <children>
-                        <ListView fx:id="connectionListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" />
-                     </children>
-                  </StackPane>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefWidth="1080.0" spacing="50.0">
-               <children>
-                  <Button fx:id="addNewConnectionButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="52.0" prefWidth="144.0" text="Add New">
-                     <font>
-                        <Font name="Atkinson Hyperlegible Regular" size="28.0" />
-                     </font>
-                     <styleClass>
-                        <String fx:value="connection-button" />
-                        <String fx:value="big-button-text" />
-                     </styleClass>
-                     <padding>
-                        <Insets top="1.0" />
-                     </padding>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <Button id="bigger-text" fx:id="connectButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="52.0" prefWidth="144.0" text="Connect">
-                     <font>
-                        <Font name="Atkinson Hyperlegible Regular" size="28.0" />
-                     </font>
-                     <styleClass>
-                        <String fx:value="connection-button" />
-                        <String fx:value="big-button-text" />
-                     </styleClass>
-                     <padding>
-                        <Insets top="1.0" />
-                     </padding>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-               </children>
-            </HBox>
-         </children>
-      </VBox>
-      <Pane fx:id="addConnectionPane" layoutX="290.0" layoutY="150.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" visible="false">
-         <children>
-            <ImageView fitHeight="500.0" fitWidth="500.0">
-               <image>
-                  <Image url="@../assets/connections_pane.png" />
-               </image>
-            </ImageView>
-            <Button fx:id="addConnectionBackButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="50.0" styleClass="back-button" text="x">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor></Button>
-            <HBox alignment="CENTER" layoutY="105.0" prefWidth="500.0">
-               <children>
-                  <VBox alignment="CENTER" spacing="20.0">
-                     <children>
-                        <VBox>
-                           <children>
-                              <Label text="IP" />
-                              <TextField fx:id="ipInput" text="127.0.0.1" />
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </VBox>
-                        <VBox>
-                           <children>
-                              <Label text="Port" />
-                              <TextField fx:id="portInput" text="8000" />
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </VBox>
-                        <VBox>
-                           <children>
-                              <Label text="Name" />
-                              <TextField fx:id="connectionNameInput" text="localhost" />
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </VBox>
-                        <Button fx:id="addConnectionButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="64.0" styleClass="connection-button-small" text="Add">
-                           <VBox.margin>
-                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                           </VBox.margin>
-                           <padding>
-                              <Insets top="1.0" />
-                           </padding>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Button>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
-         </children>
-      </Pane>
-      <Pane fx:id="loginPane" layoutX="290.0" layoutY="150.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" visible="false">
-         <children>
-            <ImageView fitHeight="500.0" fitWidth="500.0">
-               <image>
-                  <Image url="@../assets/connections_pane.png" />
-               </image>
-            </ImageView>
-            <Button fx:id="loginBackButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="50.0" styleClass="back-button" text="x">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor></Button>
-            <HBox alignment="CENTER" layoutY="62.0" prefWidth="500.0">
-               <children>
-                  <VBox alignment="CENTER" prefHeight="327.0" prefWidth="280.0" spacing="20.0">
-                     <children>
-                        <VBox>
-                           <children>
-                              <Label text="Username" />
-                              <TextField fx:id="usernameInput" />
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </VBox>
-                        <VBox>
-                           <children>
-                              <Label text="Password" />
-                              <PasswordField fx:id="passwordInput" />
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </VBox>
-                        <Button fx:id="loginButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="80.0" styleClass="login-button" text="Login">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Button>
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
-         </children>
-      </Pane>
-      <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
-         <cursor>
-            <Cursor fx:constant="HAND" />
-      </cursor>
-    </Button>
-      <Pane fx:id="notificationPane" layoutX="810.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" visible="false">
-         <children>
-            <ImageView fitHeight="64.0" fitWidth="256.0">
-               <image>
-                  <Image url="@../assets/offer_reject.png" />
-               </image>
-            </ImageView>
-            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0">
-               <children>
-                  <TextFlow fx:id="notificationText" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="236.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Your opponent has declined your draw offer." wrappingWidth="224.0" />
-                     </children>
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                  </TextFlow>
-               </children>
+  <children>
+    <ImageView fx:id="background" fitHeight="720.0" fitWidth="1080.0">
+      <image>
+        <Image url="@../assets/conections_background.png" />
+      </image>
+      <viewport>
+        <Rectangle2D height="2560.0" width="3840.0" />
+      </viewport>
+    </ImageView>
+    <VBox layoutY="190.0" spacing="50.0">
+      <children>
+        <HBox alignment="CENTER" prefWidth="1080.0" />
+        <HBox alignment="CENTER" prefWidth="1080.0">
+          <children>
+            <StackPane>
+              <children>
+                <ListView fx:id="connectionListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" />
+              </children>
+            </StackPane>
+          </children>
+        </HBox>
+        <HBox alignment="CENTER" prefWidth="1080.0" spacing="50.0">
+          <children>
+            <Button fx:id="addNewConnectionButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="52.0" prefWidth="144.0" text="Add New">
+              <font>
+                <Font name="Atkinson Hyperlegible Regular" size="28.0" />
+              </font>
+              <styleClass>
+                <String fx:value="connection-button" />
+                <String fx:value="big-button-text" />
+              </styleClass>
+              <padding>
+                <Insets top="1.0" />
+              </padding>
+            </Button>
+            <Button id="bigger-text" fx:id="connectButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="52.0" prefWidth="144.0" text="Connect">
+              <font>
+                <Font name="Atkinson Hyperlegible Regular" size="28.0" />
+              </font>
+              <styleClass>
+                <String fx:value="connection-button" />
+                <String fx:value="big-button-text" />
+              </styleClass>
+              <padding>
+                <Insets top="1.0" />
+              </padding>
+            </Button>
+          </children>
+        </HBox>
+      </children>
+    </VBox>
+    <Pane fx:id="addConnectionPane" layoutX="290.0" layoutY="150.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" visible="false">
+      <children>
+        <ImageView fitHeight="500.0" fitWidth="500.0">
+          <image>
+            <Image url="@../assets/connections_pane.png" />
+          </image>
+        </ImageView>
+        <Button fx:id="addConnectionBackButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="50.0" styleClass="back-button" text="x"></Button>
+        <HBox alignment="CENTER" layoutY="105.0" prefWidth="500.0">
+          <children>
+            <VBox alignment="CENTER" spacing="20.0">
+              <children>
+                <VBox>
+                  <children>
+                    <Label text="IP" />
+                    <TextField fx:id="ipInput" text="127.0.0.1" />
+                  </children>
+                  <VBox.margin>
+                    <Insets />
+                  </VBox.margin>
+                </VBox>
+                <VBox>
+                  <children>
+                    <Label text="Port" />
+                    <TextField fx:id="portInput" text="8000" />
+                  </children>
+                  <VBox.margin>
+                    <Insets />
+                  </VBox.margin>
+                </VBox>
+                <VBox>
+                  <children>
+                    <Label text="Name" />
+                    <TextField fx:id="connectionNameInput" text="localhost" />
+                  </children>
+                  <VBox.margin>
+                    <Insets />
+                  </VBox.margin>
+                </VBox>
+                <Button fx:id="addConnectionButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="64.0" styleClass="connection-button-small" text="Add">
+                  <VBox.margin>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  </VBox.margin>
+                  <padding>
+                    <Insets top="1.0" />
+                  </padding>
+                </Button>
+              </children>
             </VBox>
-            <ImageView fx:id="notificationIcon" fitHeight="30.0" fitWidth="30.0" layoutX="-10.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true" />
-         </children>
-      </Pane>
-   </children>
-   <stylesheets>
-      <URL value="@../css/chat.css" />
-      <URL value="@../css/menu.css" />
-   </stylesheets>
+          </children>
+        </HBox>
+      </children>
+    </Pane>
+    <Pane fx:id="loginPane" layoutX="290.0" layoutY="150.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" visible="false">
+      <children>
+        <ImageView fitHeight="500.0" fitWidth="500.0">
+          <image>
+            <Image url="@../assets/connections_pane.png" />
+          </image>
+        </ImageView>
+        <Button fx:id="loginBackButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="50.0" styleClass="back-button" text="x">
+        </Button>
+        <HBox alignment="CENTER" layoutY="62.0" prefWidth="500.0">
+          <children>
+            <VBox alignment="CENTER" prefHeight="327.0" prefWidth="280.0" spacing="20.0">
+              <children>
+                <VBox>
+                  <children>
+                    <Label text="Username" />
+                    <TextField fx:id="usernameInput" />
+                  </children>
+                  <VBox.margin>
+                    <Insets />
+                  </VBox.margin>
+                </VBox>
+                <VBox>
+                  <children>
+                    <Label text="Password" />
+                    <PasswordField fx:id="passwordInput" />
+                  </children>
+                  <VBox.margin>
+                    <Insets />
+                  </VBox.margin>
+                </VBox>
+                <Button fx:id="loginButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="80.0" styleClass="login-button" text="Login">
+                  <VBox.margin>
+                    <Insets />
+                  </VBox.margin>
+                </Button>
+              </children>
+            </VBox>
+          </children>
+        </HBox>
+      </children>
+    </Pane>
+    <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
+    </Button>
+    <Pane fx:id="notificationPane" layoutX="810.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" visible="false">
+      <children>
+        <ImageView fitHeight="64.0" fitWidth="256.0">
+          <image>
+            <Image url="@../assets/offer_reject.png" />
+          </image>
+        </ImageView>
+        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0">
+          <children>
+            <TextFlow fx:id="notificationText" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="236.0">
+              <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Your opponent has declined your draw offer." wrappingWidth="224.0" />
+              </children>
+              <padding>
+                <Insets left="10.0" />
+              </padding>
+            </TextFlow>
+          </children>
+        </VBox>
+        <ImageView fx:id="notificationIcon" fitHeight="30.0" fitWidth="30.0" layoutX="-10.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true" />
+      </children>
+    </Pane>
+  </children>
+  <stylesheets>
+    <URL value="@../css/chat.css" />
+    <URL value="@../css/menu.css" />
+  </stylesheets>
 </Pane>

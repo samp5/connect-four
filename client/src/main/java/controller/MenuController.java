@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import logic.GameLogic.GameMode;
+import utils.CursorManager;
 import utils.SceneManager;
 import utils.SceneManager.SceneSelections;
 
@@ -56,6 +57,10 @@ public class MenuController extends Controller {
     quitButton.setOnAction(e -> {
       SceneManager.performClose();
     });
+
+    // set cursors
+    CursorManager.setHandCursor(playOnlineButton, playLocalButton, playAIButton,
+        settingsButton, quitButton);
 
     animateGrass();
   }

@@ -3,6 +3,7 @@
 - [x] better text input background
 - [x] highlight surrender, draw, and request resign buttons on hover (like other buttons)
 - [x] fix scroll bar on chat
+- [ ] popout chat box padding / overflow protection
 
 
 ## Features

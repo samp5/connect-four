@@ -17,7 +17,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -123,12 +122,7 @@ public class ConnectionsController extends Controller {
         .setItems(FXCollections.observableArrayList(RecentConnectionRegistry.getConnections()));
     connectionListView.getSelectionModel().select(0);
 
-    Button[] allButtons = { addNewConnectionButton, addConnectionButton, addConnectionBackButton, connectButton,
-        backButton, loginButton, loginBackButton };
-
-    for (Button b : allButtons) {
-      CursorManager.setHandCursor(b);
-    }
+    CursorManager.setHandCursor(addNewConnectionButton, addConnectionButton, addConnectionBackButton, connectButton, backButton, loginButton, loginBackButton);
 
     setHandlers();
   }

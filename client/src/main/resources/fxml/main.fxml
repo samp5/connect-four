@@ -4,8 +4,8 @@
 
 
 <HBox prefHeight="100.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
+  <children>
     <fx:include fx:id="gamePane" source="game.fxml" />
     <fx:include fx:id="chatPane" source="chat.fxml" />
-   </children>
+  </children>
 </HBox>

@@ -63,27 +63,31 @@ public class CursorManager {
   }
 
   public static void setHandCursor(Region... regions) {
+    wantsHandCursor.addAll(Arrays.asList(regions));
+
+    Cursor c = handCursor;
     if (!enabled) {
-      wantsHandCursor.addAll(Arrays.asList(regions));
-      return;
+      c = Cursor.HAND;
     }
 
     for (Region region : regions) {
-      region.setCursor(handCursor);
+      region.setCursor(c);
     }
   }
 
   public static void setPointerCursor(Object... objs) {
+    wantsPointer.addAll(Arrays.asList(objs));
+
+    Cursor c = pointerCursor;
     if (!enabled) {
-      wantsPointer.addAll(Arrays.asList(objs));
-      return;
+      c = Cursor.DEFAULT;
     }
 
     for (Object obj : objs) {
       if (obj instanceof Pane) {
-        ((Pane) obj).setCursor(pointerCursor);
+        ((Pane) obj).setCursor(c);
       } else if (obj instanceof Scene) {
-        ((Scene) obj).setCursor(pointerCursor);
+        ((Scene) obj).setCursor(c);
       }
     }
   }
