@@ -42,7 +42,7 @@ public class UserProfile implements Serializable {
     BASIC_RED, BASIC_BLUE, MUSCLE_RED, MUSCLE_BLUE, ANGEL_BLUE, DEVIL_RED, SCUBA_BLUE, SUPER_SAIYAN_RED, UAQ, EVAN_MCCARTY;
 
     public String getAssetFileName() {
-      return "/assets/" + this.toString().toLowerCase() + ".png";
+      return "/assets/profiles/" + this.toString().toLowerCase() + ".png";
     }
 
     public String toDisplayString() {
