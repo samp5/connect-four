@@ -19,7 +19,7 @@
         <Rectangle2D height="2560.0" width="3840.0" />
       </viewport>
     </ImageView>
-    <HBox alignment="CENTER" layoutY="275.0" prefWidth="1080.0">
+    <HBox alignment="CENTER" layoutY="245.0" prefWidth="1080.0">
       <children>
         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="205.0" spacing="30.0">
           <children>
