@@ -79,7 +79,7 @@
             </BorderPane>
           </children>
         </Pane>
-        <Pane fx:id="confirmPopup" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="96.0" prefWidth="224.0" translateY="220.0" visible="false">
+        <Pane fx:id="confirmPopup" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="96.0" prefWidth="224.0" translateY="200.0" visible="false">
           <children>
             <ImageView fitHeight="96.0" fitWidth="224.0">
               <image>

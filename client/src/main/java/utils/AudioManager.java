@@ -5,11 +5,11 @@ import java.util.HashMap;
 import javafx.scene.Node;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaPlayer.Status;
 
 public class AudioManager {
   private static MediaPlayer backgroundPlayer;
   private static CurrentlyPlaying currentlyPlaying = CurrentlyPlaying.NONE;
+  private static double musicVolume = .5;
   private static double soundFXVolumeFactor = 1.0;
 
   private static enum CurrentlyPlaying {
@@ -98,7 +98,7 @@ public class AudioManager {
           AudioManager.class.getResource("/assets/sounds/" + file).toExternalForm().toString());
       backgroundPlayer = new MediaPlayer(m);
       backgroundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-      backgroundPlayer.setVolume(0.5);
+      backgroundPlayer.setVolume(musicVolume);
       backgroundPlayer.play();
     } catch (Exception e) {
       e.printStackTrace();
@@ -153,6 +153,7 @@ public class AudioManager {
    * @param volume requested volume needs to be between 0.0 and 1.0
    */
   public static void setVolume(double volume) {
+    musicVolume = volume;
     if (backgroundPlayer != null) {
       backgroundPlayer.setVolume(volume);
     }

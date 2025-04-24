@@ -1,12 +1,14 @@
-## FIXES:
+## Final Stretch
 - [ ] drop sfx not aligned with bounce
-
-## Features
-- [ ] Text emoji drawer
-- [>] Art overhaul
-
-## Client
-
-
-### Other 
+- [ ] remove friend option
+- [ ] border under name & above chat box
+- [ ] leaderboard views
+- [ ] garbage bin sfx
+- [ ] esc press on game opens settings
+- [ ] tabbing on menus?
+- [ ] invite on loading screen does nothing
+- [ ] timer to re-enable invite
+- [ ] friend chat pofile border
+- [ ] notification on friend accept/decline game
+- [ ] more stats on profile pane
 - [ ] Project Report

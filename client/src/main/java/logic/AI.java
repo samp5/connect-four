@@ -39,7 +39,7 @@ public class AI {
       "pattern recognition isn't for everyone. and that is A-ok.",
       "there's playing-to-win and then, whatever this is",
       "pretty nice stack you got. too bad it means nothing.",
-      "welcome to whose turn is is anyway: where the points don't matter and neither do your moves apparently. ",
+      "welcome to whose turn is it anyway: where the points don't matter and neither do your moves apparently. ",
       "congratulations! you've just unlocked a new game mode called \"connect-four-if-you-squint\"",
       "you're out here playing \"connect-four-if-you-close-one-eye\""
   };
