@@ -2,8 +2,6 @@ package utils;
 
 import java.util.HashMap;
 
-import javax.sound.midi.SysexMessage;
-
 import javafx.scene.Node;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -11,8 +9,12 @@ import javafx.scene.media.MediaPlayer.Status;
 
 public class AudioManager {
   private static MediaPlayer backgroundPlayer;
+  private static CurrentlyPlaying currentlyPlaying = CurrentlyPlaying.NONE;
   private static double soundFXVolumeFactor = 1.0;
 
+  private static enum CurrentlyPlaying {
+    MAIN_THEME, BOSS_MUSIC, NONE
+  };
   // we need to statically load these to ensure responsive play times
   private static HashMap<SoundEffect, MediaPlayer> soundEffectPlayers = new HashMap<>();
   static {
@@ -57,13 +59,43 @@ public class AudioManager {
     }
 
   }
+  
+  public static void playMainTheme() {
+    switch (currentlyPlaying) {
+		case BOSS_MUSIC:
+      backgroundPlayer.stop();
+			break;
+		case MAIN_THEME:
+			return;
+		case NONE:
+		default:
+			break;
+    }
 
-  public static void playContinuous(String file) {
+    currentlyPlaying = CurrentlyPlaying.MAIN_THEME;
+    playContinuous("main_theme.mp3");
+  }
+
+  public static void playBossMusic() {
+    switch (currentlyPlaying) {
+		case BOSS_MUSIC:
+			return;
+		case MAIN_THEME:
+      backgroundPlayer.stop();
+			break;
+		case NONE:
+		default:
+			break;
+    }
+
+    currentlyPlaying = CurrentlyPlaying.BOSS_MUSIC;
+    playContinuous("boss_music.mp3");
+  }
+
+  private static void playContinuous(String file) {
     try {
       Media m = new Media(
           AudioManager.class.getResource("/assets/sounds/" + file).toExternalForm().toString());
-      if (backgroundPlayer != null && backgroundPlayer.getStatus() == Status.PLAYING)
-        backgroundPlayer.stop();
       backgroundPlayer = new MediaPlayer(m);
       backgroundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
       backgroundPlayer.setVolume(0.5);

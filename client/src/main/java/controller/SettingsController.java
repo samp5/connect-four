@@ -215,6 +215,7 @@ public class SettingsController extends Controller {
         NetworkClient.disconnect();
       }
       SceneManager.showScene(SceneSelections.MAIN_MENU);
+      AudioManager.playMainTheme();
     });
 
     customCursorToggle.setOnAction(e -> {

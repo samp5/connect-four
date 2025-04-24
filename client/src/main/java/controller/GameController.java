@@ -147,6 +147,7 @@ public class GameController extends Controller {
     setHandlers();
 
     if (GameLogic.getGameMode() == GameMode.LocalAI) {
+      checkAIMaxMode();
       showPlayerRoles();
     }
   }
@@ -160,11 +161,11 @@ public class GameController extends Controller {
   }
 
   public void setAIMaxMode() {
-    AudioManager.playContinuous("boss_music.mp3");
+    AudioManager.playBossMusic();
   }
 
   public void setAIDefaultMode() {
-    AudioManager.playContinuous("main_theme.mp3");
+    AudioManager.playMainTheme();
   }
 
   private void setHandlers() {

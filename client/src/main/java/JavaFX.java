@@ -26,7 +26,7 @@ public class JavaFX extends Application {
   public void start(Stage primaryStage) throws Exception {
     SceneManager.initialize(primaryStage);
     SceneManager.showScene(SceneSelections.MAIN_MENU);
-    AudioManager.playContinuous("main_theme.mp3");
+    AudioManager.playMainTheme();
 
     // load settings
     SettingsController.load();
