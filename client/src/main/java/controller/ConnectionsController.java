@@ -29,6 +29,7 @@ import network.NetworkClient;
 import utils.SceneManager;
 import utils.SceneManager.SceneSelections;
 import utils.NotificationManager.NotificationType;
+import utils.AudioManager;
 import utils.CursorManager;
 import utils.NotificationManager;
 
@@ -123,6 +124,7 @@ public class ConnectionsController extends Controller {
     connectionListView.getSelectionModel().select(0);
 
     CursorManager.setHandCursor(addNewConnectionButton, addConnectionButton, addConnectionBackButton, connectButton, backButton, loginButton, loginBackButton);
+    AudioManager.setAudioButton(addNewConnectionButton, addConnectionButton, addConnectionBackButton, connectButton, backButton, loginButton, loginBackButton);
 
     setHandlers();
   }

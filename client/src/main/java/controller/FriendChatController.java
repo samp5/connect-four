@@ -131,6 +131,7 @@ public class FriendChatController extends Controller {
             new BackgroundSize(100, 50, false, false, false, false))));
 
     CursorManager.setHandCursor(sendButton, oppProfileBackButton, oppProfileButton);
+    AudioManager.setAudioButton(sendButton, oppProfileBackButton, oppProfileButton);
   }
 
   public void setFriendID(Long friendID) {

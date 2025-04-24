@@ -177,6 +177,7 @@ public class SettingsController extends Controller {
 
   private void styleElements() {
     CursorManager.setHandCursor(backButton, volumeSlider, soundFXVolumeSlider, aiDifficultySlider, customCursorToggle, mainMenuButton);
+    AudioManager.setAudioButton(backButton, mainMenuButton);
   }
 
   private void setHandlers() {

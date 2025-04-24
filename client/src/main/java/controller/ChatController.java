@@ -134,6 +134,8 @@ public class ChatController extends Controller {
 
     CursorManager.setHandCursor(resignButton, drawButton, requestResignButton, sendButton, oppProfileButton,
         oppProfileBackButton, popupConfirmButton, popupCancelButton);
+    AudioManager.setAudioButton(resignButton, drawButton, requestResignButton, sendButton, oppProfileButton,
+        oppProfileBackButton, popupConfirmButton, popupCancelButton);
 
     // can't do this in fxml easily
     drawButton

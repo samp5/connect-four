@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import javax.sound.midi.SysexMessage;
 
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
@@ -13,34 +15,35 @@ public class AudioManager {
   private static double soundFXVolumeFactor = 1.0;
 
   // we need to statically load these to ensure responsive play times
-  private static HashMap<SoundEffect, MediaPlayer> soundEFfectPlayers = new HashMap<>();
+  private static HashMap<SoundEffect, MediaPlayer> soundEffectPlayers = new HashMap<>();
   static {
     SoundEffect[] effects = SoundEffect.values();
     for (int i = 0; i < effects.length; i++) {
       MediaPlayer player_i = new MediaPlayer(new Media(asURIString(effects[i].toFileName())));
-      soundEFfectPlayers.put(effects[i], player_i);
+      soundEffectPlayers.put(effects[i], player_i);
       player_i.setVolume(effects[i].volume());
     }
   }
 
   public static enum SoundEffect {
-    BUTTON_PRESS, /* SELECTION, */ CHIP_DROP, CHAT_SENT, CHAT_RECIEVED, WIN/* , LOSE */;
+    BUTTON_DOWN, BUTTON_UP, /* SELECTION, */ CHIP_DROP, CHAT_SENT, CHAT_RECIEVED, WIN/* , LOSE */;
 
     public String toFileName() {
       return "/assets/sounds/" + this.toString().toLowerCase() + ".wav";
     }
 
     public void play() {
-      MediaPlayer mp = soundEFfectPlayers.get(this);
+      MediaPlayer mp = soundEffectPlayers.get(this);
       mp.seek(mp.getStartTime());
       mp.play();
     }
 
     public double volume() {
       switch (this) {
+        case BUTTON_DOWN:
+        case BUTTON_UP:
         case CHIP_DROP:
-          return 0.3;
-        case BUTTON_PRESS:
+          return 1.1;
         case CHAT_RECIEVED:
         case CHAT_SENT:
         case WIN:
@@ -91,6 +94,23 @@ public class AudioManager {
     effect.play();
   }
 
+  public static void setAudioButton(Node ...buttons) {
+    for (Node btn : buttons) {
+      var curDown = btn.getOnMousePressed();
+      var curUp = btn.getOnMouseReleased();
+
+      btn.setOnMousePressed(e -> {
+        playSoundEffect(SoundEffect.BUTTON_DOWN);
+        if (curDown != null) curDown.handle(e);
+      });
+
+      btn.setOnMouseReleased(e -> {
+        playSoundEffect(SoundEffect.BUTTON_UP);
+        if (curUp != null) curUp.handle(e);
+      });
+    }
+  }
+
   /**
    * @param volume requested volume needs to be between 0.0 and 1.0
    */
@@ -105,7 +125,7 @@ public class AudioManager {
    */
   public static void setSoundEffectVolume(double volume) {
     soundFXVolumeFactor = volume;
-    soundEFfectPlayers.forEach((effect, player) -> {
+    soundEffectPlayers.forEach((effect, player) -> {
       player.setVolume(soundFXVolumeFactor * effect.volume());
     });
   }

@@ -130,8 +130,10 @@ public class GameController extends Controller {
 
     CursorManager.setHandCursor(settingsButton, drawRequestAccept, drawRequestReject, resignRequestAccept,
         resignRequestReject, rematchYes, rematchToLobby, rematchMainMenu);
-    animateClouds();
+    AudioManager.setAudioButton(settingsButton, drawRequestAccept, drawRequestReject, resignRequestAccept,
+        resignRequestReject, rematchYes, rematchToLobby, rematchMainMenu);
 
+    animateClouds();
     animateGrass();
     animateTurnIndicators();
 

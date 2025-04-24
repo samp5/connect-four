@@ -5,6 +5,7 @@ import java.util.Collection;
 import controller.utils.LeaderBoardRow;
 import network.LeaderBoardData;
 import network.Message.LeaderBoardView;
+import utils.AudioManager;
 import utils.CursorManager;
 import network.NetworkClient;
 import javafx.event.EventHandler;
@@ -34,6 +35,7 @@ public class LeaderBoardController extends Controller {
     NetworkClient.fetchLeaderBoard(LeaderBoardView.TOP_TEN);
     setHandlers();
     CursorManager.setHandCursor(backButton);
+    AudioManager.setAudioButton(backButton);
   }
 
   private void setHandlers() {
