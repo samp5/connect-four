@@ -519,12 +519,37 @@ public class GameController extends Controller {
           new Image("/assets/flaming_" + (role == PlayerRole.PlayerOne ? "red" : "blue") + "_chip.png", 123.75, 652.5,
               false, false));
 
+      /**
+       *
+       *
+       * A chip is 90 x 90 in Javafx and 16 by 16 pixels (by design) so there are
+       * 5.625 jp/p (javafx pixels per pixel)
+       *
+       * 
+       * The flaming chip drawing is 22 x 29 pixels (by design) so
+       * to get the imageview of the flame to overlap with the original chip we offset
+       * the y property
+       * like
+       * ( (29p - 16p) + (16p / 2) )* 5.625 jp/p
+       * similarly the x property is
+       * ( (22p - 16p) / 2 + 8 ) * 5.65 jp/p
+       *
+       * and so on
+       *
+       */
+      final double f_p_width = 22;
+      final double f_p_height = 29;
+      final double chip_p_radius = 8;
+      final double jp_p_p = 5.625; // java pixels per pixel
+
       midgroundPane.getChildren().add(flamin);
-      flamin.xProperty().bind(centerXProperty().subtract(61.875));
-      flamin.yProperty().bind(centerYProperty().subtract(118.125));
+      flamin.xProperty()
+          .bind(centerXProperty().subtract(((f_p_width - chip_p_radius * 2) / 2 + chip_p_radius) * jp_p_p));
+      flamin.yProperty()
+          .bind(centerYProperty().subtract(((f_p_height - chip_p_radius * 2) + (chip_p_radius)) * jp_p_p));
       flamin.translateXProperty().bind(translateXProperty());
       flamin.translateYProperty().bind(translateYProperty());
-      flamin.setViewport(new Rectangle2D(0, 0, 163.125, 158));
+      flamin.setViewport(new Rectangle2D(0, 0, f_p_width * jp_p_p, f_p_height * jp_p_p));
       super.setFill(Color.TRANSPARENT);
       flamin_timer = new Timer();
       flamin_timer.scheduleAtFixedRate(new TimerTask() {
@@ -532,7 +557,8 @@ public class GameController extends Controller {
         public void run() {
           Platform.runLater(() -> {
             if (flamin != null) {
-              flamin.setViewport(new Rectangle2D(0, (flamin_state) * 163.125, 123.75, 163.125));
+              flamin.setViewport(new Rectangle2D(0, (flamin_state) * (f_p_height * jp_p_p),
+                  (f_p_width * jp_p_p), (f_p_height * jp_p_p)));
               flamin_state = (flamin_state + 1) % 4;
             }
           });
@@ -668,7 +694,7 @@ public class GameController extends Controller {
       for (int i = 0; i < 4; i++) {
         BoardPosition bp = winningPositions[i];
         winningPieces[i] = new Piece(winner, CoordUtils.fromRowCol(bp.getRow(),
-              bp.getColumn()));
+            bp.getColumn()));
         winningPieces[i].setFlaming();
       }
       midgroundPane.getChildren().addAll(winningPieces);
