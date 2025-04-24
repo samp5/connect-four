@@ -7,6 +7,7 @@ import javax.sound.midi.SysexMessage;
 import javafx.scene.Node;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 
 public class AudioManager {
   private static MediaPlayer backgroundPlayer;
@@ -61,6 +62,8 @@ public class AudioManager {
     try {
       Media m = new Media(
           AudioManager.class.getResource("/assets/sounds/" + file).toExternalForm().toString());
+      if (backgroundPlayer != null && backgroundPlayer.getStatus() == Status.PLAYING)
+        backgroundPlayer.stop();
       backgroundPlayer = new MediaPlayer(m);
       backgroundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
       backgroundPlayer.setVolume(0.5);

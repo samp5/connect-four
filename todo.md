@@ -1,5 +1,5 @@
 ## FIXES:
-
+- [ ] drop sfx not aligned with bounce
 
 ## Features
 - [ ] Text emoji drawer

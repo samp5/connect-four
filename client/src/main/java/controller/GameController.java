@@ -160,9 +160,11 @@ public class GameController extends Controller {
   }
 
   public void setAIMaxMode() {
+    AudioManager.playContinuous("boss_music.mp3");
   }
 
   public void setAIDefaultMode() {
+    AudioManager.playContinuous("main_theme.mp3");
   }
 
   private void setHandlers() {
@@ -387,6 +389,8 @@ public class GameController extends Controller {
     pTrans.setPath(pth);
     pTrans.setNode(pieceToDrop);
     pTrans.setInterpolator(new Interpolator() {
+      // I made a desmos graph to find these values:
+      // https://www.desmos.com/calculator/bbsip7ftzt
       @Override
       public double curve(double t) {
         if (t < (.869)) {
