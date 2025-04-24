@@ -83,9 +83,11 @@ public class SceneManager {
 
   // save close function
   public static void performClose() {
-    SettingsController.save();
-    NetworkClient.disconnect();
-    Platform.exit();
+    try {
+      SettingsController.save();
+      NetworkClient.disconnect();
+      Platform.exit();
+    } catch (Exception e) {}
     System.exit(0);
   }
 }

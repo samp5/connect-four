@@ -12,6 +12,7 @@ import controller.utils.BoardPosition;
 import controller.utils.CoordSystem;
 import controller.utils.CoordUtils;
 import controller.utils.GameSettings;
+import javafx.animation.Interpolator;
 import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -349,7 +350,7 @@ public class GameController extends Controller {
     // calc the point for the top of this column
     Point topOfCol = CoordUtils.topOfColumn(rowCol.getColumn());
     double topX = topOfCol.getX();
-    double topY = topOfCol.getY() - CoordUtils.pieceRadius;
+    double topY = topOfCol.getY();
 
     // construct a path
     Path path = new Path();
@@ -365,7 +366,6 @@ public class GameController extends Controller {
   }
 
   private void animateDrop(Point from, BoardPosition rowCol, PlayerRole role) {
-    from.setY(from.getY() - (2 * CoordUtils.pieceRadius));
     double fromX = from.getX();
     double fromY = from.getY();
 
@@ -386,6 +386,18 @@ public class GameController extends Controller {
     pTrans.setDuration(Duration.millis(1500));
     pTrans.setPath(pth);
     pTrans.setNode(pieceToDrop);
+    pTrans.setInterpolator(new Interpolator() {
+      @Override
+      public double curve(double t) {
+        if (t < (.869)) {
+          return 3. * Math.pow(Math.E, 4.7 * (t - 1.1)) - 0.017;
+        } else if (t < .958){
+          return Math.pow((5.2 * t) - 4.75, 2) + .946;
+        } else {
+          return Math.pow((6.4 * t) - 6.265, 2) + .982;
+        }
+      }
+    });
 
     PauseTransition soundEffect = new PauseTransition(Duration.millis(1300));
     soundEffect.setOnFinished(e -> {
