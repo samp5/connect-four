@@ -120,9 +120,9 @@ public class ChatController extends Controller {
     if (GameLogic.getGameMode() == GameMode.LocalAI) {
       profileTimer = new Timer();
       oppProfileButton.setVisible(true);
-      userNameText.setText("AI");
+      userNameText.setText(AI.getName());
       oppProfileButton.setOnMouseClicked(e -> {
-        recieveMessage("ow stop :cry:", "AI", false);
+        recieveMessage("ow stop :cry:", AI.getName(), false);
       });
 
       checkAIMaxMode();

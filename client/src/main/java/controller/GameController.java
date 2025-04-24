@@ -425,7 +425,7 @@ public class GameController extends Controller {
         BoardPosition bp = new BoardPosition(gameLogic.getAvailableRow(aiCol).get(), aiCol);
         handleMove(AI.bestColumn(gameLogic.getBoard()), AI.getRole());
         if (AI.shouldQuip()) {
-          NetworkClient.handleChat(AI.getQuip(), "AI", false);
+          NetworkClient.handleChat(AI.getQuip(), AI.getName(), false);
         }
         animateMove(bp, CoordUtils.chipHolder(AI.getRole()),
             AI.getRole());
@@ -805,7 +805,7 @@ public class GameController extends Controller {
       return;
     } else {
       if (GameLogic.getGameMode() == GameMode.LocalAI && AI.getRole() == winner) {
-        NetworkClient.handleChat(AI.getWinningQuip(), "AI", false);
+        NetworkClient.handleChat(AI.getWinningQuip(), AI.getName(), false);
       }
       resetGameState();
     }

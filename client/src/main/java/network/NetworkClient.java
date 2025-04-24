@@ -17,6 +17,7 @@ import controller.utils.FriendUtils;
 import javafx.application.Platform;
 import utils.SceneManager;
 import utils.SceneManager.SceneSelections;
+import logic.AI;
 import logic.GameLogic;
 import logic.GameLogic.GameMode;
 import network.Message.LeaderBoardView;
@@ -314,7 +315,7 @@ public class NetworkClient {
     switch (GameLogic.getGameMode()) {
       case LocalAI:
         chatCTL.drawDeclined();
-        handleChat("what? no.", "AI", false);
+        handleChat("what? no.", AI.getName(), false);
         break;
       case LocalMultiplayer:
         gameCTL.recieveDrawRequest();
@@ -354,7 +355,7 @@ public class NetworkClient {
   public static void resignRequest() {
     switch (GameLogic.getGameMode()) {
       case LocalAI:
-        handleChat("i'm impressed you even considered the option.", "AI", false);
+        handleChat("i'm impressed you even considered the option.", AI.getName(), false);
         chatCTL.resignDeclined();
       case LocalMultiplayer:
         gameCTL.recieveResignRequest();

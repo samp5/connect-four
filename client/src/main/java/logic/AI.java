@@ -292,4 +292,8 @@ public class AI {
 
   }
 
+  public static String getName() {
+    return "C4";
+  }
+
 }
