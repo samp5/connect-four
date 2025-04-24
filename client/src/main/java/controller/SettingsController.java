@@ -123,7 +123,7 @@ public class SettingsController extends Controller {
     EventHandler<? super KeyEvent> curHandler = parent.getOnKeyReleased();
     root.requestFocus();
     parent.setOnKeyReleased((e) -> {
-      if (e.getCode() == KeyCode.ESCAPE) {
+      if (isAttached && e.getCode() == KeyCode.ESCAPE) {
         parent.setOnKeyReleased(curHandler);
         detach();
         e.consume();

@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-<HBox alignment="CENTER_LEFT" minWidth="-Infinity" styleClass="leader-board-row" stylesheets="@../css/menu.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.utils.LeaderBoardRow">
+<HBox alignment="CENTER_LEFT" minWidth="-Infinity" styleClass="leader-board-row" stylesheets="@../css/menu.css" xmlns="http://javafx.com/javafx/19.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.utils.LeaderBoardRow">
   <children>
     <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="100.0" styleClass="leader-board-entry">
       <children>

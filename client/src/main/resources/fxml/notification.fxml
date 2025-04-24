@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<Pane fx:id="notificationPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="notificationPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" xmlns="http://javafx.com/javafx/19.0.2.1" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <ImageView fitHeight="64.0" fitWidth="256.0">
       <image>

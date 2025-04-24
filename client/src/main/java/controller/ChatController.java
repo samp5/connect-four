@@ -100,6 +100,12 @@ public class ChatController extends Controller {
   @FXML
   Text oppWinPercent;
   @FXML
+  Text oppDrawPercent;
+  @FXML
+  Text oppLosePercent;
+  @FXML
+  Text oppGames;
+  @FXML
   Button addFriend;
   Timer profileTimer;
   int aiProfileState = 0;
@@ -298,7 +304,13 @@ public class ChatController extends Controller {
     oppUsername.setText(profile.getUserName());
     userNameText.setText(profile.getUserName());
     oppWinPercent.setText(
-        String.format("%d", (int) ((float) profile.getGamesWon() / (float) profile.getGamesPlayed() * 100)) + "%");
+        String.format("%d%%", (int) ((float) profile.getGamesWon() / (float) profile.getGamesPlayed() * 100)));
+    oppDrawPercent.setText(
+        String.format("%d%%", (int) ((float) profile.getGamesTied() / (float) profile.getGamesPlayed() * 100)));
+    oppLosePercent.setText(
+        String.format("%d%%", (int) ((float) profile.getGamesLost() / (float) profile.getGamesPlayed() * 100)));
+    oppGames.setText(
+        String.format("%d", profile.getGamesPlayed()));
   }
 
   private void sendMessage() {

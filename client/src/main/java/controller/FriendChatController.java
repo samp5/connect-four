@@ -84,6 +84,12 @@ public class FriendChatController extends Controller {
   Text oppElo;
   @FXML
   Text oppWinPercent;
+  @FXML
+  Text oppDrawPercent;
+  @FXML
+  Text oppLosePercent;
+  @FXML
+  Text oppGames;
 
   @FXML
   Pane notificationPane;
@@ -190,6 +196,12 @@ public class FriendChatController extends Controller {
         usernameText.setText(profile.getUserName());
         oppWinPercent.setText(
             String.format("%d", (int) ((float) profile.getGamesWon() / (float) profile.getGamesPlayed() * 100)) + "%");
+        oppDrawPercent.setText(
+            String.format("%d%%", (int) ((float) profile.getGamesTied() / (float) profile.getGamesPlayed() * 100)));
+        oppLosePercent.setText(
+            String.format("%d%%", (int) ((float) profile.getGamesLost() / (float) profile.getGamesPlayed() * 100)));
+        oppGames.setText(
+            String.format("%d", profile.getGamesPlayed()));
       });
     });
   }

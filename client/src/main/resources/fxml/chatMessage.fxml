@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<HBox fx:id="messageRowBox" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="320.0" stylesheets="@../css/chat.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.utils.ChatMessage">
+<HBox fx:id="messageRowBox" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="320.0" stylesheets="@../css/chat.css" xmlns="http://javafx.com/javafx/19.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.utils.ChatMessage">
   <children>
     <HBox fx:id="messageBox" styleClass="message">
       <children>

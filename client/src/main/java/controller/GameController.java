@@ -24,10 +24,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -66,6 +68,9 @@ public class GameController extends Controller {
   private Piece draggedPiece = null;
   private Piece dropHint = null;
   private boolean canMove = true;
+
+  @FXML
+  private StackPane game;
 
   @FXML
   private Pane gamePaneBackground;
@@ -797,10 +802,18 @@ public class GameController extends Controller {
     }
 
     if (GameLogic.getGameMode() == GameMode.Multiplayer) {
-      if (winner == GameLogic.getLocalPlayer().getRole()) {
-        NetworkClient.gameComplete(WinType.WIN);
-      } else {
-        NetworkClient.gameComplete(WinType.LOSE);
+      switch (winner) {
+        case None:
+          NetworkClient.gameComplete(WinType.DRAW);
+          break;
+        case PlayerOne:
+          NetworkClient.gameComplete(WinType.WIN);
+          break;
+        case PlayerTwo:
+          NetworkClient.gameComplete(WinType.LOSE);
+          break;
+        default:
+          break;
       }
       rematch.setVisible(true);
       return;

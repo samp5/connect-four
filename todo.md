@@ -2,11 +2,14 @@
 
 ### Michael
 - [ ] drop sfx not aligned with bounce
-- [ ] border under name & above chat box
 - [ ] garbage bin sfx
+- [x] border under name & above chat box
 - [ ] tabbing on menus?
-- [ ] esc press on game opens settings
-- [ ] more stats on profile pane
+- [x] more stats on profile pane
+    - [x] main chat
+    - [x] friend chat
+    - [x] fix draws not being properly tracked
+- [x] fix fxml version log
 
 ### Sam
 - [ ] invite on loading screen does nothing

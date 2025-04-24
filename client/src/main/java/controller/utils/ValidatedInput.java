@@ -30,7 +30,7 @@ public class ValidatedInput {
           }
           return val <= 65535 && val > 0; 
         case LENGTH:
-          return input.length() <= 16;
+          return input.length() <= 12;
         case NO_SPACES:
           return input.indexOf(' ') == -1;
         case NOT_EMPTY:
