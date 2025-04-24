@@ -137,8 +137,8 @@
         </ImageView>
       </center>
     </BorderPane>
-    <Text fx:id="userNameText" layoutX="115.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="{username}" />
-    <HBox layoutX="190.0" layoutY="30.0" spacing="10.0">
+    <Text fx:id="userNameText" layoutX="115.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="{username}" />
+    <HBox layoutX="115.0" layoutY="70.0" spacing="10.0">
       <children>
         <Button fx:id="resignButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="33.0" prefWidth="39.0" styleClass="resign-button" stylesheets="@../css/chat.css">
         </Button>

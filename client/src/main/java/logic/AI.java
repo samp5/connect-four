@@ -141,9 +141,9 @@ public class AI {
     return false;
   }
 
-  private static int endStateScore(int[][] board) {
+  private static int endStateScore(int[][] board, int depth) {
     if (checkWin(board, playingAs)) {
-      return 100_000;
+      return (AI.MAX_DIFFICULTY - depth) * 100_000 + 100_000;
     } else if (checkWin(board, switchPlayer(playingAs))) {
       return -100_000;
     } else if (stalemate(board)) {
@@ -164,7 +164,7 @@ public class AI {
    *
    */
   private static MoveScore minMaxDescent(int[][] board, int player, int depth) {
-    int endScore = endStateScore(board);
+    int endScore = endStateScore(board, depth);
     if (endScore != -1) {
       return new MoveScore(-1, endScore);
     } else if (depth == 0) {
