@@ -340,8 +340,9 @@ public class GameController extends Controller {
       draggedPiece = new Piece(role, CoordUtils.chipHolder(role));
       overlayPane.getChildren().add(draggedPiece);
     }
-    // lock playing a move until animation pt 1 is done
+    // lock playing a move until animation is done
     canMove = false;
+    CursorManager.setPointerCursor(chipPane1, chipPane2);
 
     // calc the point for the top of this column
     Point topOfCol = CoordUtils.topOfColumn(rowCol.getColumn());
@@ -411,6 +412,8 @@ public class GameController extends Controller {
       }
 
       canMove = true;
+      // mostly used for cursor updates
+      updateTurnIndicator();
     });
 
   }
@@ -658,14 +661,16 @@ public class GameController extends Controller {
     updateTurnIndicator();
     Object[] pieces = midgroundPane.getChildren().toArray();
 
-    Piece[] winningPieces = new Piece[4];
-    for (int i = 0; i < 4; i++) {
-      BoardPosition bp = winningPositions[i];
-      winningPieces[i] = new Piece(winner, CoordUtils.fromRowCol(bp.getRow(),
-          bp.getColumn()));
-      winningPieces[i].setFlaming();
+    if (winningPositions != null) {
+      Piece[] winningPieces = new Piece[4];
+      for (int i = 0; i < 4; i++) {
+        BoardPosition bp = winningPositions[i];
+        winningPieces[i] = new Piece(winner, CoordUtils.fromRowCol(bp.getRow(),
+              bp.getColumn()));
+        winningPieces[i].setFlaming();
+      }
+      midgroundPane.getChildren().addAll(winningPieces);
     }
-    midgroundPane.getChildren().addAll(winningPieces);
 
     for (Object pi : pieces) {
       Piece p = (Piece) pi;
