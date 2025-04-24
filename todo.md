@@ -1,14 +1,20 @@
 ## Final Stretch
+
+### Michael
 - [ ] drop sfx not aligned with bounce
-- [ ] remove friend option
 - [ ] border under name & above chat box
-- [ ] leaderboard views
 - [ ] garbage bin sfx
-- [ ] esc press on game opens settings
 - [ ] tabbing on menus?
+- [ ] esc press on game opens settings
+- [ ] more stats on profile pane
+
+### Sam
 - [ ] invite on loading screen does nothing
+- [ ] leaderboard views
+- [ ] remove friend option
 - [ ] timer to re-enable invite
 - [ ] friend chat pofile border
 - [ ] notification on friend accept/decline game
-- [ ] more stats on profile pane
+
+### Final Item
 - [ ] Project Report
