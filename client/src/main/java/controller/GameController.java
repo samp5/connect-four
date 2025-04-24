@@ -443,7 +443,11 @@ public class GameController extends Controller {
         grassState = (grassState + 1) % 2;
         try {
           Platform.runLater(() -> {
-            gameBG.setViewport(new Rectangle2D((1536 * grassState), 0, 1536, 1536));
+            if (GameLogic.getGameMode() == GameMode.LocalMultiplayer) {
+              gameBG.setViewport(new Rectangle2D((3840 * grassState), 0, 3840, 2560));
+            } else {
+              gameBG.setViewport(new Rectangle2D((1536 * grassState), 0, 1536, 1536));
+            }
           });
         } catch (Exception e) {
         }
