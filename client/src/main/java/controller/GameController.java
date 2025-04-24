@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 import controller.utils.BoardPosition;
 import controller.utils.CoordSystem;
@@ -26,6 +27,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.HLineTo;
@@ -126,7 +128,8 @@ public class GameController extends Controller {
     gameLogic = new GameLogic();
     updateTurnIndicator();
 
-    CursorManager.setHandCursor(settingsButton, drawRequestAccept, drawRequestReject, resignRequestAccept, resignRequestReject, rematchYes, rematchToLobby, rematchMainMenu);
+    CursorManager.setHandCursor(settingsButton, drawRequestAccept, drawRequestReject, resignRequestAccept,
+        resignRequestReject, rematchYes, rematchToLobby, rematchMainMenu);
     animateClouds();
 
     animateGrass();
@@ -143,6 +146,20 @@ public class GameController extends Controller {
     if (GameLogic.getGameMode() == GameMode.LocalAI) {
       showPlayerRoles();
     }
+  }
+
+  public void checkAIMaxMode() {
+    if (AI.getDifficulty() == 7) {
+      setAIMaxMode();
+    } else {
+      setAIDefaultMode();
+    }
+  }
+
+  public void setAIMaxMode() {
+  }
+
+  public void setAIDefaultMode() {
   }
 
   private void setHandlers() {
@@ -350,6 +367,10 @@ public class GameController extends Controller {
     double fromY = from.getY();
 
     Piece pieceToDrop = new Piece(role, from);
+    if (gameLogic.checkWin(role).isPresent()
+        || (GameLogic.getGameMode() == GameMode.LocalAI && AI.isMaxDifficulty() && AI.getRole() == role)) {
+      pieceToDrop.setFlaming();
+    }
     Point finalPosition = CoordUtils.fromRowCol(rowCol.getRow(), rowCol.getColumn());
     midgroundPane.getChildren().add(pieceToDrop);
 
@@ -372,6 +393,7 @@ public class GameController extends Controller {
     pTrans.play();
 
     pTrans.setOnFinished(k -> {
+      pieceToDrop.extinguish();
       // chack for game over
       checkGameOver(role);
 
@@ -387,6 +409,8 @@ public class GameController extends Controller {
         animateMove(bp, CoordUtils.chipHolder(AI.getRole()),
             AI.getRole());
       }
+
+      canMove = true;
     });
 
   }
@@ -401,7 +425,6 @@ public class GameController extends Controller {
       overlayPane.getChildren().remove(draggedPiece);
       animateDrop(topOfCol, rowCol, role);
       draggedPiece = null;
-      canMove = true;
     });
   }
 
@@ -445,6 +468,9 @@ public class GameController extends Controller {
   private class Piece extends Circle {
     public Point position;
     public PlayerRole role;
+    private ImageView flamin;
+    private int flamin_state = 0;
+    private Timer flamin_timer;
 
     public PlayerRole getPlayer() {
       return role;
@@ -481,6 +507,48 @@ public class GameController extends Controller {
       this.position = p.copy();
       super.setCenterX(position.getX());
       super.setCenterY(position.getY());
+    }
+
+    public void setFlaming() {
+      flamin = new ImageView(
+          new Image("/assets/flaming_" + (role == PlayerRole.PlayerOne ? "red" : "blue") + "_chip.png", 123.75, 652.5,
+              false, false));
+
+      midgroundPane.getChildren().add(flamin);
+      flamin.xProperty().bind(centerXProperty().subtract(61.875));
+      flamin.yProperty().bind(centerYProperty().subtract(118.125));
+      flamin.translateXProperty().bind(translateXProperty());
+      flamin.translateYProperty().bind(translateYProperty());
+      flamin.setViewport(new Rectangle2D(0, 0, 163.125, 158));
+      super.setFill(Color.TRANSPARENT);
+      flamin_timer = new Timer();
+      flamin_timer.scheduleAtFixedRate(new TimerTask() {
+        @Override
+        public void run() {
+          Platform.runLater(() -> {
+            if (flamin != null) {
+              flamin.setViewport(new Rectangle2D(0, (flamin_state) * 163.125, 123.75, 163.125));
+              flamin_state = (flamin_state + 1) % 4;
+            }
+          });
+        }
+      }, 0, 100);
+    }
+
+    public void extinguish() {
+      if (flamin_timer != null) {
+        flamin_timer.cancel();
+        flamin_timer = null;
+        flamin_state = 0;
+        midgroundPane.getChildren().remove(flamin);
+        flamin = null;
+        if (role == PlayerRole.PlayerOne) {
+          super.setFill(new ImagePattern(new Image("/assets/red_chip.png")));
+        } else {
+          super.setFill(new ImagePattern(new Image("/assets/blue_chip.png")));
+        }
+      }
+
     }
   }
 
@@ -572,6 +640,13 @@ public class GameController extends Controller {
         break;
     }
     displayLargeText(loc, Duration.millis(4000), Optional.of(g -> {
+
+      // we have to grab a copy or else we get a concurrent modification exception
+      var wps = midgroundPane.getChildren().stream().filter(Piece.class::isInstance).map(o -> (Piece) o)
+          .collect(Collectors.toList());
+      for (Piece wp : wps) {
+        wp.extinguish();
+      }
       midgroundPane.getChildren().setAll();
       canMove = true;
     }));
@@ -583,13 +658,14 @@ public class GameController extends Controller {
     updateTurnIndicator();
     Object[] pieces = midgroundPane.getChildren().toArray();
 
-    // Piece[] winningPieces = new Piece[4];
-    // for (int i = 0; i < 4; i++) {
-    // BoardPosition bp = winningPositions[i];
-    // winningPieces[i] = new Piece(winner, CoordUtils.fromRowCol(bp.getRow(),
-    // bp.getColumn()));
-    // }
-    // midgroundPane.getChildren().addAll(winningPieces);
+    Piece[] winningPieces = new Piece[4];
+    for (int i = 0; i < 4; i++) {
+      BoardPosition bp = winningPositions[i];
+      winningPieces[i] = new Piece(winner, CoordUtils.fromRowCol(bp.getRow(),
+          bp.getColumn()));
+      winningPieces[i].setFlaming();
+    }
+    midgroundPane.getChildren().addAll(winningPieces);
 
     for (Object pi : pieces) {
       Piece p = (Piece) pi;
@@ -627,7 +703,6 @@ public class GameController extends Controller {
 
         pathTransition2.setOnFinished(g -> {
           overlayPane.getChildren().remove(pieceToReturn);
-
         });
         pathTransition2.play();
         displayWinner(winner);

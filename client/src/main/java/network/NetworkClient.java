@@ -418,6 +418,7 @@ public class NetworkClient {
 
   public static void checkAIMaxMode() {
     chatCTL.checkAIMaxMode();
+    gameCTL.checkAIMaxMode();
   }
 
   // set controllers so that the network client can "message" the ui
