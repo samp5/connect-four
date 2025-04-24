@@ -143,7 +143,7 @@ public class AI {
 
   private static int endStateScore(int[][] board, int depth) {
     if (checkWin(board, playingAs)) {
-      return (AI.MAX_DIFFICULTY - depth) * 100_000 + 100_000;
+      return depth * 100_000 + 100_000;
     } else if (checkWin(board, switchPlayer(playingAs))) {
       return -100_000;
     } else if (stalemate(board)) {
