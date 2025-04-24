@@ -29,7 +29,7 @@
             </ImageView>
             <BorderPane fx:id="chatPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="360.0">
               <center>
-                <ScrollPane fx:id="chatHistoryScroll" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minViewportHeight="500.0" minViewportWidth="315.0" minWidth="-Infinity" prefHeight="500.0" prefViewportHeight="500.0" prefViewportWidth="315.0" prefWidth="315.0" style="-fx-background-color: transparent;" styleClass="chat-history-scroll" stylesheets="@../css/chat.css" translateY="50.0" BorderPane.alignment="CENTER">
+                <ScrollPane fx:id="chatHistoryScroll" fitToHeight="true" hbarPolicy="NEVER" hmax="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minViewportHeight="500.0" minViewportWidth="315.0" minWidth="-Infinity" prefHeight="500.0" prefViewportHeight="500.0" prefViewportWidth="315.0" prefWidth="340.0" style="-fx-background-color: transparent;" styleClass="chat-history-scroll" stylesheets="@../css/chat.css" translateX="10.0" translateY="50.0" BorderPane.alignment="CENTER">
                   <content>
                     <VBox fx:id="chatHistory" alignment="TOP_CENTER" maxWidth="320.0" minWidth="-Infinity" prefWidth="320.0" />
                   </content>
@@ -45,8 +45,8 @@
                             <Image url="@../assets/chat_message.png" />
                           </image>
                         </ImageView>
-                        <TextFlow fx:id="chatEditorDisplay" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mouseTransparent="true" prefHeight="80.0" prefWidth="220.0" />
-                        <TextArea fx:id="chatEditorInput" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="80.0" prefWidth="220.0" wrapText="true"> </TextArea>
+                        <TextFlow fx:id="chatEditorDisplay" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mouseTransparent="true" prefHeight="80.0" prefWidth="210.0" translateX="5.0" />
+                        <TextArea fx:id="chatEditorInput" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" prefHeight="80.0" prefWidth="210.0" translateX="5.0" wrapText="true"> </TextArea>
                       </children>
                       <HBox.margin>
                         <Insets />
