@@ -398,7 +398,9 @@ public class GameController extends Controller {
     pTrans.setOnFinished(k -> {
       pieceToDrop.extinguish();
       // chack for game over
-      checkGameOver(role);
+      if (checkGameOver(role)) {
+        return;
+      }
 
       // run our AI if we need to
       if (GameLogic.getGameMode() == GameMode.LocalAI
@@ -411,11 +413,11 @@ public class GameController extends Controller {
         }
         animateMove(bp, CoordUtils.chipHolder(AI.getRole()),
             AI.getRole());
+      } else {
+        canMove = true;
+        // mostly used for cursor updates
+        updateTurnIndicator();
       }
-
-      canMove = true;
-      // mostly used for cursor updates
-      updateTurnIndicator();
     });
 
   }
@@ -624,14 +626,17 @@ public class GameController extends Controller {
     updateTurnIndicator();
   }
 
-  private void checkGameOver(PlayerRole role) {
+  private boolean checkGameOver(PlayerRole role) {
     Optional<BoardPosition[]> winningComboOpt = gameLogic.checkWin(role);
 
     if (winningComboOpt.isPresent()) {
       gameOver(role, winningComboOpt.get());
+      return true;
     } else if (gameLogic.staleMate()) {
       staleMate();
+      return true;
     }
+    return false;
   }
 
   private void displayLargeText(String fileName, Duration duration, Optional<EventHandler<ActionEvent>> onFinish) {
@@ -670,7 +675,29 @@ public class GameController extends Controller {
         loc = "/assets/blue-wins.png";
         break;
     }
-    displayLargeText(loc, Duration.millis(4000), Optional.of(g -> {
+    switch (GameLogic.getGameMode()) {
+      case LocalAI:
+        if (winner == AI.getRole()) {
+          AudioManager.playSoundEffect(SoundEffect.LOSE);
+        } else {
+          AudioManager.playSoundEffect(SoundEffect.WIN);
+        }
+        break;
+      case LocalMultiplayer:
+        AudioManager.playSoundEffect(SoundEffect.WIN);
+        break;
+      case Multiplayer:
+        if (winner == GameLogic.getLocalPlayer().getRole()) {
+          AudioManager.playSoundEffect(SoundEffect.WIN);
+        } else {
+          AudioManager.playSoundEffect(SoundEffect.LOSE);
+        }
+        break;
+      case None:
+        break;
+    }
+
+    displayLargeText(loc, Duration.millis(3000), Optional.of(g -> {
 
       // we have to grab a copy or else we get a concurrent modification exception
       var wps = midgroundPane.getChildren().stream().filter(Piece.class::isInstance).map(o -> (Piece) o)

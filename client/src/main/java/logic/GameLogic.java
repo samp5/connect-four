@@ -65,10 +65,6 @@ public class GameLogic {
     return mode;
   }
 
-  public static void setLocalPlayer(Player p) {
-    localPlayer = p;
-  }
-
   public static void setRemotePlayer(Player p) {
     remotePlayer = p;
   }

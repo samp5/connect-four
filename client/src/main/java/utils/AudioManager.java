@@ -5,10 +5,8 @@ import java.util.HashMap;
 import javax.sound.midi.SysexMessage;
 
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
 
 public class AudioManager {
   private static MediaPlayer backgroundPlayer;
@@ -26,7 +24,7 @@ public class AudioManager {
   }
 
   public static enum SoundEffect {
-    BUTTON_DOWN, BUTTON_UP, /* SELECTION, */ CHIP_DROP, CHAT_SENT, CHAT_RECIEVED, WIN/* , LOSE */;
+    BUTTON_DOWN, BUTTON_UP, /* SELECTION, */ CHIP_DROP, CHAT_SENT, CHAT_RECIEVED, WIN, LOSE;
 
     public String toFileName() {
       return "/assets/sounds/" + this.toString().toLowerCase() + ".wav";
@@ -43,11 +41,14 @@ public class AudioManager {
         case BUTTON_DOWN:
         case BUTTON_UP:
         case CHIP_DROP:
-          return 1.1;
+          return 1.0;
         case CHAT_RECIEVED:
         case CHAT_SENT:
-        case WIN:
           return 0.4;
+        case LOSE:
+          return 0.4;
+        case WIN:
+          return 0.2;
         default:
           return 0.0;
       }
@@ -94,19 +95,21 @@ public class AudioManager {
     effect.play();
   }
 
-  public static void setAudioButton(Node ...buttons) {
+  public static void setAudioButton(Node... buttons) {
     for (Node btn : buttons) {
       var curDown = btn.getOnMousePressed();
       var curUp = btn.getOnMouseReleased();
 
       btn.setOnMousePressed(e -> {
         playSoundEffect(SoundEffect.BUTTON_DOWN);
-        if (curDown != null) curDown.handle(e);
+        if (curDown != null)
+          curDown.handle(e);
       });
 
       btn.setOnMouseReleased(e -> {
         playSoundEffect(SoundEffect.BUTTON_UP);
-        if (curUp != null) curUp.handle(e);
+        if (curUp != null)
+          curUp.handle(e);
       });
     }
   }
