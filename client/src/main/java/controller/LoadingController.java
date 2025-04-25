@@ -4,13 +4,19 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.TextFlow;
 import network.NetworkClient;
 import utils.AudioManager;
 import utils.CursorManager;
+import utils.NotificationManager;
+import utils.NotificationManager.NotificationType;
 import utils.SceneManager;
 import utils.SceneManager.SceneSelections;
 
@@ -22,6 +28,15 @@ public class LoadingController extends Controller {
   ImageView background;
   int grassState = 0;
 
+  // NOTIFICATIONS
+  @FXML
+  Pane notificationPane;
+  @FXML
+  TextFlow notificationText;
+  @FXML
+  ImageView notificationIcon;
+  NotificationManager notificationManager;
+
   @FXML
   Button backButton;
 
@@ -31,9 +46,12 @@ public class LoadingController extends Controller {
   private int loadState = 0;
 
   public void initialize() {
+    NetworkClient.bindLoadingController(this);
     setHandlers();
     animateLoading();
     animateGrass();
+
+    notificationManager = new NotificationManager(notificationPane, notificationText, notificationIcon);
 
     CursorManager.setHandCursor(backButton);
     AudioManager.setAudioButton(backButton);
@@ -56,7 +74,8 @@ public class LoadingController extends Controller {
           Platform.runLater(() -> {
             background.setViewport(new Rectangle2D((3840 * grassState), 0, 3840, 2560));
           });
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
       }
     }, 0, 1000);
   }
@@ -72,5 +91,14 @@ public class LoadingController extends Controller {
         });
       }
     }, 1000, 1000);
+  }
+
+  public void recieveNotification(String msg, NotificationType type) {
+    notificationManager.recieve(msg, type);
+  }
+
+  public void recievePrompt(String msg, NotificationType type, EventHandler<ActionEvent> onAccept,
+      EventHandler<ActionEvent> onDeny) {
+    notificationManager.recievePrompt(msg, type, onAccept, onDeny);
   }
 }

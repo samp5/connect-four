@@ -140,12 +140,16 @@ public class ClientManager {
             sendToByID(msg.getInvited(), msg);
             break;
           case GAME_INVITATION_RESPONSE:
-            // send the target player the response
+            // send the inviting player the response
             sendToByID(msg.getInvitor(), msg);
-            // if we need to start a game, do it
-            if (msg.isSuccess()) {
-              getClientByID(msg.getInvitor()).ifPresent(con2 -> GameManager.acceptInvitation(connection, con2));
-            }
+            break;
+          case GAME_INVITATION_START_GAME:
+            // it is the network clients responsibility to only send this message when the
+            // original response was yes
+            getClientByID(msg.getInvited()).ifPresent(con2 -> GameManager.acceptInvitation(connection, con2));
+            break;
+          case GAME_INVITATION_CANCEL:
+            sendToByID(msg.getInvited(), msg);
             break;
           case FETCH_FRIENDS:
             sendFriends(connection);

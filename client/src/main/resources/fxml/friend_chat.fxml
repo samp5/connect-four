@@ -151,16 +151,16 @@
       </center>
     </BorderPane>
     <Text fx:id="usernameText" layoutX="115.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="{username}" />
-      <Pane fx:id="oppProfilePane" layoutX="40.0" layoutY="40.0" prefHeight="300.0" prefWidth="200.0" visible="false">
+      <Pane fx:id="oppProfilePane" layoutX="40.0" layoutY="40.0" prefHeight="300.0" prefWidth="200.0">
          <children>
             <ImageView fitHeight="300.0" fitWidth="200.0">
                <image>
-                  <Image url="@../assets/load-background.png" />
+                  <Image url="@../assets/opp_profile_bg.png" />
                </image>
             </ImageView>
-            <VBox alignment="TOP_CENTER" prefHeight="300.0" prefWidth="200.0" spacing="10.0">
+            <VBox alignment="TOP_CENTER" prefHeight="300.0" prefWidth="190.0" spacing="10.0">
                <padding>
-                  <Insets top="30.0" />
+                  <Insets left="10.0" top="30.0" />
                </padding>
                <children>
                   <Text fx:id="oppUsername" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text="{username}" textAlignment="CENTER" wrappingWidth="100.0" />

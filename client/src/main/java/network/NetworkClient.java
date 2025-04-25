@@ -11,10 +11,13 @@ import controller.ChatController;
 import controller.ConnectionsController;
 import controller.GameController;
 import controller.LeaderBoardController;
+import controller.LoadingController;
 import controller.ServerMenuController;
 import controller.utils.RecentConnectionRegistry;
 import controller.utils.FriendUtils;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import utils.SceneManager;
 import utils.SceneManager.SceneSelections;
 import logic.AI;
@@ -45,6 +48,7 @@ public class NetworkClient {
   private static NetworkThread listener;
 
   private static GameController gameCTL;
+  private static LoadingController loadCTL;
   private static LeaderBoardController leaderBoardCTL;
   private static ChatController chatCTL;
   private static ServerMenuController serverMenuCTL;
@@ -192,7 +196,7 @@ public class NetworkClient {
             chatCTL.recieveNotification(notificationStr, type);
             break;
           case LOADING:
-            // TODO:
+            loadCTL.recieveNotification(notificationStr, type);
             break;
           default:
             break;
@@ -204,16 +208,78 @@ public class NetworkClient {
       case FETCH_FRIENDS:
         PlayerData.friendsUpdated();
         break;
-      case GAME_INVITATION:
-        if (SceneManager.getCurrentScene() == SceneSelections.SERVER_MENU) {
-          serverMenuCTL.recievePrompt(msg.getUsername() + " is inviting you to a game", NotificationType.FRIEND_GOOD,
-              (e -> NetworkClient
-                  .sendMessage(Message.forGameInvitationResponse(true, msg.getInvitor(), msg.getInvited()))),
-              (e -> NetworkClient
-                  .sendMessage(Message.forGameInvitationResponse(false, msg.getInvitor(), msg.getInvited()))));
+      case GAME_INVITATION_CANCEL:
+        switch (SceneManager.getCurrentScene()) {
+          case LOADING:
+            loadCTL.recieveNotification(msg.getUsername() + " canceled their invitation", NotificationType.FRIEND_BAD);
+            break;
+          case SERVER_MENU:
+            serverMenuCTL.recieveNotification(msg.getUsername() + " canceled their invitation",
+                NotificationType.FRIEND_BAD);
+            break;
+          default:
+            break;
         }
         break;
-      // TODO: Handle other scenes
+      case GAME_INVITATION_RESPONSE:
+        // this is the response from the other player
+        switch (SceneManager.getCurrentScene()) {
+          case LOADING:
+            if (msg.isSuccess()) {
+              loadCTL.recievePrompt(msg.getUsername() + " accepted your invitation. Start game?",
+                  NotificationType.FRIEND_GOOD, (e -> {
+                    NetworkClient.sendMessage(Message.forGameInvitationGameStart(msg.getInvitor(), msg.getInvited()));
+                  }), (e -> {
+                    NetworkClient.sendMessage(
+                        Message.forGameInvitationCancel(player.getUsername(), msg.getInvitor(), msg.getInvited()));
+                  }));
+            } else {
+              loadCTL.recieveNotification(msg.getUsername() + " denied your invitation", NotificationType.FRIEND_BAD);
+            }
+            break;
+          case SERVER_MENU:
+            if (msg.isSuccess()) {
+              serverMenuCTL.recievePrompt(msg.getUsername() + " accepted your invitation. Start game?",
+                  NotificationType.FRIEND_GOOD, (e -> {
+                    NetworkClient.sendMessage(Message.forGameInvitationGameStart(msg.getInvitor(), msg.getInvited()));
+                  }), (e -> {
+                    serverMenuCTL.reenableInvite(msg.getUsername());
+                    NetworkClient.sendMessage(
+                        Message.forGameInvitationCancel(player.getUsername(), msg.getInvitor(), msg.getInvited()));
+                  }));
+            } else {
+              serverMenuCTL.recieveNotification(msg.getUsername() + " denied your invitation",
+                  NotificationType.FRIEND_BAD);
+            }
+            break;
+          default:
+            break;
+
+        }
+        break;
+      case GAME_INVITATION:
+
+        String msgStr = msg.getUsername() + " is inviting you to a game";
+        NotificationType nT = NotificationType.FRIEND_GOOD;
+        EventHandler<ActionEvent> onYes = (e -> NetworkClient
+            .sendMessage(
+                Message.forGameInvitationResponse(player.getUsername(), true, msg.getInvitor(), msg.getInvited())));
+        EventHandler<ActionEvent> onNo = (e -> NetworkClient
+            .sendMessage(
+                Message.forGameInvitationResponse(player.getUsername(), false, msg.getInvitor(), msg.getInvited())));
+        switch (SceneManager.getCurrentScene()) {
+          case LOADING:
+            loadCTL.recievePrompt(msgStr, nT, onYes, onNo);
+            break;
+          case SERVER_MENU:
+            serverMenuCTL.recievePrompt(msgStr, nT, onYes, onNo);
+            break;
+          default:
+            break;
+        }
+        if (SceneManager.getCurrentScene() == SceneSelections.SERVER_MENU) {
+        }
+        break;
       case PROFILE_DATA:
         /*
          * These might need to be split into different message types if we need to do
@@ -426,6 +492,10 @@ public class NetworkClient {
   //
   public static void bindGameController(GameController gc) {
     gameCTL = gc;
+  }
+
+  public static void bindLoadingController(LoadingController lc) {
+    loadCTL = lc;
   }
 
   // set controllers so that the network client can "message" the ui

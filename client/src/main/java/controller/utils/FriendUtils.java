@@ -6,15 +6,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Optional;
 
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import network.NetworkClient;
@@ -108,6 +109,14 @@ public class FriendUtils {
       inviteToGame.setText("Invited");
       CursorManager.setPointerCursor(inviteToGame);
       NetworkClient.inviteToGame(profile.getId());
+      PauseTransition pt = new PauseTransition(Duration.seconds(20));
+      pt.setOnFinished(f -> {
+        if (inviteToGame != null) {
+          inviteToGame.setDisable(false);
+          inviteToGame.setText("Invite");
+        }
+      });
+      pt.play();
     });
 
     HBox friendActions = new HBox(chatWithFriend, inviteToGame);
@@ -158,6 +167,44 @@ public class FriendUtils {
       } else {
         return n;
       }
+    });
+  }
+
+  public static void reenableInvite(VBox allFriends, String userName) {
+    // technically this is one line
+    // this is my monument to streams, call it a river
+    allFriends.getChildren().stream().map(n -> (HBox) n).filter(hb -> {
+      return hb.getChildren()
+          .stream()
+          .filter(TextFlow.class::isInstance)
+          .map(fl -> (TextFlow) fl)
+          .filter(fl -> fl.getChildren()
+              .stream()
+              .filter(Text.class::isInstance)
+              .map(t -> (Text) t)
+              .filter(t -> t.getText().trim().equals(userName))
+              .findFirst()
+              .isPresent())
+          .findFirst()
+          .isPresent();
+    }).forEach(n -> {
+      n.getChildren()
+          .stream()
+          .filter(HBox.class::isInstance)
+          .map(nd -> (HBox) nd)
+          .forEach(hb -> {
+            System.out.println("got here");
+            hb.getChildren()
+                .stream()
+                .filter(Button.class::isInstance)
+                .map(bt -> (Button) bt)
+                .filter(bt -> bt.getText().equals("Invited"))
+                .forEach(bt -> {
+                  bt.setText("Invite");
+                  bt.setDisable(false);
+                });
+          });
+      ;
     });
   }
 

@@ -165,12 +165,12 @@
       <children>
         <ImageView fitHeight="300.0" fitWidth="200.0">
           <image>
-            <Image url="@../assets/load-background.png" />
+            <Image url="@../assets/opp_profile_bg.png" />
           </image>
         </ImageView>
-        <VBox alignment="TOP_CENTER" prefHeight="300.0" prefWidth="200.0" spacing="10.0">
+        <VBox alignment="TOP_CENTER" prefHeight="300.0" prefWidth="190.0" spacing="10.0">
           <padding>
-            <Insets top="30.0" />
+            <Insets left="10.0" top="30.0" />
           </padding>
           <children>
             <Text fx:id="oppUsername" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text="{username}" textAlignment="CENTER" wrappingWidth="100.0" />
@@ -269,7 +269,7 @@
             </Button>
           </children>
         </VBox>
-        <Button fx:id="oppProfileBackButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="36.0" prefWidth="36.0" styleClass="back-button" stylesheets="@../css/menu.css" text="x">
+        <Button fx:id="oppProfileBackButton" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="36.0" prefWidth="36.0" styleClass="back-button" stylesheets="@../css/menu.css" text="x">
         </Button>
         </children>
       </Pane>

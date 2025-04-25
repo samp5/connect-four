@@ -5,8 +5,10 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" stylesheets="@../css/menu.css" xmlns="http://javafx.com/javafx/19.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoadingController">
   <children>
@@ -35,5 +37,24 @@
       </font>
     </Text>
     <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x" />
+      <Pane fx:id="notificationPane" layoutX="810.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" visible="false">
+         <children>
+            <ImageView fitHeight="64.0" fitWidth="256.0">
+               <image>
+                  <Image url="@../assets/offer_reject.png" />
+               </image>
+            </ImageView>
+            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0">
+               <children>
+                  <TextFlow fx:id="notificationText" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="236.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Your opponent has declined your draw offer." wrappingWidth="224.0" />
+                     </children>
+                  </TextFlow>
+               </children>
+            </VBox>
+            <ImageView fx:id="notificationIcon" fitHeight="30.0" fitWidth="30.0" layoutX="-15.0" layoutY="-15.0" pickOnBounds="true" preserveRatio="true" smooth="false" />
+         </children>
+      </Pane>
   </children>
 </Pane>

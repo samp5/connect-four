@@ -2,7 +2,6 @@ package network;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import network.Player.PlayerRole;
 import network.UserProfile.ProfilePicture;
 
@@ -15,7 +14,7 @@ public class Message implements Serializable {
     RESIGN_RESPONSE, RETURN_TO_LOBBY, OPPONENT_RETURN_TO_LOBBY, OPPONENT_DISCONNECT, REMATCH, REMATCH_REQUEST,
     FETCH_LEADER_BOARD, LEADER_BOARD_DATA, JOIN_GAME, CANCEL_JOIN, GET_SERVER_STATUS, SERVER_STATUS, FETCH_PROFILE,
     PROFILE_DATA, PROFILE_PIC_UPDATE, FRIEND_REQUEST, FRIEND_REQUEST_RESPONSE, FETCH_FRIENDS, FRIEND_LIST_DATA,
-    FRIEND_ONLINE_STATUS, GAME_INVITATION, GAME_INVITATION_RESPONSE;
+    FRIEND_ONLINE_STATUS, GAME_INVITATION, GAME_INVITATION_RESPONSE, GAME_INVITATION_START_GAME, GAME_INVITATION_CANCEL;
   };
 
   public static enum WinType {
@@ -279,10 +278,29 @@ public class Message implements Serializable {
     return toSend;
   }
 
-  public static Message forGameInvitationResponse(boolean accepted, Long invitorID, Long invitedID) {
+  public static Message forGameInvitationResponse(String invitedName, boolean accepted, Long invitorID,
+      Long invitedID) {
     Message toSend = new Message();
     toSend.type = Type.GAME_INVITATION_RESPONSE;
+    toSend.username = invitedName;
     toSend.success = accepted;
+    toSend.invitedID = invitedID;
+    toSend.invitorID = invitorID;
+    return toSend;
+  }
+
+  public static Message forGameInvitationGameStart(Long invitorID, Long invitedID) {
+    Message toSend = new Message();
+    toSend.type = Type.GAME_INVITATION_START_GAME;
+    toSend.invitedID = invitedID;
+    toSend.invitorID = invitorID;
+    return toSend;
+  }
+
+  public static Message forGameInvitationCancel(String invitorUsername, Long invitorID, Long invitedID) {
+    Message toSend = new Message();
+    toSend.type = Type.GAME_INVITATION_CANCEL;
+    toSend.username = invitorUsername;
     toSend.invitedID = invitedID;
     toSend.invitorID = invitorID;
     return toSend;

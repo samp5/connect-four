@@ -163,8 +163,10 @@ public class ServerMenuController extends Controller {
       setPlayerInfo(playerInfo.online, playerInfo.activeGames);
     }
 
-    CursorManager.setHandCursor(profileButton, leaderBoardButton, friendsButton, joinButton, settingsButton, disconnectButton, profileBackButton, profilePicSelector, friendsBackButton);
-    AudioManager.setAudioButton(profileButton, leaderBoardButton, friendsButton, joinButton, settingsButton, disconnectButton, profileBackButton, profilePicSelector, friendsBackButton);
+    CursorManager.setHandCursor(profileButton, leaderBoardButton, friendsButton, joinButton, settingsButton,
+        disconnectButton, profileBackButton, profilePicSelector, friendsBackButton);
+    AudioManager.setAudioButton(profileButton, leaderBoardButton, friendsButton, joinButton, settingsButton,
+        disconnectButton, profileBackButton, profilePicSelector, friendsBackButton);
   }
 
   private void animateGrass() {
@@ -177,7 +179,8 @@ public class ServerMenuController extends Controller {
           Platform.runLater(() -> {
             background.setViewport(new Rectangle2D((3840 * grassState), 0, 3840, 2560));
           });
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
       }
     }, 0, 1000);
   }
@@ -318,6 +321,10 @@ public class ServerMenuController extends Controller {
   public void recievePrompt(String msg, NotificationType type, EventHandler<ActionEvent> onAccept,
       EventHandler<ActionEvent> onDeny) {
     notificationManager.recievePrompt(msg, type, onAccept, onDeny);
+  }
+
+  public void reenableInvite(String username) {
+    FriendUtils.reenableInvite(friendsList, username);
   }
 
   public void updateFriendOnlineView(String username, boolean isOnline) {
