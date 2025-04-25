@@ -14,6 +14,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import utils.AudioManager;
+import utils.AudioManager.SoundEffect;
 
 public class RecentConnection implements Comparable<RecentConnection>, Serializable {
   String ip;
@@ -74,6 +76,7 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
               top.setMinWidth(280);
 
               bp.setOnMouseClicked(e -> {
+                AudioManager.playSoundEffect(SoundEffect.TRASH);
                 param.getItems().remove(connection);
                 RecentConnectionRegistry.remove(connection);
               });

@@ -1,8 +1,8 @@
 ## Final Stretch
 
 ### Michael
-- [ ] drop sfx not aligned with bounce
-- [ ] garbage bin sfx
+- [x] drop sfx not aligned with bounce
+- [x] garbage bin sfx
 - [x] border under name & above chat box
 - [ ] tabbing on menus?
 - [x] more stats on profile pane
@@ -10,6 +10,7 @@
     - [x] friend chat
     - [x] fix draws not being properly tracked
 - [x] fix fxml version log
+- [ ] flame animation top pixel layer incorrect
 
 ### Sam
 - [x] invite on loading screen does nothing

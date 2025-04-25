@@ -5,6 +5,7 @@ import java.util.HashMap;
 import javafx.scene.Node;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 public class AudioManager {
   private static MediaPlayer backgroundPlayer;
@@ -27,7 +28,7 @@ public class AudioManager {
   }
 
   public static enum SoundEffect {
-    BUTTON_DOWN, BUTTON_UP, /* SELECTION, */ CHIP_DROP, CHAT_SENT, CHAT_RECIEVED, WIN, LOSE;
+    BUTTON_DOWN, BUTTON_UP, CHIP_DROP, TRASH, CHAT_SENT, CHAT_RECIEVED, WIN, LOSE;
 
     public String toFileName() {
       return "/assets/sounds/" + this.toString().toLowerCase() + ".wav";
@@ -35,7 +36,7 @@ public class AudioManager {
 
     public void play() {
       MediaPlayer mp = soundEffectPlayers.get(this);
-      mp.seek(mp.getStartTime());
+      mp.seek(new Duration(0));
       mp.play();
     }
 
@@ -47,6 +48,7 @@ public class AudioManager {
           return 1.0;
         case CHAT_RECIEVED:
         case CHAT_SENT:
+        case TRASH:
           return 0.4;
         case LOSE:
           return 0.4;
