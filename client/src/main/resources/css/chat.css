@@ -72,7 +72,7 @@
   -fx-font-size: 14.0;
 }
 .scroll-pane .viewport {
-       -fx-background-color: transparent;
+  -fx-background-color: transparent;
 }
 
 .scroll-pane .scroll-bar:vertical {
@@ -112,4 +112,10 @@
   -fx-border-color: #363646; 
   -fx-border-style: solid; 
   -fx-border-width: 2px; 
+}
+
+.chat-highlight {
+  -fx-border-color: #FFD541;
+  -fx-border-width: 3px;
+  -fx-border-insets: -3px -8px -3px -8px;
 }

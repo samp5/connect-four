@@ -16,9 +16,9 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<Pane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FriendChatController">
+<Pane fx:id="chat" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FriendChatController">
   <children>
-    <StackPane stylesheets="@../css/chat.css">
+    <StackPane focusTraversable="true" stylesheets="@../css/chat.css">
       <children>
         <Pane>
           <children>
@@ -143,9 +143,9 @@
     </StackPane>
     <BorderPane fx:id="oppProfileButton" layoutX="30.0" layoutY="30.0" prefHeight="75.0" prefWidth="75.0" visible="false">
       <center>
-        <ImageView fitHeight="75.0" fitWidth="75.0" BorderPane.alignment="CENTER">
+        <ImageView fitHeight="75.0" fitWidth="75.0" focusTraversable="true" BorderPane.alignment="CENTER">
           <image>
-            <Image url="@../assets/basic_red.png" />
+            <Image url="@../assets/profiles/basic_blue.png" />
           </image>
         </ImageView>
       </center>
@@ -259,7 +259,7 @@
                   </Button>
                </children>
             </VBox>
-            <Button fx:id="oppProfileBackButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="36.0" prefWidth="36.0" styleClass="back-button" stylesheets="@../css/menu.css" text="x" />
+            <Button fx:id="oppProfileBackButton" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="36.0" prefWidth="36.0" styleClass="back-button" stylesheets="@../css/menu.css" text="x" />
          </children>
       </Pane>
     <Pane fx:id="notificationPane" layoutX="70.0" layoutY="30.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" visible="false">

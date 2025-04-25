@@ -166,6 +166,17 @@ public class ChatController extends Controller {
         }
       }
     });
+    chatEditorInput.focusedProperty().addListener(new ChangeListener<Boolean>() {
+      @Override
+      public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+        // the display doesn't get focused, the the input isn't visible, so must
+        // handle the hightlighting manually rather than a css:focused tag
+        if (newValue)
+          chatEditorDisplay.getStyleClass().add("chat-highlight");
+        else
+          chatEditorDisplay.getStyleClass().removeAll("chat-highlight");
+      }
+    });
 
     chatEditorInput.setOnKeyPressed(e -> {
       if (e.getCode() == KeyCode.ENTER) {

@@ -44,6 +44,9 @@ import controller.utils.Markup;
 public class FriendChatController extends Controller {
 
   @FXML
+  Pane chat;
+
+  @FXML
   Button sendButton;
 
   @FXML
@@ -101,7 +104,6 @@ public class FriendChatController extends Controller {
   private NotificationManager notificationManager;
 
   public void close() {
-    System.out.println("closing scene");
     ((Stage) chatPane.getScene().getWindow()).close();
   }
 
@@ -112,6 +114,11 @@ public class FriendChatController extends Controller {
       chatEditorInput.setOnKeyPressed(e -> {
         if (e.getCode() == KeyCode.ENTER) {
           sendMessage();
+        } else if (e.getCode() == KeyCode.TAB) {
+          // move off of the chat
+          sendButton.requestFocus();
+          // remove the tab character in the text
+          chatEditorInput.deletePreviousChar();
         }
         e.consume();
       });
@@ -146,8 +153,17 @@ public class FriendChatController extends Controller {
   }
 
   private void setHandlers() {
+    chat.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ESCAPE)
+        oppProfilePane.setVisible(false);
+    });
+
     sendButton.setOnAction(e -> {
       sendMessage();
+    });
+    sendButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        sendButton.getOnAction().handle(null);
     });
     sendButton.setTooltip(ToolTipHelper.make("Send message"));
 
@@ -162,10 +178,25 @@ public class FriendChatController extends Controller {
         }
       }
     });
-
+    chatEditorInput.focusedProperty().addListener(new ChangeListener<Boolean>() {
+      @Override
+      public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+        // the display doesn't get focused, the the input isn't visible, so must
+        // handle the hightlighting manually rather than a css:focused tag
+        if (newValue)
+          chatEditorDisplay.getStyleClass().add("chat-highlight");
+        else
+          chatEditorDisplay.getStyleClass().removeAll("chat-highlight");
+      }
+    });
     chatEditorInput.setOnKeyPressed(e -> {
       if (e.getCode() == KeyCode.ENTER) {
         sendMessage();
+      } else if (e.getCode() == KeyCode.TAB) {
+        // move off of the chat
+        sendButton.requestFocus();
+        // remove the tab character in the text
+        chatEditorInput.deletePreviousChar();
       }
       e.consume();
     });
@@ -177,6 +208,11 @@ public class FriendChatController extends Controller {
     oppProfileButton.setOnMouseClicked(e -> {
       oppProfilePane.setVisible(true);
     });
+    oppProfileButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        oppProfileButton.getOnMouseClicked().handle(null);
+    });
+
     oppProfileBackButton.setOnAction(e -> {
       oppProfilePane.setVisible(false);
     });

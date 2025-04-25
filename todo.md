@@ -5,15 +5,16 @@
 - [x] garbage bin sfx
 - [x] border under name & above chat box
 - [x] tabbing on menus?
+    - [x] forgot friend chat
 - [x] more stats on profile pane
     - [x] main chat
     - [x] friend chat
     - [x] fix draws not being properly tracked
 - [x] fix fxml version log
 - [x] flame animation top pixel layer incorrect
-- [ ] chat box has no focus indicator
+- [x] chat box has no focus indicator
 - [x] attempting to connect to server at not server IP causes hang
-- [ ] button style
+- [ ] button style consistency fix
 
 ### Sam
 - [x] invite on loading screen does nothing
