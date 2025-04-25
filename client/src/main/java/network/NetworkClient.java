@@ -328,6 +328,10 @@ public class NetworkClient {
     }
   }
 
+  public static void removeFriend(Long friendID) {
+    sendMessage(Message.forFriendRemove(friendID));
+  }
+
   // get the leader board with the specified view
   public static void fetchLeaderBoard(LeaderBoardView view) {
     sendMessage(Message.forFetchLeaderboard(view));

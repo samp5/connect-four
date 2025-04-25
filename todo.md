@@ -20,6 +20,8 @@
 - [x] resign pane border 
 - [x] fix background in ip in server menu
 - [x] friend chat profile border
+- [ ] friend action button upgrade
+- [ ] profile pic selector upgrade
 - [ ] remove friend option
 - [ ] leaderboard views
 

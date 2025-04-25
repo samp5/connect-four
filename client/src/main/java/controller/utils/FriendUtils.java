@@ -11,7 +11,6 @@ import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Optional;
 
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +21,7 @@ import network.NetworkClient;
 import network.UserProfile;
 import utils.CursorManager;
 import utils.SceneManager;
+import utils.ToolTipHelper;
 import controller.FriendChatController;
 import network.Player;
 
@@ -86,19 +86,29 @@ public class FriendUtils {
 
   public static HBox createComponent(UserProfile profile) {
 
-    Button inviteToGame = new Button("Invite");
-    inviteToGame.setMaxSize(100, 48);
-    inviteToGame.setPrefSize(100, 48);
-    inviteToGame.setMinSize(100, 48);
+    Button removeFriend = new Button();
+    removeFriend.setMaxSize(51, 48);
+    removeFriend.setPrefSize(51, 48);
+    removeFriend.setMinSize(51, 48);
+    removeFriend.getStyleClass().add("remove-friend-button");
+
+    Button inviteToGame = new Button();
+    inviteToGame.setMaxSize(51, 48);
+    inviteToGame.setPrefSize(51, 48);
+    inviteToGame.setMinSize(51, 48);
     inviteToGame.getStyleClass().add("invite-button");
 
-    Button chatWithFriend = new Button("Chat");
-    chatWithFriend.setMaxSize(75, 48);
-    chatWithFriend.setPrefSize(75, 48);
-    chatWithFriend.setMinSize(75, 48);
-    chatWithFriend.getStyleClass().add("login-button");
+    Button chatWithFriend = new Button();
+    chatWithFriend.setMaxSize(51, 48);
+    chatWithFriend.setPrefSize(51, 48);
+    chatWithFriend.setMinSize(51, 48);
+    chatWithFriend.getStyleClass().add("chat-button");
 
-    CursorManager.setHandCursor(inviteToGame, chatWithFriend);
+    inviteToGame.setTooltip(ToolTipHelper.make("Invite " + profile.getUserName() + " to a game"));
+    chatWithFriend.setTooltip(ToolTipHelper.make("Open chat with " + profile.getUserName()));
+    removeFriend.setTooltip(ToolTipHelper.make("Remove  " + profile.getUserName() + " from your friends "));
+
+    CursorManager.setHandCursor(inviteToGame, chatWithFriend, removeFriend);
 
     chatWithFriend.setOnAction(e -> {
       openChat(profile.getId());
@@ -106,20 +116,18 @@ public class FriendUtils {
 
     inviteToGame.setOnAction(e -> {
       inviteToGame.setDisable(true);
-      inviteToGame.setText("Invited");
       CursorManager.setPointerCursor(inviteToGame);
       NetworkClient.inviteToGame(profile.getId());
       PauseTransition pt = new PauseTransition(Duration.seconds(20));
       pt.setOnFinished(f -> {
         if (inviteToGame != null) {
           inviteToGame.setDisable(false);
-          inviteToGame.setText("Invite");
         }
       });
       pt.play();
     });
 
-    HBox friendActions = new HBox(chatWithFriend, inviteToGame);
+    HBox friendActions = new HBox(chatWithFriend, inviteToGame, removeFriend);
     friendActions.setAlignment(Pos.CENTER_RIGHT);
     friendActions.setMinWidth(200);
     friendActions.setMaxWidth(200);
@@ -149,6 +157,12 @@ public class FriendUtils {
     box.setMaxSize(330, 50);
     box.setMinSize(330, 50);
     box.setAlignment(Pos.CENTER);
+
+    // need a ref to box so this on action goes here
+    removeFriend.setOnAction(e -> {
+      NetworkClient.removeFriend(profile.getId());
+      ((VBox) box.getParent()).getChildren().remove(box);
+    });
 
     return box;
   }
@@ -198,10 +212,10 @@ public class FriendUtils {
                 .stream()
                 .filter(Button.class::isInstance)
                 .map(bt -> (Button) bt)
-                .filter(bt -> bt.getText().equals("Invited"))
+                .filter(bt -> bt.getStyleClass().contains("invite-button"))
                 .forEach(bt -> {
-                  bt.setText("Invite");
                   bt.setDisable(false);
+                  CursorManager.setHandCursor(bt);
                 });
           });
       ;

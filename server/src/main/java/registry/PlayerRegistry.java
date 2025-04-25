@@ -102,6 +102,18 @@ public class PlayerRegistry {
     }
   }
 
+  public static void removeFriendship(Long idA, Long idB) {
+    synchronized (registeredPlayers) {
+      RegistryPlayer pA = registeredPlayers.get(idA);
+      RegistryPlayer pB = registeredPlayers.get(idB);
+      if (pA == null || pB == null) {
+        return;
+      }
+      pA.friends.remove(idB);
+      pB.friends.remove(idA);
+    }
+  }
+
   public static boolean playerIsOnline(Long id) {
     synchronized (activePlayers) {
       return activePlayers.contains(id);

@@ -154,6 +154,10 @@ public class ClientManager {
           case FETCH_FRIENDS:
             sendFriends(connection);
             break;
+          case REMOVE_FRIEND:
+            PlayerRegistry.removeFriendship(connection.getPlayer().getID(), msg.getPlayerID());
+            getClientByID(msg.getPlayerID()).ifPresent(c -> sendFriends(c));
+            break;
           case FRIEND_CHAT:
             sendToByID(msg.getPlayerID(), msg);
             break;

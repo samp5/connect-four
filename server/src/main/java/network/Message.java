@@ -14,7 +14,8 @@ public class Message implements Serializable {
     RESIGN_RESPONSE, RETURN_TO_LOBBY, OPPONENT_RETURN_TO_LOBBY, OPPONENT_DISCONNECT, REMATCH, REMATCH_REQUEST,
     FETCH_LEADER_BOARD, LEADER_BOARD_DATA, JOIN_GAME, CANCEL_JOIN, GET_SERVER_STATUS, SERVER_STATUS, FETCH_PROFILE,
     PROFILE_DATA, PROFILE_PIC_UPDATE, FRIEND_REQUEST, FRIEND_REQUEST_RESPONSE, FETCH_FRIENDS, FRIEND_LIST_DATA,
-    FRIEND_ONLINE_STATUS, GAME_INVITATION, GAME_INVITATION_RESPONSE, GAME_INVITATION_START_GAME, GAME_INVITATION_CANCEL;
+    FRIEND_ONLINE_STATUS, REMOVE_FRIEND, GAME_INVITATION, GAME_INVITATION_RESPONSE, GAME_INVITATION_START_GAME,
+    GAME_INVITATION_CANCEL;
   };
 
   public static enum WinType {
@@ -303,6 +304,13 @@ public class Message implements Serializable {
     toSend.username = invitorUsername;
     toSend.invitedID = invitedID;
     toSend.invitorID = invitorID;
+    return toSend;
+  }
+
+  public static Message forFriendRemove(Long ID) {
+    Message toSend = new Message();
+    toSend.type = Type.REMOVE_FRIEND;
+    toSend.playerID = ID;
     return toSend;
   }
 
