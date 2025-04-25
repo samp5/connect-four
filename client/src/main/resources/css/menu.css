@@ -568,16 +568,36 @@
   -fx-fill: green;
 }
 
-/*  Background color of the whole context menu */
-.choice-box .context-menu { -fx-background-color: #938056; }
+.profile-pic-choice-box .context-menu { 
+  -fx-background-color: #E4D2AA;
+  -fx-background-radius: 15;
+  -fx-border-image-source: url("/assets/chat_message_local.png");
+  -fx-border-image-repeat: stretch;
+  -fx-border-image-slice: 20;
+  -fx-border-image-width: 4;
+  -fx-background-color: #FFF7D4;
+}
 
- /* Focused item background color in the list */
-.choice-box .menu-item:focused { -fx-background-color: #639bff; }
+.profile-pic-choice-box .menu-item:focused { 
+  -fx-background-color: #23674e
+}
 
-/*  Background color of the control itself */
-.choice-box {
-  -fx-border-color: #363646;
-  -fx-border-width: 2px;
-  -fx-background-insets: 0;
-  -fx-mark-color: #45a218;
+.profile-pic-choice-box .open-button .arrow {
+  -fx-background-color: transparent;
+}
+.profile-pic-choice-box .open-button { 
+  -fx-background-image: url("../assets/decrement-button.png");
+  -fx-background-repeat: no-repeat;
+  -fx-background-size: contain;
+  -fx-background-position: -1;
+}
+
+.profile-pic-choice-box {
+  -fx-background-color: transparent;
+  -fx-background-radius: 15;
+  -fx-border-image-source: url("../assets/chat_message_local.png");
+  -fx-border-image-repeat: stretch;
+  -fx-border-image-slice: 20;
+  -fx-border-image-width: 4;
+
 }
