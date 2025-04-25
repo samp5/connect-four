@@ -14,7 +14,7 @@
 - [x] flame animation top pixel layer incorrect
 - [x] chat box has no focus indicator
 - [x] attempting to connect to server at not server IP causes hang
-- [ ] button style consistency fix
+- [x] button style consistency fix
 
 ### Sam
 - [x] invite on loading screen does nothing

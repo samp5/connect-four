@@ -609,10 +609,10 @@
 .profile-pic-choice-box:focused .open-button,
 .image-view:focused,
 .check-box:focused,
-.slider:focused .thumb,
-.resign-button:focused,
-.draw-button:focused,
-.request-resign-button:focused
+.slider:focused .thumb
+/* .resign-button:focused, */
+/* .draw-button:focused, */
+/* .request-resign-button:focused */
 {
   -fx-effect: dropshadow(one-pass-box, #FFD541, 8, 1, 0, 0);
 }
