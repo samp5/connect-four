@@ -98,6 +98,11 @@ public class GameController extends Controller {
   private int grassState = 0;
 
   @FXML
+  private ImageView flameBorder;
+  private int flameState = 0;
+  private Timer flameTimer;
+
+  @FXML
   private ImageView redTurnIndicator;
   @FXML
   private ImageView blueTurnIndicator;
@@ -167,10 +172,30 @@ public class GameController extends Controller {
 
   public void setAIMaxMode() {
     AudioManager.playBossMusic();
+
+    flameBorder.setVisible(true);
+    flameTimer = new Timer();
+    flameTimer.scheduleAtFixedRate(new TimerTask() {
+      @Override
+      public void run() {
+        flameState = (flameState + 1) % 3;
+        try {
+          Platform.runLater(() -> {
+            // don't ask me why this works,,
+            flameBorder.setViewport(new Rectangle2D(-1800 + (1800 * flameState), 0, 5400, 1800));
+          });
+        } catch (Exception e) {
+        }
+      }
+    }, 0, 200);
   }
 
   public void setAIDefaultMode() {
     AudioManager.playMainTheme();
+    if (flameTimer != null) {
+      flameTimer.cancel();
+      flameBorder.setVisible(false);
+    }
   }
 
   private void setHandlers() {
@@ -401,7 +426,7 @@ public class GameController extends Controller {
       public double curve(double t) {
         if (t < (.869)) {
           return 3. * Math.pow(Math.E, 4.7 * (t - 1.1)) - 0.017;
-        } else if (t < .958){
+        } else if (t < .958) {
           return Math.pow((5.2 * t) - 4.75, 2) + .946;
         } else {
           return Math.pow((6.4 * t) - 6.265, 2) + .982;
