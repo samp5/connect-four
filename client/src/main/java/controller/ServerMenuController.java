@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -187,21 +188,6 @@ public class ServerMenuController extends Controller {
 
   private void setHandlers() {
 
-    joinButton.setOnAction(e -> {
-      NetworkClient.joinGame();
-      SceneManager.showScene(SceneSelections.LOADING);
-    });
-    settingsButton.setOnAction(e -> {
-      GameSettings.loadOnto(menuPane);
-    });
-    leaderBoardButton.setOnMouseClicked(e -> {
-      LeaderBoardController.loadOnto(menuPane);
-    });
-    disconnectButton.setOnAction(e -> {
-      NetworkClient.disconnect();
-      SceneManager.showScene(SceneSelections.MAIN_MENU);
-    });
-
     menuPane.setOnKeyPressed(e -> {
       if (e.getCode() == KeyCode.ESCAPE) {
         profilePane.setVisible(false);
@@ -210,23 +196,64 @@ public class ServerMenuController extends Controller {
       }
     });
 
-    profileBackButton.setOnAction(e -> {
-      profilePane.setVisible(false);
+    joinButton.setOnAction(e -> {
+      NetworkClient.joinGame();
+      SceneManager.showScene(SceneSelections.LOADING);
     });
+    joinButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        joinButton.getOnAction().handle(null);
+    });
+
+    settingsButton.setOnAction(e -> {
+      GameSettings.loadOnto(menuPane);
+    });
+    settingsButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        settingsButton.getOnAction().handle(null);
+    });
+
+    disconnectButton.setOnAction(e -> {
+      NetworkClient.disconnect();
+      SceneManager.showScene(SceneSelections.MAIN_MENU);
+    });
+    disconnectButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        disconnectButton.getOnAction().handle(null);
+    });
+
     profileButton.setOnMouseClicked(e -> {
       profilePane.toFront();
       profilePane.setVisible(true);
       profilePane.requestFocus();
     });
+    profileButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER) 
+        profileButton.getOnMouseClicked().handle(null);
+    });
+    profileBackButton.setOnAction(e -> {
+      profilePane.setVisible(false);
+    });
 
-    friendsBackButton.setOnAction(e -> {
-      friendsPane.setVisible(false);
+    leaderBoardButton.setOnMouseClicked(e -> {
+      LeaderBoardController.loadOnto(menuPane);
+    });
+    leaderBoardButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        leaderBoardButton.getOnMouseClicked().handle(null);
     });
 
     friendsButton.setOnMouseClicked(e -> {
       friendsPane.toFront();
       friendsPane.setVisible(true);
       friendsPane.requestFocus();
+    });
+    friendsButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        friendsButton.getOnMouseClicked().handle(null);
+    });
+    friendsBackButton.setOnAction(e -> {
+      friendsPane.setVisible(false);
     });
 
     Tooltip.install(leaderBoardButton, ToolTipHelper.make("View leaderboard"));
@@ -239,6 +266,22 @@ public class ServerMenuController extends Controller {
         profilePicture.setImage(new Image(newProfilePic.getAssetFileName()));
         ((ImageView) profileButton.getCenter()).setImage(new Image(newProfilePic.getAssetFileName()));
         PlayerData.updateProfilePicture(newProfilePic);
+      }
+    });
+    profilePicSelector.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER) {
+        profilePicSelector.show();
+        e.consume();
+      } else if (profilePicSelector.isShowing()) {
+        SingleSelectionModel<ProfilePicture> selector = profilePicSelector.getSelectionModel();
+
+        if (e.getCode() == KeyCode.J) 
+          selector.selectNext();
+        else if (e.getCode() == KeyCode.K)
+          selector.selectPrevious();
+
+        profilePicSelector.show();
+        e.consume();
       }
     });
   }

@@ -1,6 +1,7 @@
 package controller.utils;
 
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -106,12 +107,16 @@ public class FriendUtils {
 
     inviteToGame.setTooltip(ToolTipHelper.make("Invite " + profile.getUserName() + " to a game"));
     chatWithFriend.setTooltip(ToolTipHelper.make("Open chat with " + profile.getUserName()));
-    removeFriend.setTooltip(ToolTipHelper.make("Remove  " + profile.getUserName() + " from your friends "));
+    removeFriend.setTooltip(ToolTipHelper.make("Remove " + profile.getUserName() + " from your friends "));
 
     CursorManager.setHandCursor(inviteToGame, chatWithFriend, removeFriend);
 
     chatWithFriend.setOnAction(e -> {
       openChat(profile.getId());
+    });
+    chatWithFriend.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        chatWithFriend.getOnAction().handle(null);
     });
 
     inviteToGame.setOnAction(e -> {
@@ -125,6 +130,10 @@ public class FriendUtils {
         }
       });
       pt.play();
+    });
+    inviteToGame.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        inviteToGame.getOnAction().handle(null);
     });
 
     HBox friendActions = new HBox(chatWithFriend, inviteToGame, removeFriend);
@@ -162,6 +171,10 @@ public class FriendUtils {
     removeFriend.setOnAction(e -> {
       NetworkClient.removeFriend(profile.getId());
       ((VBox) box.getParent()).getChildren().remove(box);
+    });
+    removeFriend.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        removeFriend.getOnAction().handle(null);
     });
 
     return box;

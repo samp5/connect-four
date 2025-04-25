@@ -51,7 +51,7 @@
   -fx-background-position: center top;
   -fx-label-padding: 0 0 8 0;
 }
-.remove-friend-button:hover {
+.remove-friend-button:hover, .remove-friend-button:focused {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
   -fx-background-image: url('/assets/buttons/remove_friend2.png');
@@ -85,7 +85,7 @@
   -fx-background-position: center top;
   -fx-label-padding: 0 0 8 0;
 }
-.chat-button:hover {
+.chat-button:hover, .chat-button:focused {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
   -fx-background-image: url('/assets/buttons/chat_button2.png');
@@ -120,7 +120,7 @@
   -fx-background-position: center top;
   -fx-label-padding: 0 0 8 0;
 }
-.draw-button:hover {
+.draw-button:hover, .draw-button:focused {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
   -fx-background-image: url('/assets/buttons/draw2.png');
@@ -155,7 +155,7 @@
   -fx-background-position: center top;
   -fx-label-padding: 0 0 8 0;
 }
-.request-resign-button:hover {
+.request-resign-button:hover, .request-resign-button:focused {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
   -fx-background-image: url('/assets/buttons/red-flag2.png');
@@ -190,7 +190,7 @@
   -fx-background-position: center top;
   -fx-label-padding: 0 0 8 0;
 }
-.resign-button:hover {
+.resign-button:hover, .resign-button:focused {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
   -fx-background-image: url('/assets/buttons/surrender-flag2.png');
@@ -225,7 +225,7 @@
   -fx-background-position: center top;
   -fx-label-padding: 0 0 8 0;
 }
-.send-button:hover {
+.send-button:hover, .send-button:focused {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
   -fx-background-image: url('/assets/buttons/send_button2.png');
@@ -260,7 +260,7 @@
   -fx-background-position: center top;
   -fx-label-padding: 0 0 8 0;
 }
-.confirm-button:hover {
+.confirm-button:hover, .confirm-button:focused {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
   -fx-background-image: url('/assets/buttons/confirm_button2.png');
@@ -294,7 +294,7 @@
   -fx-background-position: center top;
   -fx-label-padding: 0 0 8 0;
 }
-.invite-button:hover {
+.invite-button:hover, .invite-button:focused {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
   -fx-background-image: url('/assets/buttons/invite_button2.png');
@@ -327,7 +327,7 @@
   -fx-background-position: center top;
   -fx-label-padding: 0 0 8 0;
 }
-.login-button:hover {
+.login-button:hover, .login-button:focused {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
   -fx-background-image: url('/assets/buttons/login_button2.png');
@@ -361,7 +361,7 @@
   -fx-background-position: center top;
   -fx-label-padding: 0 0 4 0;
 }
-.connection-button-small:hover {
+.connection-button-small:hover, .connection-button-small:focused {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
   -fx-background-image: url('/assets/buttons/connection_button_small2.png');
@@ -395,7 +395,7 @@
   -fx-background-position: center top;
   -fx-label-padding: 0 0 10 0;
 }
-.connection-button:hover {
+.connection-button:hover, .connection-button:focused {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
   -fx-background-image: url('/assets/buttons/connections_button2.png');
@@ -429,7 +429,7 @@
   -fx-background-position: center top;
   -fx-label-padding: 0 0 10 0;
 }
-.menu-button:hover {
+.menu-button:hover, .menu-button:focused {
   -fx-background-insets: 0;
   -fx-border-width: 0px;
   -fx-background-image: url('/assets/buttons/menu_button2.png');
@@ -462,15 +462,10 @@
   -fx-text-fill: transparent;
 }
 
-.back-button:hover .text {
-  -fx-font-family: "Mota Pixel Bold";
-}
-
-
 .button-bottom-padded {
   -fx-label-padding: 0 0 16 0;
 }
-.button-bottom-padded:hover {
+.button-bottom-padded:hover, .button-bottom-padded:focused {
   -fx-label-padding: 0 0 16 0;
 }
 .button-bottom-padded:pressed {
@@ -498,6 +493,11 @@
   -fx-font-family: "Mota Pixel Regular";
   -fx-font-size: 20px;
 }
+.recent-connection-cell:focused {
+  -fx-border-width: 2px;
+  -fx-border-color: black;
+  -fx-border-style: dashed;
+}
 .recent-connection-cell-text {
   -fx-font-family: "Mota Pixel Regular";
   -fx-font-size: 20px;
@@ -508,6 +508,11 @@
 }
 .recent-connection-cell-selected {
   -fx-padding: 10px;
+}
+.recent-connection-cell-selected:focused {
+  -fx-border-width: 2px;
+  -fx-border-color: black;
+  -fx-border-style: dashed;
 }
 .slider .thumb {
   -fx-background-image: url("../assets/red_chip.png");
@@ -599,5 +604,15 @@
   -fx-border-image-repeat: stretch;
   -fx-border-image-slice: 20;
   -fx-border-image-width: 4;
+}
 
+.profile-pic-choice-box:focused .open-button,
+.image-view:focused,
+.check-box:focused,
+.slider:focused .thumb,
+.resign-button:focused,
+.draw-button:focused,
+.request-resign-button:focused
+{
+  -fx-effect: dropshadow(one-pass-box, #FFD541, 8, 1, 0, 0);
 }

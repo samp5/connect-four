@@ -16,7 +16,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<Pane xmlns="http://javafx.com/javafx/19.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FriendChatController">
+<Pane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FriendChatController">
   <children>
     <StackPane stylesheets="@../css/chat.css">
       <children>
@@ -151,7 +151,7 @@
       </center>
     </BorderPane>
     <Text fx:id="usernameText" layoutX="115.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="{username}" />
-      <Pane fx:id="oppProfilePane" layoutX="40.0" layoutY="40.0" prefHeight="300.0" prefWidth="200.0">
+      <Pane fx:id="oppProfilePane" layoutX="40.0" layoutY="40.0" prefHeight="300.0" prefWidth="200.0" visible="false">
          <children>
             <ImageView fitHeight="300.0" fitWidth="200.0">
                <image>

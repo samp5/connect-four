@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/19.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MenuController">
+<Pane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MenuController">
   <children>
     <ImageView fx:id="background" fitHeight="720.0" fitWidth="1080.0">
       <image>
@@ -21,7 +21,7 @@
     </ImageView>
     <HBox alignment="CENTER" layoutY="245.0" prefWidth="1080.0">
       <children>
-        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="205.0" spacing="30.0">
+        <VBox alignment="CENTER" focusTraversable="true" prefHeight="200.0" prefWidth="205.0" spacing="30.0">
           <children>
             <Button fx:id="playOnlineButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="menu-button" text="Play Online" textAlignment="CENTER">
             </Button>

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="settingsPane" maxHeight="-Infinity" maxWidth="500.0" minHeight="500.0" minWidth="500.0" prefHeight="500.0" prefWidth="500.0" stylesheets="@../css/menu.css" xmlns="http://javafx.com/javafx/19.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SettingsController">
+<Pane fx:id="settingsPane" maxHeight="-Infinity" maxWidth="500.0" minHeight="500.0" minWidth="500.0" prefHeight="500.0" prefWidth="500.0" stylesheets="@../css/menu.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SettingsController">
   <children>
     <ImageView fitHeight="500.0" fitWidth="500.0">
       <image>
@@ -34,7 +34,7 @@
             <VBox spacing="10.0">
               <children>
                 <Label text="Music Volume" />
-                <Slider fx:id="volumeSlider" max="1.0" minorTickCount="5">
+                <Slider fx:id="volumeSlider" blockIncrement="0.1" max="1.0" minorTickCount="5">
                 </Slider>
               </children>
             </VBox>
@@ -45,7 +45,7 @@
             <VBox spacing="10.0">
               <children>
                 <Label text="SoundFX Volume" />
-                <Slider fx:id="soundFXVolumeSlider" max="1.0" minorTickCount="5">
+                <Slider fx:id="soundFXVolumeSlider" blockIncrement="0.1" max="1.0" minorTickCount="5">
                 </Slider>
               </children>
             </VBox>
@@ -56,7 +56,7 @@
             <VBox spacing="10.0">
               <children>
                 <Label text="AI Difficulty" />
-                <Slider fx:id="aiDifficultySlider" max="7.0" min="1.0" minorTickCount="5" value="4.0">
+                <Slider fx:id="aiDifficultySlider" blockIncrement="1.0" max="7.0" min="1.0" minorTickCount="5" value="4.0">
                 </Slider>
               </children>
             </VBox>

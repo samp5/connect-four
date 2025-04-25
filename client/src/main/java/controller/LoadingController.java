@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.TextFlow;
 import network.NetworkClient;
@@ -61,6 +62,11 @@ public class LoadingController extends Controller {
     backButton.setOnAction(e -> {
       NetworkClient.cancelJoinGame();
       SceneManager.showScene(SceneSelections.SERVER_MENU);
+    });
+
+    background.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ESCAPE)
+        backButton.getOnAction().handle(null);
     });
   }
 

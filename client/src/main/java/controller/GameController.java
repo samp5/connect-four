@@ -89,7 +89,7 @@ public class GameController extends Controller {
   @FXML
   private Pane chipPane2;
   @FXML
-  private BorderPane settingsButton;
+  BorderPane settingsButton;
   @FXML
   private ImageView clouds;
 
@@ -149,6 +149,7 @@ public class GameController extends Controller {
     animateTurnIndicators();
 
     NetworkClient.bindGameController(this);
+    MainController.attachGame(this);
     settingsButton.setBackground(SettingsController.getButtonBackground(40));
 
     Tooltip.install(settingsButton, ToolTipHelper.make("Settings"));
@@ -224,20 +225,36 @@ public class GameController extends Controller {
       drawRequest.setVisible(false);
       NetworkClient.replyDrawRequest(true);
     });
+    drawRequestAccept.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        drawRequestAccept.getOnAction().handle(null);
+    });
 
     drawRequestReject.setOnAction(e -> {
       drawRequest.setVisible(false);
       NetworkClient.replyDrawRequest(false);
+    });
+    drawRequestReject.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        drawRequestReject.getOnAction().handle(null);
     });
 
     resignRequestAccept.setOnAction(e -> {
       resignRequest.setVisible(false);
       NetworkClient.replyResignRequest(true);
     });
+    resignRequestAccept.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        resignRequestAccept.getOnAction().handle(null);
+    });
 
     resignRequestReject.setOnAction(e -> {
       resignRequest.setVisible(false);
       NetworkClient.replyResignRequest(false);
+    });
+    resignRequestReject.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        resignRequestReject.getOnAction().handle(null);
     });
 
     rematchYes.setOnAction(e -> {
@@ -247,12 +264,22 @@ public class GameController extends Controller {
         NetworkClient.rematchRequest();
       }
     });
+    rematchYes.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER) {
+        rematchYes.getOnAction().handle(null);
+        gamePane.requestFocus();
+      }
+    });
 
     rematchMainMenu.setOnAction(e -> {
       if (GameLogic.getGameMode() == GameMode.Multiplayer) {
         NetworkClient.disconnect();
       }
       SceneManager.showScene(SceneSelections.MAIN_MENU);
+    });
+    rematchMainMenu.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        rematchMainMenu.getOnAction().handle(null);
     });
 
     rematchToLobby.setOnAction(e -> {
@@ -261,6 +288,10 @@ public class GameController extends Controller {
       }
       rematch.setVisible(false);
       SceneManager.showScene(SceneSelections.SERVER_MENU);
+    });
+    rematchToLobby.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        rematchToLobby.getOnAction().handle(null);
     });
 
   }
@@ -585,7 +616,7 @@ public class GameController extends Controller {
        * like
        * ( (29p - 16p) + (16p / 2) )* 5.625 jp/p
        * similarly the x property is
-       * ( (22p - 16p) / 2 + 8 ) * 5.65 jp/p
+       * ( (22p - 16p) / 2 + 8 ) * 5.625 jp/p
        *
        * and so on
        *
@@ -594,6 +625,9 @@ public class GameController extends Controller {
       final double f_p_height = 29;
       final double chip_p_radius = 8;
       final double jp_p_p = 5.625; // java pixels per pixel
+
+      final double width = f_p_width * jp_p_p;
+      final double height = f_p_height * jp_p_p;
 
       midgroundPane.getChildren().add(flamin);
       flamin.xProperty()
@@ -610,8 +644,8 @@ public class GameController extends Controller {
         public void run() {
           Platform.runLater(() -> {
             if (flamin != null) {
-              flamin.setViewport(new Rectangle2D(0, (flamin_state) * (f_p_height * jp_p_p),
-                  (f_p_width * jp_p_p), (f_p_height * jp_p_p)));
+              flamin.setViewport(new Rectangle2D(0, flamin_state * height + .3,
+                  width, height));
               flamin_state = (flamin_state + 1) % 4;
             }
           });
@@ -632,7 +666,6 @@ public class GameController extends Controller {
           super.setFill(new ImagePattern(new Image("/assets/blue_chip.png")));
         }
       }
-
     }
   }
 
@@ -841,6 +874,7 @@ public class GameController extends Controller {
           break;
       }
       rematch.setVisible(true);
+      gamePane.requestFocus();
       return;
     } else {
       if (GameLogic.getGameMode() == GameMode.LocalAI && AI.getRole() == winner) {

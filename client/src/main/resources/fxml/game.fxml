@@ -31,7 +31,7 @@
           </image>
         </ImageView>
     </children></Pane>
-    <AnchorPane fx:id="gamePane" minHeight="-Infinity" minWidth="-Infinity">
+    <AnchorPane fx:id="gamePane" focusTraversable="true" minHeight="-Infinity" minWidth="-Infinity">
       <children>
         <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
           <children>

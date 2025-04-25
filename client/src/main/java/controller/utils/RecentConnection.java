@@ -9,6 +9,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -122,12 +123,20 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
               // set the graphic for this cell
               setGraphic(info);
             }
+
             info.setCursor(Cursor.HAND);
+            info.setFocusTraversable(true);
+            info.setOnKeyPressed(e -> {
+              if (e.getCode() == KeyCode.ENTER) {
+                this.getListView().getSelectionModel().select(this.getItem());
+                e.consume();
+              }
+            });
           } else {
 
             /**
              * This case should never occur
-             * a {@code City} should never be null
+             * a {@code Connection} should never be null
              */
             setGraphic(new Text("null"));
           }

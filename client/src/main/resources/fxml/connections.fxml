@@ -19,7 +19,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<Pane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/19.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ConnectionsController">
+<Pane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ConnectionsController">
   <children>
     <ImageView fx:id="background" fitHeight="720.0" fitWidth="1080.0">
       <image>
@@ -78,7 +78,7 @@
             <Image url="@../assets/connections_pane.png" />
           </image>
         </ImageView>
-        <Button fx:id="addConnectionBackButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="50.0" styleClass="back-button" text="x"></Button>
+        <Button fx:id="addConnectionBackButton" focusTraversable="false" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="50.0" styleClass="back-button" text="x" />
         <HBox alignment="CENTER" layoutY="105.0" prefWidth="500.0">
           <children>
             <VBox alignment="CENTER" spacing="20.0">
@@ -131,7 +131,7 @@
             <Image url="@../assets/connections_pane.png" />
           </image>
         </ImageView>
-        <Button fx:id="loginBackButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="50.0" styleClass="back-button" text="x">
+        <Button fx:id="loginBackButton" focusTraversable="false" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="50.0" styleClass="back-button" text="x">
         </Button>
         <HBox alignment="CENTER" layoutY="62.0" prefWidth="500.0">
           <children>
@@ -166,7 +166,7 @@
         </HBox>
       </children>
     </Pane>
-    <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
+    <Button fx:id="backButton" focusTraversable="false" layoutX="14.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
     </Button>
     <Pane fx:id="notificationPane" layoutX="810.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" visible="false">
       <children>

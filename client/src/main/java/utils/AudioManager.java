@@ -5,6 +5,7 @@ import java.util.HashMap;
 import javafx.scene.Node;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
 
 public class AudioManager {
@@ -36,7 +37,11 @@ public class AudioManager {
 
     public void play() {
       MediaPlayer mp = soundEffectPlayers.get(this);
-      mp.seek(new Duration(0));
+      if (mp.getStatus() == Status.PLAYING) mp.seek(Duration.ZERO);
+      mp.setOnStopped(new Thread(() -> {
+        mp.seek(Duration.ZERO);
+      }));
+
       mp.play();
     }
 

@@ -2,8 +2,7 @@
 
 <?import javafx.scene.layout.HBox?>
 
-
-<HBox prefHeight="100.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/19.0.2.1" xmlns:fx="http://javafx.com/fxml/1">
+<HBox fx:id="game" prefHeight="100.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
   <children>
     <fx:include fx:id="gamePane" source="game.fxml" />
     <fx:include fx:id="chatPane" source="chat.fxml" />

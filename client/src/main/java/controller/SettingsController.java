@@ -187,12 +187,26 @@ public class SettingsController extends Controller {
         AudioManager.setVolume(currentSettings.musicVolume);
       }
     });
+    volumeSlider.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.H)
+        volumeSlider.decrement();
+      else if (e.getCode() == KeyCode.L)
+        volumeSlider.increment();
+    });
+
     soundFXVolumeSlider.valueProperty().addListener((observable, old, newValue) -> {
       if (newValue != null) {
         currentSettings.sfxVolume = newValue.doubleValue() / soundFXVolumeSlider.getMax();
         AudioManager.setSoundEffectVolume(currentSettings.sfxVolume);
       }
     });
+    soundFXVolumeSlider.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.H)
+        soundFXVolumeSlider.decrement();
+      else if (e.getCode() == KeyCode.L)
+        soundFXVolumeSlider.increment();
+    });
+
     aiDifficultySlider.valueProperty().addListener((observable, old, newValue) -> {
       if (newValue != null) {
         currentSettings.aiDifficulty = newValue.intValue();
@@ -204,6 +218,12 @@ public class SettingsController extends Controller {
           NetworkClient.checkAIMaxMode();
         }
       }
+    });
+    aiDifficultySlider.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.H)
+        aiDifficultySlider.decrement();
+      else if (e.getCode() == KeyCode.L)
+        aiDifficultySlider.increment();
     });
 
     backButton.setOnAction(e -> {
@@ -217,10 +237,20 @@ public class SettingsController extends Controller {
       SceneManager.showScene(SceneSelections.MAIN_MENU);
       AudioManager.playMainTheme();
     });
+    mainMenuButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        mainMenuButton.getOnAction().handle(null);
+    });
 
     customCursorToggle.setOnAction(e -> {
       currentSettings.cursorsEnabled = customCursorToggle.isSelected();
       CursorManager.setEnabled(currentSettings.cursorsEnabled);
+    });
+    customCursorToggle.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER) {
+        customCursorToggle.fire();
+        customCursorToggle.getOnAction().handle(null);
+      }
     });
   }
 

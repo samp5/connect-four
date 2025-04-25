@@ -172,6 +172,10 @@ public class ConnectionsController extends Controller {
       RecentConnectionRegistry.save();
       SceneManager.showScene(SceneSelections.MAIN_MENU);
     });
+    backButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        backButton.getOnAction().handle(null);
+    });
 
     // enter and escape press handlers
     // -- login screen

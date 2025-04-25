@@ -121,6 +121,7 @@ public class ChatController extends Controller {
 
   public void initialize() {
     NetworkClient.bindChatController(this);
+    MainController.attachChat(this);
     setHandlers();
 
     if (GameLogic.getGameMode() == GameMode.LocalAI) {
@@ -142,21 +143,15 @@ public class ChatController extends Controller {
         oppProfileBackButton, popupConfirmButton, popupCancelButton);
     AudioManager.setAudioButton(resignButton, drawButton, requestResignButton, sendButton, oppProfileButton,
         oppProfileBackButton, popupConfirmButton, popupCancelButton);
-
-    // can't do this in fxml easily
-    drawButton
-        .setBackground(new Background(new BackgroundImage(new Image("/assets/draw.png"),
-            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            new BackgroundSize(34, 28, false, false, false, false))));
-    requestResignButton
-        .setBackground(new Background(new BackgroundImage(new Image("/assets/red-flag.png"),
-            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            new BackgroundSize(33, 28, false, false, false, false))));
   }
 
   private void setHandlers() {
     sendButton.setOnAction(e -> {
       sendMessage();
+    });
+    sendButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        sendButton.getOnAction().handle(null);
     });
     sendButton.setTooltip(ToolTipHelper.make("Send message"));
 
@@ -175,12 +170,26 @@ public class ChatController extends Controller {
     chatEditorInput.setOnKeyPressed(e -> {
       if (e.getCode() == KeyCode.ENTER) {
         sendMessage();
+      } else if (e.getCode() == KeyCode.TAB) {
+        // move off of the chat
+        sendButton.requestFocus();
+        // remove the tab character in the text
+        chatEditorInput.deletePreviousChar();
       }
       e.consume();
     });
 
     popupCancelButton.setOnAction(e -> {
       confirmPopup.setVisible(false);
+    });
+    popupCancelButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        popupCancelButton.getOnAction().handle(null);
+    });
+
+    popupConfirmButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        popupConfirmButton.getOnAction().handle(null);
     });
 
     resignButton.setOnAction(e -> {
@@ -192,7 +201,10 @@ public class ChatController extends Controller {
         NetworkClient.resign();
       });
     });
-
+    resignButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER) 
+        resignButton.getOnAction().handle(null);
+    });
     resignButton.setTooltip(ToolTipHelper.make("Resign"));
 
     drawButton.setOnAction(e -> {
@@ -203,6 +215,10 @@ public class ChatController extends Controller {
         confirmPopup.setVisible(false);
         NetworkClient.drawRequest();
       });
+    });
+    drawButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        drawButton.getOnAction().handle(null);
     });
     drawButton.setTooltip(ToolTipHelper.make("Request a draw"));
 
@@ -215,16 +231,30 @@ public class ChatController extends Controller {
         NetworkClient.resignRequest();
       });
     });
+    requestResignButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        requestResignButton.getOnAction().handle(null);
+    });
     requestResignButton.setTooltip(ToolTipHelper.make("Request your opponent resigns"));
 
     oppProfileButton.setOnMouseClicked(e -> {
       oppProfilePane.setVisible(true);
     });
+    oppProfileButton.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        oppProfileButton.getOnMouseClicked().handle(null);
+    });
+
     oppProfileBackButton.setOnAction(e -> {
       oppProfilePane.setVisible(false);
     });
+
     addFriend.setOnAction(e -> {
       NetworkClient.sendOpponentFriendRequest();
+    });
+    addFriend.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        addFriend.getOnAction().handle(null);
     });
   }
 

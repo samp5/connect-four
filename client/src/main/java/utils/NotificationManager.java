@@ -8,6 +8,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.HLineTo;
 import javafx.scene.shape.MoveTo;
@@ -105,12 +106,20 @@ public class NotificationManager {
     reverse = new PathTransition(Duration.seconds(.5), hidePath, notificationPane);
 
     confirm.setOnAction(e -> {
-      onConfirm.handle(e);
+      onConfirm.handle(null);
       reverse.play();
+    });
+    confirm.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER) 
+        confirm.getOnAction().handle(null);
     });
     deny.setOnAction(e -> {
       onDeny.handle(e);
       reverse.play();
+    });
+    deny.setOnKeyPressed(e -> {
+      if (e.getCode() == KeyCode.ENTER)
+        deny.getOnAction().handle(null);
     });
 
     reverse.setOnFinished(e -> {

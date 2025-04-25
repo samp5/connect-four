@@ -48,7 +48,7 @@
         </TextFlow>
         <HBox alignment="CENTER" prefWidth="1080.0">
           <children>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="205.0" spacing="50.0">
+            <VBox alignment="CENTER" focusTraversable="true" prefHeight="200.0" prefWidth="205.0" spacing="50.0">
               <children>
                 <Button fx:id="joinButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="48.0" prefWidth="128.0" styleClass="menu-button" text="Join Game">
                 </Button>
@@ -64,9 +64,9 @@
           <children>
             <BorderPane fx:id="profileButton" minWidth="-Infinity" prefHeight="75.0" prefWidth="75.0">
               <center>
-                <ImageView fitHeight="75.0" fitWidth="75.0" BorderPane.alignment="CENTER">
+                <ImageView fitHeight="75.0" fitWidth="75.0" focusTraversable="true" BorderPane.alignment="CENTER">
                   <image>
-                    <Image url="@../assets/basic_red.png" />
+                    <Image url="@../assets/profiles/basic_red.png" />
                   </image>
                 </ImageView>
               </center>
@@ -87,7 +87,7 @@
                 </Text>
               </top>
               <center>
-                <ImageView fitHeight="75.0" fitWidth="75.0" BorderPane.alignment="CENTER">
+                <ImageView fitHeight="75.0" fitWidth="75.0" focusTraversable="true" styleClass="focusable" BorderPane.alignment="CENTER">
                   <image>
                     <Image url="@../assets/trophy.png" />
                   </image>
@@ -103,7 +103,7 @@
                 </Text>
               </top>
               <center>
-                <ImageView fitHeight="75.0" fitWidth="75.0" BorderPane.alignment="CENTER">
+                <ImageView fitHeight="75.0" fitWidth="75.0" focusTraversable="true" styleClass="focusable" BorderPane.alignment="CENTER">
                   <image>
                     <Image url="@../assets/friend.png" />
                   </image>
@@ -153,7 +153,7 @@
             <Text fx:id="profileUserName" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium" text="{user name}" />
             <ImageView fx:id="profilePicture" fitHeight="100.0" fitWidth="100.0">
               <image>
-                <Image url="@../assets/basic_red.png" />
+                <Image url="@../assets/profiles/basic_red.png" />
               </image>
             </ImageView>
             <HBox alignment="CENTER" spacing="5.0">
@@ -243,7 +243,7 @@
             <Insets top="20.0" />
           </padding>
         </VBox>
-        <Button fx:id="profileBackButton" layoutX="20.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
+        <Button fx:id="profileBackButton" focusTraversable="false" layoutX="20.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
         </Button>
       </children>
     </Pane>
@@ -254,7 +254,7 @@
             <Image url="@../assets/server_menu_pane.png" />
           </image>
         </ImageView>
-        <Button fx:id="friendsBackButton" alignment="CENTER" layoutX="20.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
+        <Button fx:id="friendsBackButton" alignment="CENTER" focusTraversable="false" layoutX="20.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
         </Button>
         <Text layoutX="155.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-bold-medium" text="Friends" />
         <ScrollPane layoutX="17.0" layoutY="67.0" minViewportHeight="400.0" minViewportWidth="350.0" prefHeight="400.0" prefWidth="350.0" style="-fx-background-color: transparent;">

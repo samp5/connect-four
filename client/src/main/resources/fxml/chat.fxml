@@ -16,7 +16,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<Pane xmlns="http://javafx.com/javafx/19.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatController">
+<Pane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatController">
   <children>
     <StackPane stylesheets="@../css/chat.css">
       <children>
@@ -92,75 +92,15 @@
                   </ImageView>
           </children>
         </Pane>
-        <Pane fx:id="confirmPopup" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="96.0" prefWidth="224.0" translateY="200.0" visible="false">
-          <children>
-            <ImageView fitHeight="96.0" fitWidth="224.0">
-              <image>
-                <Image url="@../assets/confirm_popup_bg.png" />
-              </image>
-            </ImageView>
-            <VBox alignment="CENTER" maxHeight="96.0" maxWidth="218.0" minHeight="96.0" minWidth="224.0" prefHeight="96.0" prefWidth="218.0">
-              <children>
-                <Text fx:id="confirmText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Are you sure you want to?" wrappingWidth="192.0">
-                  <VBox.margin>
-                    <Insets top="4.0" />
-                  </VBox.margin>
-                  <font>
-                    <Font name="Mota Pixel Regular" size="20.0" />
-                  </font>
-                </Text>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-spacing: 12px;">
-                  <children>
-                    <Button fx:id="popupCancelButton" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" styleClass="confirm-button" text="Cancel" textAlignment="CENTER">
-                      <font>
-                        <Font name="Mota Pixel Regular" size="20.0" />
-                      </font>
-                      <padding>
-                        <Insets bottom="-1.0" />
-                      </padding>
-                      <HBox.margin>
-                        <Insets top="-4.0" />
-                      </HBox.margin>
-                    </Button>
-                    <Button fx:id="popupConfirmButton" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" styleClass="confirm-button" text="Confirm" textAlignment="CENTER">
-                      <font>
-                        <Font name="Mota Pixel Regular" size="20.0" />
-                      </font>
-                      <padding>
-                        <Insets bottom="-1.0" />
-                      </padding>
-                      <HBox.margin>
-                        <Insets top="-4.0" />
-                      </HBox.margin>
-                    </Button>
-                  </children>
-                  <opaqueInsets>
-                    <Insets top="-8.0" />
-                  </opaqueInsets>
-                </HBox>
-              </children>
-            </VBox>
-          </children>
-        </Pane>
       </children>
     </StackPane>
     <BorderPane fx:id="oppProfileButton" layoutX="30.0" layoutY="30.0" prefHeight="75.0" prefWidth="75.0" visible="false">
       <center>
-        <ImageView fitHeight="75.0" fitWidth="75.0" BorderPane.alignment="CENTER">
+        <ImageView fitHeight="75.0" fitWidth="75.0" focusTraversable="true" BorderPane.alignment="CENTER">
         </ImageView>
       </center>
     </BorderPane>
     <Text fx:id="userNameText" layoutX="115.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-medium-large" text="{username}" />
-    <HBox layoutX="115.0" layoutY="70.0" spacing="10.0">
-      <children>
-        <Button fx:id="resignButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="33.0" prefWidth="39.0" styleClass="resign-button" stylesheets="@../css/chat.css">
-        </Button>
-        <Button fx:id="drawButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="33.0" prefWidth="39.0" styleClass="draw-button">
-        </Button>
-        <Button fx:id="requestResignButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="33.0" prefWidth="39.0" styleClass="request-resign-button">
-        </Button>
-      </children>
-    </HBox>
     <Pane fx:id="oppProfilePane" layoutX="30.0" layoutY="30.0" prefHeight="300.0" prefWidth="200.0" visible="false">
       <children>
         <ImageView fitHeight="300.0" fitWidth="200.0">
@@ -273,6 +213,66 @@
         </Button>
         </children>
       </Pane>
+    <HBox layoutX="115.0" layoutY="70.0" spacing="10.0">
+      <children>
+        <Button fx:id="resignButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="33.0" prefWidth="39.0" styleClass="resign-button" stylesheets="@../css/chat.css">
+        </Button>
+        <Button fx:id="drawButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="33.0" prefWidth="39.0" styleClass="draw-button">
+        </Button>
+        <Button fx:id="requestResignButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="33.0" prefWidth="39.0" styleClass="request-resign-button">
+        </Button>
+      </children>
+    </HBox>
+  <Pane fx:id="confirmPopup" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="96.0" prefWidth="224.0" translateX="64.0" translateY="500.0" visible="false">
+    <children>
+      <ImageView fitHeight="96.0" fitWidth="224.0">
+        <image>
+          <Image url="@../assets/confirm_popup_bg.png" />
+        </image>
+      </ImageView>
+      <VBox alignment="CENTER" maxHeight="96.0" maxWidth="218.0" minHeight="96.0" minWidth="224.0" prefHeight="96.0" prefWidth="218.0">
+        <children>
+          <Text fx:id="confirmText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text" text="Are you sure you want to?" wrappingWidth="192.0">
+            <VBox.margin>
+              <Insets top="4.0" />
+            </VBox.margin>
+            <font>
+              <Font name="Mota Pixel Regular" size="20.0" />
+            </font>
+          </Text>
+          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-spacing: 12px;">
+            <children>
+              <Button fx:id="popupCancelButton" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" styleClass="confirm-button" text="Cancel" textAlignment="CENTER">
+                <font>
+                  <Font name="Mota Pixel Regular" size="20.0" />
+                </font>
+                <padding>
+                  <Insets bottom="-1.0" />
+                </padding>
+                <HBox.margin>
+                  <Insets top="-4.0" />
+                </HBox.margin>
+              </Button>
+              <Button fx:id="popupConfirmButton" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="96.0" styleClass="confirm-button" text="Confirm" textAlignment="CENTER">
+                <font>
+                  <Font name="Mota Pixel Regular" size="20.0" />
+                </font>
+                <padding>
+                  <Insets bottom="-1.0" />
+                </padding>
+                <HBox.margin>
+                  <Insets top="-4.0" />
+                </HBox.margin>
+              </Button>
+            </children>
+            <opaqueInsets>
+              <Insets top="-8.0" />
+            </opaqueInsets>
+          </HBox>
+        </children>
+      </VBox>
+    </children>
+  </Pane>
       <Pane fx:id="notificationPane" layoutX="70.0" layoutY="30.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="256.0" visible="false">
         <children>
           <ImageView fitHeight="64.0" fitWidth="256.0">
