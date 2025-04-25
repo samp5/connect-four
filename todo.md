@@ -11,7 +11,9 @@
     - [x] fix draws not being properly tracked
 - [x] fix fxml version log
 - [x] flame animation top pixel layer incorrect
-- [ ] attempting to connect to server at not server IP causes hang
+- [ ] chat box has no focus indicator
+- [x] attempting to connect to server at not server IP causes hang
+- [ ] button style
 
 ### Sam
 - [x] invite on loading screen does nothing

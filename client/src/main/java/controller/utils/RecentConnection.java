@@ -130,6 +130,10 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
               if (e.getCode() == KeyCode.ENTER) {
                 this.getListView().getSelectionModel().select(this.getItem());
                 e.consume();
+              } else if (e.getCode() == KeyCode.DELETE || e.getCode() == KeyCode.BACK_SPACE) {
+                AudioManager.playSoundEffect(SoundEffect.TRASH);
+                param.getItems().remove(connection);
+                RecentConnectionRegistry.remove(connection);
               }
             });
           } else {

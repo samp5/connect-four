@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -149,9 +150,23 @@ public class ConnectionsController extends Controller {
       addConnectionPane.setVisible(true);
       ipInput.requestFocus();
     });
+    addNewConnectionButton.setOnKeyReleased(e -> {
+      if (e.getCode() == KeyCode.ENTER) {
+        addNewConnectionButton.getOnAction().handle(null);
+        e.consume();
+      }
+    });
+
     addConnectionButton.setOnAction(e -> {
       addConnection();
     });
+    addConnectionButton.setOnKeyReleased(e -> {
+      if (e.getCode() == KeyCode.ENTER) {
+        addConnectionButton.getOnAction().handle(null);
+        e.consume();
+      }
+    });
+
     addConnectionBackButton.setOnAction(e -> {
       addConnectionPane.setVisible(false);
     });
@@ -282,19 +297,26 @@ public class ConnectionsController extends Controller {
     RecentConnectionRegistry.save();
 
     notificationManager
-        .recieve("Attempting to connect user " + username + " to server at " + c.getIp() + ":" +
+        .recieve("Attempting to connect to server at " + c.getIp() + ":" +
             c.getPort());
     try {
-      if (!NetworkClient.connect(c.getIp(), c.getPort(), username, password)) {
-        notificationManager
+
+      NetworkClient.connect(c.getIp(), c.getPort(), username, password, () -> {
+        Platform.runLater(() -> {
+          notificationManager
             .recieve("Failed to connect to server at " + c.getIp() + ":" +
                 c.getPort(), NotificationType.CONNECTION_ERROR);
-      } else {
-        c.updateLastConnected();
-      }
+        });
+        return null;
+      });
+
+      c.updateLastConnected();
+
     } catch (IOException e1) {
+
       notificationManager
           .recieve("Connection refused", NotificationType.CONNECTION_ERROR);
+
     }
   }
 }

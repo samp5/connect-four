@@ -6,6 +6,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import controller.ChatController;
 import controller.ConnectionsController;
@@ -56,15 +60,38 @@ public class NetworkClient {
   private static Player player;
 
   // connect to a host
-  public static boolean connect(String host, int port, String username, String password)
-      throws IOException {
-    if (socket == null) {
-      socket = new Socket(host, port);
-      listener = new NetworkThread(socket);
-      listener.start();
-    }
+  public static void connect(String host, int port, String username, String password, Callable<Void> failCallback) throws IOException {
+    // run this in a thread so that non-instant connections dont hang
+    new Thread(() -> {
+      if (socket == null) {
+        // try to connect for 5 seconds. if fail, stop
+        try {
+
+          final Future<Object> f = Executors.newSingleThreadExecutor().submit(() -> {
+            socket = new Socket(host, port);
+            return 1;
+          });
+          f.get(5, TimeUnit.SECONDS);
+
+        } catch (Exception e0) {
+
+          // on fail, execute the failure callback
+          try {
+            failCallback.call();
+          } catch (Exception e) { }
+          return;
+
+        }
+
+        onConnect(username, password);
+      }
+    }).start();
+  }
+
+  private static void onConnect(String username, String password) {
     sendMessage(Message.forServerLoginAttempt(username, password));
-    return socket.isConnected();
+    listener = new NetworkThread(socket);
+    listener.start();
   }
 
   // get then handle all available messages
