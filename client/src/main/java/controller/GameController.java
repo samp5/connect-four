@@ -768,7 +768,10 @@ public class GameController extends Controller {
         }
         break;
       case LocalMultiplayer:
-        AudioManager.playSoundEffect(SoundEffect.WIN);
+        if (winner != PlayerRole.None)
+          AudioManager.playSoundEffect(SoundEffect.WIN);
+        else
+          AudioManager.playSoundEffect(SoundEffect.LOSE);
         break;
       case Multiplayer:
         if (winner == GameLogic.getLocalPlayer().getRole()) {

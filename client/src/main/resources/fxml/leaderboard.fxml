@@ -36,7 +36,7 @@
             </ImageView>
             <ScrollPane hbarPolicy="NEVER" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: transparent;">
               <content>
-                <VBox fx:id="leaderBoardList" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="600.0" />
+                <VBox fx:id="leaderBoardList" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="590.0" translateX="4.0" />
               </content>
             </ScrollPane>
           </children>

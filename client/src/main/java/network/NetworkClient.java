@@ -63,7 +63,7 @@ public class NetworkClient {
   public static void connect(String host, int port, String username, String password, Callable<Void> failCallback) throws IOException {
     // run this in a thread so that non-instant connections dont hang
     new Thread(() -> {
-      if (socket == null) {
+      if (socket == null || socket.isClosed()) {
         // try to connect for 5 seconds. if fail, stop
         try {
 
@@ -82,13 +82,14 @@ public class NetworkClient {
           return;
 
         }
-
-        onConnect(username, password);
       }
+
+      onConnect(username, password);
     }).start();
   }
 
   private static void onConnect(String username, String password) {
+    NetworkThread.reset();
     sendMessage(Message.forServerLoginAttempt(username, password));
     listener = new NetworkThread(socket);
     listener.start();
@@ -109,9 +110,11 @@ public class NetworkClient {
     } catch (IOException e) {
       e.printStackTrace();
       System.out.printf("error on getting stream: %s\n", e.getMessage());
+      return -1;
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
       System.out.println("error parsing message");
+      return -1;
     }
     return handled;
   }
@@ -572,16 +575,35 @@ public class NetworkClient {
 
   private static class NetworkThread extends Thread {
     private final Socket socket;
+    private boolean toStop;
+    private static final ArrayList<NetworkThread> runningList = new ArrayList<>();
+
+    public static void reset() {
+      for (NetworkThread t : runningList) {
+        t.stopThread();
+      }
+    }
 
     public NetworkThread(Socket socket) {
       this.socket = socket;
+      this.toStop = false;
+
+      runningList.add(this);
     }
 
     @Override
     public void run() {
       while (!socket.isClosed()) {
+        if (toStop) break;
+
         getMessages();
       }
+
+      runningList.remove(this);
+    }
+
+    public void stopThread() {
+      this.toStop = true;
     }
   }
 }
