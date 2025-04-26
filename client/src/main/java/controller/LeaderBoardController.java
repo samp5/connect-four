@@ -1,19 +1,29 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+
 import controller.utils.LeaderBoardRow;
 import network.LeaderBoardData;
 import network.Message.LeaderBoardView;
 import utils.AudioManager;
 import utils.CursorManager;
+import utils.ToolTipHelper;
 import network.NetworkClient;
+import network.PlayerData;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -27,21 +37,66 @@ public class LeaderBoardController extends Controller {
   @FXML
   Pane root;
 
+  @FXML
+  BorderPane topTenButton;
+  @FXML
+  BorderPane aroundPlayerButton;
+  @FXML
+  BorderPane friendsButton;
+
+  // cached data
+  static HashMap<LeaderBoardView, ArrayList<LeaderBoardData>> leaderboardData = new HashMap<>();
+  static LeaderBoardView lastView = LeaderBoardView.TOP_TEN;
+  static Runnable onRecieve = null;
+
   private static boolean isAttached = false;
   private Pane parent;
 
   public void initialize() {
     NetworkClient.bindLeaderBoardController(this);
-    NetworkClient.fetchLeaderBoard(LeaderBoardView.TOP_TEN);
     setHandlers();
-    CursorManager.setHandCursor(backButton);
-    AudioManager.setAudioButton(backButton);
+    CursorManager.setHandCursor(backButton, topTenButton, aroundPlayerButton, friendsButton);
+    AudioManager.setAudioButton(backButton, topTenButton, aroundPlayerButton, friendsButton);
+
+    setProfilePicture();
+    setView(lastView);
+  }
+
+  private void setProfilePicture() {
+    PlayerData.getProfile(() -> setProfilePicture()).ifPresent(up -> {
+      ((ImageView) aroundPlayerButton.getCenter()).setImage(new Image(up.getProfilePicture().getAssetFileName()));
+    });
+  }
+
+  public static void reset() {
+    lastView = LeaderBoardView.TOP_TEN;
+    leaderboardData.clear();
   }
 
   private void setHandlers() {
     backButton.setOnAction(e -> {
       detach();
     });
+    topTenButton.setOnMouseClicked(e -> {
+      setView(LeaderBoardView.TOP_TEN);
+    });
+    aroundPlayerButton.setOnMouseClicked(e -> {
+      setView(LeaderBoardView.TEN_AROUND_PLAYER);
+    });
+    friendsButton.setOnMouseClicked(e -> {
+      setView(LeaderBoardView.FRIENDS);
+    });
+    Tooltip.install(friendsButton, ToolTipHelper.make("Compare with Friends"));
+    Tooltip.install(topTenButton, ToolTipHelper.make("Global Top 10"));
+    Tooltip.install(aroundPlayerButton, ToolTipHelper.make("Your local rank"));
+  }
+
+  public static void recieveData(ArrayList<LeaderBoardData> data, LeaderBoardView type) {
+    leaderboardData.put(type, data);
+    if (onRecieve != null) {
+      onRecieve.run();
+      onRecieve = null;
+    }
   }
 
   public void fill(Collection<LeaderBoardData> c) {
@@ -60,6 +115,16 @@ public class LeaderBoardController extends Controller {
   }
 
   public void setView(LeaderBoardView view) {
+    lastView = view;
+
+    Collection<LeaderBoardData> d = leaderboardData.get(view);
+
+    if (d == null) {
+      NetworkClient.fetchLeaderBoard(view);
+      onRecieve = (() -> fill(leaderboardData.get(view)));
+    } else {
+      fill(d);
+    }
   }
 
   public static void loadOnto(Pane onto) {
@@ -95,7 +160,8 @@ public class LeaderBoardController extends Controller {
         parent.setOnKeyReleased(curHandler);
         detach();
         e.consume();
-      } else if (curHandler != null) curHandler.handle(e);
+      } else if (curHandler != null)
+        curHandler.handle(e);
     });
   }
 

@@ -89,7 +89,7 @@
               <center>
                 <ImageView fitHeight="75.0" fitWidth="75.0" focusTraversable="true" styleClass="focusable" BorderPane.alignment="CENTER">
                   <image>
-                    <Image url="@../assets/trophy.png" />
+                    <Image url="@../assets/top_three.png" />
                   </image>
                 </ImageView>
               </center>

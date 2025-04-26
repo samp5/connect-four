@@ -127,7 +127,8 @@ public class SettingsController extends Controller {
         parent.setOnKeyReleased(curHandler);
         detach();
         e.consume();
-      } else if (curHandler != null) curHandler.handle(e);
+      } else if (curHandler != null)
+        curHandler.handle(e);
     });
   }
 
@@ -176,7 +177,8 @@ public class SettingsController extends Controller {
   }
 
   private void styleElements() {
-    CursorManager.setHandCursor(backButton, volumeSlider, soundFXVolumeSlider, aiDifficultySlider, customCursorToggle, mainMenuButton);
+    CursorManager.setHandCursor(backButton, volumeSlider, soundFXVolumeSlider, aiDifficultySlider, customCursorToggle,
+        mainMenuButton);
     AudioManager.setAudioButton(backButton, mainMenuButton);
   }
 
@@ -212,7 +214,7 @@ public class SettingsController extends Controller {
         currentSettings.aiDifficulty = newValue.intValue();
         AI.setDifficulty(currentSettings.aiDifficulty);
 
-        if (this.parent != null 
+        if (this.parent != null
             && this.parent.getId().equals("foregroundPane")
             && GameLogic.getGameMode() == GameMode.LocalAI) {
           NetworkClient.checkAIMaxMode();

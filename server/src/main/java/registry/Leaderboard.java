@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -114,51 +115,76 @@ public class Leaderboard {
 
   private static List<LeaderboardEntry> getNAroundPlayer(Long playerId, int n) {
     synchronized (lock) {
-      LeaderboardEntry entry = leaderboard.stream().filter(o -> o.id == playerId).findFirst().get();
+      LeaderboardEntry entry = leaderboard.stream().filter(o -> o.id.equals(playerId)).findFirst().orElse(null);
+
       if (entry == null)
         return null;
 
       int ndx = leaderboard.indexOf(entry);
-      int ndxTop = Math.min(0, ndx - Math.ceilDiv(n, 2));
+      int ndxTop = Math.max(0, ndx - Math.ceilDiv(n, 2));
       int ndxBot = ndxTop + n;
 
-      return leaderboard.subList(ndxTop, Math.min(n, ndxBot));
+      return leaderboard.subList(ndxTop, Math.min(ndxBot, leaderboard.size()));
     }
   }
 
-  private static List<LeaderboardEntry> getPlayerFriendsBoard(RegistryPlayer player) {
-    return leaderboard.stream().filter(o -> player.friends.contains(o.id)).toList();
+  private static List<LeaderboardEntry> getPlayerFriendsBoard(Long playerID) {
+    synchronized (lock) {
+      HashSet<Long> friends = PlayerRegistry.getUsersFriendIDs(playerID);
+      return leaderboard.stream().filter(o -> friends.contains(o.id) || o.id.equals(playerID)).toList();
+    }
   }
 
-  public static List<LeaderBoardData> getLeaderBoard(LeaderBoardView view) {
+  public static List<LeaderBoardData> getLeaderBoard(Long ID, LeaderBoardView view) {
+    final List<LeaderBoardData> data = new ArrayList<>();
+    final List<LeaderboardEntry> entries;
+    final int starting_rank;
     synchronized (lock) {
       switch (view) {
-        case TOP_TEN:
-
-          // return list
-          List<LeaderBoardData> data = new ArrayList<>();
-          // top 10
-          List<LeaderboardEntry> entries = getTopN(10);
-
-          for (int i = 0; i < entries.size(); i++) {
-            LeaderboardEntry entry = entries.get(i);
-            int rank = i + 1;
-            PlayerRegistry.getRegistryPlayerByID(entry.getId()).ifPresent(rp -> {
-              LeaderBoardData data_i = entry.toData()
-                  .withUserName(rp.getUsername())
-                  .withRank(rank)
-                  .withGamesWon(rp.getGamesWon())
-                  .withGamesLost(rp.getGamesLost())
-                  .withWinPercent(rp.getWinPercentage());
-              data.add(data_i);
-            });
+        case TEN_AROUND_PLAYER:
+          // 10 around player
+          entries = getNAroundPlayer(ID, 10);
+          if (entries.size() > 0) {
+            starting_rank = leaderboard.indexOf(entries.getFirst()) + 1;
+          } else {
+            starting_rank = 0;
           }
-          return data;
-        default:
           break;
+        case TOP_TEN:
+          // top 10
+          starting_rank = 1;
+          entries = getTopN(10);
+          break;
+        case FRIENDS:
+          starting_rank = 1;
+          entries = getPlayerFriendsBoard(ID);
+          break;
+        default:
+          entries = null;
+          starting_rank = 0;
+
       }
-      return null;
     }
+
+    if (entries == null) {
+      return data;
+    }
+
+    for (int i = 0; i < entries.size(); i++) {
+      LeaderboardEntry entry = entries.get(i);
+      int rank = starting_rank + i;
+      PlayerRegistry.getRegistryPlayerByID(entry.getId()).ifPresent(rp -> {
+        LeaderBoardData data_i = entry.toData()
+            .withUserName(rp.getUsername())
+            .withRank(rank)
+            .withGamesWon(rp.getGamesWon())
+            .withGamesLost(rp.getGamesLost())
+            .withWinPercent(rp.getWinPercentage());
+        data.add(data_i);
+      });
+    }
+
+    return data;
   }
 
   /**

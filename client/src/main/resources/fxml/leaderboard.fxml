@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LeaderBoardController">
+<Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LeaderBoardController">
   <children>
     <ImageView fitHeight="600.0" fitWidth="800.0">
       <image>
@@ -93,6 +93,42 @@
           </children>
         </StackPane>
       </top>
+         <bottom>
+            <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="75.0" spacing="75.0" BorderPane.alignment="CENTER">
+               <children>
+                  <BorderPane fx:id="topTenButton" prefHeight="75.0" prefWidth="75.0">
+                     <center>
+                        <ImageView fitHeight="75.0" fitWidth="75.0" BorderPane.alignment="CENTER">
+                           <image>
+                              <Image url="@../assets/trophy.png" />
+                           </image>
+                        </ImageView>
+                     </center>
+                  </BorderPane>
+                  <BorderPane fx:id="aroundPlayerButton" prefHeight="75.0" prefWidth="75.0">
+                     <center>
+                        <ImageView fitHeight="75.0" fitWidth="75.0" BorderPane.alignment="CENTER">
+                           <image>
+                              <Image url="@../assets/profiles/basic_blue.png" />
+                           </image>
+                        </ImageView>
+                     </center>
+                  </BorderPane>
+                  <BorderPane fx:id="friendsButton" prefHeight="75.0" prefWidth="75.0">
+                     <center>
+                        <ImageView fitHeight="75.0" fitWidth="75.0" BorderPane.alignment="CENTER">
+                           <image>
+                              <Image url="@../assets/friend.png" />
+                           </image>
+                        </ImageView>
+                     </center>
+                  </BorderPane>
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </HBox>
+         </bottom>
     </BorderPane>
     <Button fx:id="backButton" layoutX="20.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" styleClass="back-button" text="x">
     </Button>

@@ -195,7 +195,7 @@ public class NetworkClient {
         gameCTL.recieveRematchRequest();
         break;
       case LEADER_BOARD_DATA:
-        leaderBoardCTL.fill(msg.getLeaderBoardData());
+        LeaderBoardController.recieveData(msg.getLeaderBoardData(), msg.getLeaderBoardViewType());
         break;
       case SERVER_STATUS:
         serverMenuCTL.setPlayerInfo(msg.getNumPlayers(), msg.getNumActiveGames());
@@ -253,7 +253,7 @@ public class NetworkClient {
         switch (SceneManager.getCurrentScene()) {
           case LOADING:
             if (msg.isSuccess()) {
-              loadCTL.recievePrompt(msg.getUsername() + " accepted your invitation. Start game?",
+              loadCTL.recievePrompt(msg.getUsername() + " accepted. Start game?",
                   NotificationType.FRIEND_GOOD, (e -> {
                     NetworkClient.sendMessage(Message.forGameInvitationGameStart(msg.getInvitor(), msg.getInvited()));
                   }), (e -> {
@@ -556,6 +556,7 @@ public class NetworkClient {
   public static void disconnect() {
     PlayerData.reset();
     FriendUtils.reset();
+    LeaderBoardController.reset();
 
     if (socket == null) {
       return;

@@ -24,7 +24,7 @@
 - [x] resign pane border 
 - [x] fix background in ip in server menu
 - [x] friend chat profile border
-- [ ] remove friend option
+- [x] remove friend option
 - [ ] leaderboard views
 
 ### Final Item

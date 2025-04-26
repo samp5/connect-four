@@ -24,6 +24,8 @@ public class Message implements Serializable {
 
   public static enum LeaderBoardView {
     TOP_TEN,
+    TEN_AROUND_PLAYER,
+    FRIENDS;
   };
 
   private Type type;
@@ -204,6 +206,7 @@ public class Message implements Serializable {
     Message toSend = new Message();
     toSend.type = Type.LEADER_BOARD_DATA;
     toSend.leaderBoardData = data;
+    toSend.viewType = view;
     return toSend;
   }
 

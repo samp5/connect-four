@@ -203,7 +203,7 @@ public class ClientManager {
   private static void sendLeaderBoard(ServerClient client, Message msg) {
     try {
       client.sendMessage(Message.forLeaderBoardData(msg.getLeaderBoardViewType(),
-          new ArrayList<>(Leaderboard.getLeaderBoard(msg.getLeaderBoardViewType()))));
+          new ArrayList<>(Leaderboard.getLeaderBoard(client.getPlayer().getID(), msg.getLeaderBoardViewType()))));
     } catch (IOException e) {
 
       e.printStackTrace();
