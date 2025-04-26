@@ -1,5 +1,13 @@
 package logic;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import network.Player.PlayerRole;
 
 public class AI {
@@ -50,6 +58,13 @@ public class AI {
       "skill issue.",
       "you really should've like, prevented that, don't you think?",
   };
+  private static int quipI = 0;
+  private static List<Integer> quipIndexes = IntStream.range(0, generalQuips.length).boxed()
+      .collect(Collectors.toList());
+
+  static {
+    Collections.shuffle(quipIndexes);
+  }
 
   /**
    * The AI should quip either every other move, or every second.
@@ -67,8 +82,11 @@ public class AI {
   }
 
   public static String getQuip() {
-    int i = (int) Math.floor(Math.random() * (generalQuips.length));
-    return generalQuips[i];
+    if (quipI == quipIndexes.size()) {
+      Collections.shuffle(quipIndexes);
+      quipI = 0;
+    }
+    return generalQuips[quipIndexes.get(quipI++)];
   }
 
   public static String getWinningQuip() {
