@@ -144,7 +144,7 @@ public class Leaderboard {
         case TEN_AROUND_PLAYER:
           // 10 around player
           entries = getNAroundPlayer(ID, 10);
-          if (entries.size() > 0) {
+          if (entries != null && entries.size() > 0) {
             starting_rank = leaderboard.indexOf(entries.getFirst()) + 1;
           } else {
             starting_rank = 0;
