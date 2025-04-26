@@ -25,7 +25,7 @@
 - [x] fix background in ip in server menu
 - [x] friend chat profile border
 - [x] remove friend option
-- [ ] leaderboard views
+- [x] leaderboard views
 
 ### Final Item
 - [ ] Project Report
