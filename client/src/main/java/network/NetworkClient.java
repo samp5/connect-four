@@ -60,7 +60,8 @@ public class NetworkClient {
   private static Player player;
 
   // connect to a host
-  public static void connect(String host, int port, String username, String password, Callable<Void> failCallback) throws IOException {
+  public static void connect(String host, int port, String username, String password, Callable<Void> failCallback)
+      throws IOException {
     // run this in a thread so that non-instant connections dont hang
     new Thread(() -> {
       if (socket == null || socket.isClosed()) {
@@ -78,7 +79,8 @@ public class NetworkClient {
           // on fail, execute the failure callback
           try {
             failCallback.call();
-          } catch (Exception e) { }
+          } catch (Exception e) {
+          }
           return;
 
         }
@@ -565,8 +567,10 @@ public class NetworkClient {
       return;
     }
     try {
-      out = new ObjectOutputStream(socket.getOutputStream());
-      out.writeObject(Message.forServerDisconnect(player));
+      if (player != null) {
+        out = new ObjectOutputStream(socket.getOutputStream());
+        out.writeObject(Message.forServerDisconnect(player));
+      }
       socket.close();
       socket = null;
     } catch (Exception e) {
@@ -594,7 +598,8 @@ public class NetworkClient {
     @Override
     public void run() {
       while (!socket.isClosed()) {
-        if (toStop) break;
+        if (toStop)
+          break;
 
         getMessages();
       }
