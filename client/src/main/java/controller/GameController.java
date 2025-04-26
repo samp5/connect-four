@@ -949,7 +949,15 @@ public class GameController extends Controller {
       // reset our text
       rematchYes.setText("Yes");
       rematchYes.setDisable(false);
-      // rest the game logic
+      // reset the button
+      rematchYes.setOnAction(e -> {
+        rematchYes.setText("Waiting...");
+        rematchYes.setDisable(true);
+        if (GameLogic.getGameMode() == GameMode.Multiplayer) {
+          NetworkClient.rematchRequest();
+        }
+      });
+      // reset the game logic
       resetGameState();
       gameLogic.swapLocalRemotePlayerRoles();
       showPlayerRoles();
@@ -958,7 +966,7 @@ public class GameController extends Controller {
 
   public void recieveRematchRequest() {
     // edge case of network being slow
-    if (rematchYes.getText() == "Wating...") {
+    if (rematchYes.getText().equals("Wating...")) {
       rematch();
     } else {
       rematchYes.setOnAction(e -> {
