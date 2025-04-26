@@ -39,7 +39,8 @@ public class UserProfile implements Serializable {
   }
 
   public enum ProfilePicture {
-    BASIC_RED, BASIC_BLUE, MUSCLE_RED, MUSCLE_BLUE, ANGEL_BLUE, DEVIL_RED, SCUBA_BLUE, SUPER_SAIYAN_RED, UAQ, EVAN_MCCARTY;
+    BASIC_RED, BASIC_BLUE, MUSCLE_RED, MUSCLE_BLUE, ALIEN_RED, SPACE_BLUE, ANGEL_BLUE, DEVIL_RED, SCUBA_BLUE, GORILLA,
+    SUPER_SAIYAN_RED, UAQ, EVAN_MCCARTY;
 
     public String getAssetFileName() {
       return "/assets/profiles/" + this.toString().toLowerCase() + ".png";
@@ -67,6 +68,12 @@ public class UserProfile implements Serializable {
           return "uaq [REDACTED]";
         case EVAN_MCCARTY:
           return "Evan McCarty";
+        case ALIEN_RED:
+          return "ALIEN";
+        case GORILLA:
+          return "Gorilla";
+        case SPACE_BLUE:
+          return "Spaced OUT";
       }
       return "";
     }
