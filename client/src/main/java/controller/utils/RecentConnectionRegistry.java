@@ -39,6 +39,10 @@ public class RecentConnectionRegistry {
     connections.remove(c);
   }
 
+  public static void sort() {
+    Collections.sort(connections);
+  }
+
   /**
    * Save the registry to a file
    */

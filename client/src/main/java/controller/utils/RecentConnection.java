@@ -22,16 +22,18 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
   String ip;
   int port;
   String name;
-  LocalTime lastConnected = LocalTime.MAX;
+  LocalTime lastConnected;
 
   public RecentConnection(String ip, int port, String name) {
     this.ip = ip;
     this.port = port;
     this.name = name;
+    lastConnected = LocalTime.now();
   }
 
   public void updateLastConnected() {
     lastConnected = LocalTime.now();
+    RecentConnectionRegistry.sort();
   }
 
   public static class ConnectionCellFactory
@@ -65,16 +67,22 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
               HBox boxLeft = new HBox(connectionLabel);
               boxLeft.setAlignment(Pos.CENTER_LEFT);
               boxLeft.setMinWidth(240);
+              boxLeft.setMaxWidth(240);
+              boxLeft.setPrefWidth(240);
 
               BorderPane bp = new BorderPane();
               bp.setCenter(new ImageView(new Image("/assets/garbage.png", 25, 25, false, false)));
               HBox boxRight = new HBox(bp);
               boxRight.setAlignment(Pos.CENTER_RIGHT);
               boxRight.setMinWidth(25);
+              boxRight.setMaxWidth(25);
+              boxRight.setPrefWidth(25);
               bp.setCursor(Cursor.HAND);
 
               HBox top = new HBox(boxLeft, boxRight);
               top.setMinWidth(280);
+              top.setMaxWidth(280);
+              top.setPrefWidth(280);
 
               bp.setOnMouseClicked(e -> {
                 AudioManager.playSoundEffect(SoundEffect.TRASH);
@@ -91,6 +99,9 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
 
               // construct our HBox and label
               info = new VBox(top, details);
+              info.setMinWidth(280);
+              info.setMaxWidth(280);
+              info.setPrefWidth(280);
 
               // Add the appropriate style classes
               connectionLabel.getStyleClass().add("recent-connection-cell-text-selected");
@@ -108,12 +119,19 @@ public class RecentConnection implements Comparable<RecentConnection>, Serializa
               HBox boxLeft = new HBox(connectionLabel);
               boxLeft.setAlignment(Pos.CENTER_LEFT);
               boxLeft.setMinWidth(240);
+              boxLeft.setMaxWidth(240);
+              boxLeft.setPrefWidth(240);
 
               HBox top = new HBox(boxLeft);
               top.setMinWidth(280);
+              top.setMaxWidth(280);
+              top.setPrefWidth(280);
 
               // construct our HBox and label
               info = new VBox(top, details);
+              info.setMinWidth(280);
+              info.setMaxWidth(280);
+              info.setPrefWidth(280);
 
               // Add the appropriate style classes
               connectionLabel.getStyleClass().add("recent-connection-cell-text");

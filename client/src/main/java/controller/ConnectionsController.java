@@ -259,6 +259,7 @@ public class ConnectionsController extends Controller {
       connectionListView.getItems().add(c);
       connectionListView.getSelectionModel().select(c);
       RecentConnectionRegistry.add(c);
+      RecentConnectionRegistry.save();
       notificationManager.recieve("Added connection");
     } catch (NumberFormatException f) {
 
@@ -294,6 +295,7 @@ public class ConnectionsController extends Controller {
   }
 
   private void connectToHost(RecentConnection c, String username, String password) {
+    c.updateLastConnected();
     RecentConnectionRegistry.save();
 
     notificationManager

@@ -286,7 +286,7 @@ public class ClientManager {
     Optional<ServerClient> sc;
     synchronized (clients) {
       synchronized (clientsInGame) {
-        sc = clients.stream().filter(c -> c.getPlayer().getID().equals(id)).findFirst();
+        sc = clients.stream().filter(c -> c.getPlayer() != null && c.getPlayer().getID().equals(id)).findFirst();
         if (sc.isPresent()) {
           return sc;
         } else {
