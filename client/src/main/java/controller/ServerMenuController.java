@@ -343,7 +343,6 @@ public class ServerMenuController extends Controller {
 
       @Override
       public ProfilePicture fromString(String string) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'fromString'");
       }
 

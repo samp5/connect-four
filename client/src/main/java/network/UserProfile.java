@@ -38,6 +38,7 @@ public class UserProfile implements Serializable {
     this.online = online;
   }
 
+  // NOTE: Methods on enums are awesome
   public enum ProfilePicture {
     BASIC_RED, BASIC_BLUE, MUSCLE_RED, MUSCLE_BLUE, ALIEN_RED, SPACE_BLUE, ANGEL_BLUE, DEVIL_RED, SCUBA_BLUE, GORILLA,
     SUPER_SAIYAN_RED, UAQ, EVAN_MCCARTY;

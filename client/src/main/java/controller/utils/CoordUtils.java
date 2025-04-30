@@ -81,6 +81,7 @@ public class CoordUtils {
         CoordSystem.GameBoard);
   }
 
+  // NOTE: Power of Optionals
   public static Optional<BoardPosition> toRowCol(Point p) {
     return CoordUtils.onBoard(p).map(point -> {
       int col = (int) point.x / (pieceRadius * 2);

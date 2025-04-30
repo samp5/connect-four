@@ -52,7 +52,6 @@ public class LeaderBoardController extends Controller {
   private Pane parent;
 
   public void initialize() {
-    NetworkClient.bindLeaderBoardController(this);
     setHandlers();
     CursorManager.setHandCursor(backButton, topTenButton, aroundPlayerButton, friendsButton);
     AudioManager.setAudioButton(backButton, topTenButton, aroundPlayerButton, friendsButton);
@@ -63,7 +62,8 @@ public class LeaderBoardController extends Controller {
 
   private void setProfilePicture() {
     PlayerData.getProfile(() -> setProfilePicture()).ifPresent(up -> {
-      ((ImageView) aroundPlayerButton.getCenter()).setImage(new Image(up.getProfilePicture().getAssetFileName()));
+      ((ImageView) aroundPlayerButton.getCenter())
+          .setImage(new Image(up.getProfilePicture().getAssetFileName()));
     });
   }
 
@@ -102,7 +102,8 @@ public class LeaderBoardController extends Controller {
     this.leaderBoardList.getChildren().setAll();
     for (LeaderBoardData entry : c) {
       try {
-        FXMLLoader loader = new FXMLLoader(ChatController.class.getResource("/fxml/leaderboard_entry.fxml"));
+        FXMLLoader loader =
+            new FXMLLoader(ChatController.class.getResource("/fxml/leaderboard_entry.fxml"));
         HBox row = loader.load();
         LeaderBoardRow rowCTL = loader.getController();
         rowCTL.build(entry);
@@ -132,7 +133,8 @@ public class LeaderBoardController extends Controller {
     }
 
     try {
-      FXMLLoader loader = new FXMLLoader(LeaderBoardController.class.getResource("/fxml/leaderboard.fxml"));
+      FXMLLoader loader =
+          new FXMLLoader(LeaderBoardController.class.getResource("/fxml/leaderboard.fxml"));
       Pane leaderboard = loader.load();
       LeaderBoardController ldboardCTL = loader.getController();
       ldboardCTL.attach(onto, leaderboard);

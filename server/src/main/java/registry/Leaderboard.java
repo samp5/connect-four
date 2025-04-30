@@ -12,8 +12,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import network.LeaderBoardData;
 import network.Message.LeaderBoardView;
@@ -80,8 +78,10 @@ public class Leaderboard {
       trackedElo.put(idB, newEloB);
 
       // update the leaderboard
-      LeaderboardEntry currentA = leaderboard.stream().filter(o -> o.id.equals(idA)).findFirst().orElse(null);
-      LeaderboardEntry currentB = leaderboard.stream().filter(o -> o.id.equals(idB)).findFirst().orElse(null);
+      LeaderboardEntry currentA =
+          leaderboard.stream().filter(o -> o.id.equals(idA)).findFirst().orElse(null);
+      LeaderboardEntry currentB =
+          leaderboard.stream().filter(o -> o.id.equals(idB)).findFirst().orElse(null);
 
       if (currentA == null) {
         currentA = new LeaderboardEntry(idA, newEloA);
@@ -115,7 +115,8 @@ public class Leaderboard {
 
   private static List<LeaderboardEntry> getNAroundPlayer(Long playerId, int n) {
     synchronized (lock) {
-      LeaderboardEntry entry = leaderboard.stream().filter(o -> o.id.equals(playerId)).findFirst().orElse(null);
+      LeaderboardEntry entry =
+          leaderboard.stream().filter(o -> o.id.equals(playerId)).findFirst().orElse(null);
 
       if (entry == null)
         return null;
@@ -131,7 +132,8 @@ public class Leaderboard {
   private static List<LeaderboardEntry> getPlayerFriendsBoard(Long playerID) {
     synchronized (lock) {
       HashSet<Long> friends = PlayerRegistry.getUsersFriendIDs(playerID);
-      return leaderboard.stream().filter(o -> friends.contains(o.id) || o.id.equals(playerID)).toList();
+      return leaderboard.stream().filter(o -> friends.contains(o.id) || o.id.equals(playerID))
+          .toList();
     }
   }
 

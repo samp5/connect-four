@@ -107,7 +107,8 @@ public class FriendUtils {
 
     inviteToGame.setTooltip(ToolTipHelper.make("Invite " + profile.getUserName() + " to a game"));
     chatWithFriend.setTooltip(ToolTipHelper.make("Open chat with " + profile.getUserName()));
-    removeFriend.setTooltip(ToolTipHelper.make("Remove " + profile.getUserName() + " from your friends "));
+    removeFriend
+        .setTooltip(ToolTipHelper.make("Remove " + profile.getUserName() + " from your friends "));
 
     CursorManager.setHandCursor(inviteToGame, chatWithFriend, removeFriend);
 
@@ -186,7 +187,8 @@ public class FriendUtils {
       HBox box = (HBox) n;
       var match = box.getChildren().filtered(t -> {
         return t instanceof TextFlow && (((TextFlow) t).getChildren().filtered(txt -> {
-          return (txt instanceof Text) && ((Text) txt).getText().trim().equals(newProfile.getUserName());
+          return (txt instanceof Text)
+              && ((Text) txt).getText().trim().equals(newProfile.getUserName());
         }).size() > 0);
       });
       if (match.size() > 0) {
@@ -197,6 +199,7 @@ public class FriendUtils {
     });
   }
 
+  // NOTE: Power of streams
   public static void reenableInvite(VBox allFriends, String userName) {
     // technically this is one line
     // this is my monument to streams, call it a river
@@ -230,8 +233,7 @@ public class FriendUtils {
                   bt.setDisable(false);
                   CursorManager.setHandCursor(bt);
                 });
-          });
-      ;
+          });;
     });
   }
 

@@ -5,7 +5,6 @@ import java.util.TimerTask;
 
 import controller.utils.GameSettings;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;

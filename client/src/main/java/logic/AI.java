@@ -1,9 +1,6 @@
 package logic;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -121,12 +118,12 @@ public class AI {
   }
 
   private static final int[][] scoremap = {
-      { 3, 4, 5, 7, 5, 4, 3 },
-      { 4, 6, 8, 9, 8, 6, 4 },
-      { 5, 8, 11, 13, 11, 8, 5 },
-      { 5, 8, 11, 13, 11, 8, 5 },
-      { 4, 6, 8, 9, 8, 6, 4 },
-      { 3, 4, 5, 7, 5, 4, 3 }
+      {3, 4, 5, 7, 5, 4, 3},
+      {4, 6, 8, 9, 8, 6, 4},
+      {5, 8, 11, 13, 11, 8, 5},
+      {5, 8, 11, 13, 11, 8, 5},
+      {4, 6, 8, 9, 8, 6, 4},
+      {3, 4, 5, 7, 5, 4, 3}
   };
 
   private static void place_piece(int[][] board, int player, int col) {
@@ -178,7 +175,7 @@ public class AI {
    * We start with some initial board and the player whose turn we are trying to
    * calculate
    *
-   * TODO: Maybe implement alpha-beta pruning?
+   * NOTE: Neat algo
    *
    */
   private static MoveScore minMaxDescent(int[][] board, int player, int depth) {

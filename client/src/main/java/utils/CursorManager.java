@@ -27,7 +27,9 @@ public class CursorManager {
       false, false);
   private final static ImageCursor pointerCursor = new ImageCursor(pointerCursorScaled);
 
+  // NOTE: Kind of cursed, but neat trick
   public static void setEnabled(boolean enabled) {
+
     CursorManager.enabled = enabled;
     if (CursorManager.enabled) {
       wantsHandCursor.stream().filter(r -> {

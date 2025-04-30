@@ -28,6 +28,8 @@ public class AudioManager {
     }
   }
 
+
+  // NOTE: Methods on enums are awesome
   public static enum SoundEffect {
     BUTTON_DOWN, BUTTON_UP, CHIP_DROP, TRASH, CHAT_SENT, CHAT_RECIEVED, WIN, LOSE;
 

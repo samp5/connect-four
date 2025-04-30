@@ -113,7 +113,8 @@ public class ClientManager {
             break;
           case LOGIN:
             if (attemptLogin(connection, msg)) {
-              notifyFriends(connection, Message.forFriendOnlineStatus(connection.getPlayer(), true));
+              notifyFriends(connection,
+                  Message.forFriendOnlineStatus(connection.getPlayer(), true));
             }
             break;
           case JOIN_GAME:
@@ -146,7 +147,8 @@ public class ClientManager {
           case GAME_INVITATION_START_GAME:
             // it is the network clients responsibility to only send this message when the
             // original response was yes
-            getClientByID(msg.getInvited()).ifPresent(con2 -> GameManager.acceptInvitation(connection, con2));
+            getClientByID(msg.getInvited())
+                .ifPresent(con2 -> GameManager.acceptInvitation(connection, con2));
             break;
           case GAME_INVITATION_CANCEL:
             sendToByID(msg.getInvited(), msg);
@@ -203,7 +205,8 @@ public class ClientManager {
   private static void sendLeaderBoard(ServerClient client, Message msg) {
     try {
       client.sendMessage(Message.forLeaderBoardData(msg.getLeaderBoardViewType(),
-          new ArrayList<>(Leaderboard.getLeaderBoard(client.getPlayer().getID(), msg.getLeaderBoardViewType()))));
+          new ArrayList<>(Leaderboard.getLeaderBoard(client.getPlayer().getID(),
+              msg.getLeaderBoardViewType()))));
     } catch (IOException e) {
 
       e.printStackTrace();
@@ -212,7 +215,8 @@ public class ClientManager {
 
   private static void sendFriends(ServerClient client) {
     try {
-      ArrayList<UserProfile> friends = PlayerRegistry.getUsersFriendList(client.getPlayer().getID());
+      ArrayList<UserProfile> friends =
+          PlayerRegistry.getUsersFriendList(client.getPlayer().getID());
       client.sendMessage(Message.forFriendListData(friends));
     } catch (IOException e) {
     }
@@ -220,7 +224,8 @@ public class ClientManager {
 
   private static void sendServerInfo(ServerClient client) {
     try {
-      client.sendMessage(Message.forServerInfo(PlayerRegistry.loggedInCount(), GameManager.getActiveGameCount()));
+      client.sendMessage(
+          Message.forServerInfo(PlayerRegistry.loggedInCount(), GameManager.getActiveGameCount()));
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -236,6 +241,7 @@ public class ClientManager {
     }
   }
 
+  // NOTE: Optionals are awesome
   public static void sendToByID(Long targetPlayer, Message msg) {
     // lock both clients and clientsInGame in game to ensure that
     // nothting is modifed while we are in the lambda
@@ -252,14 +258,7 @@ public class ClientManager {
     }
   }
 
-  private static void sendTo(ServerClient client, Message msg) {
-    try {
-      client.sendMessage(msg);
-    } catch (IOException ioe) {
-      ioe.printStackTrace();
-    }
-  }
-
+  // NOTE: Streams are awesome
   private static void notifyFriends(ServerClient client, Message msg) {
     synchronized (clients) {
       HashSet<Long> friendIDs = PlayerRegistry.getUsersFriendIDs(client.getPlayer().getID());
@@ -286,7 +285,8 @@ public class ClientManager {
     Optional<ServerClient> sc;
     synchronized (clients) {
       synchronized (clientsInGame) {
-        sc = clients.stream().filter(c -> c.getPlayer() != null && c.getPlayer().getID().equals(id)).findFirst();
+        sc = clients.stream().filter(c -> c.getPlayer() != null && c.getPlayer().getID().equals(id))
+            .findFirst();
         if (sc.isPresent()) {
           return sc;
         } else {
@@ -301,7 +301,8 @@ public class ClientManager {
    */
   private static boolean attemptLogin(ServerClient client, Message msg) {
     // get the player associated with the username/password
-    PlayerRegistrationInfo loginInfo = PlayerRegistry.getRegisteredPlayer(msg.getUsername(), msg.getPassword());
+    PlayerRegistrationInfo loginInfo =
+        PlayerRegistry.getRegisteredPlayer(msg.getUsername(), msg.getPassword());
 
     try {
       if (loginInfo.isSuccess()) {
@@ -334,7 +335,7 @@ public class ClientManager {
   private static long lastFrame = System.currentTimeMillis();
   private static int frametime = 200; // ms
   private static int animationState = 0;
-  private static char animationFrames[] = new char[] { '\\', '|', '/', '-' };
+  private static char animationFrames[] = new char[] {'\\', '|', '/', '-'};
 
   private static void animateStatus() {
     if (System.currentTimeMillis() >= (lastFrame + frametime)) {

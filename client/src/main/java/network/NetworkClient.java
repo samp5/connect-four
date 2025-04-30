@@ -53,7 +53,6 @@ public class NetworkClient {
 
   private static GameController gameCTL;
   private static LoadingController loadCTL;
-  private static LeaderBoardController leaderBoardCTL;
   private static ChatController chatCTL;
   private static ServerMenuController serverMenuCTL;
   private static ConnectionsController connectionCTL;
@@ -532,12 +531,6 @@ public class NetworkClient {
 
   public static void bindLoadingController(LoadingController lc) {
     loadCTL = lc;
-  }
-
-  // set controllers so that the network client can "message" the ui
-  //
-  public static void bindLeaderBoardController(LeaderBoardController lbc) {
-    leaderBoardCTL = lbc;
   }
 
   // set controllers so that the network client can "message" the ui

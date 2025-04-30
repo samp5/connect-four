@@ -16,6 +16,8 @@ public class PlayerData {
   private static ArrayList<Runnable> onProfileRecieve = new ArrayList<>();
   private static ArrayList<Runnable> onFriendsRecieve = new ArrayList<>();
 
+  // NOTE: Neat trick
+  //
   // Get the friends list of this player if it is valid, otherwise, pass a
   // runnable that will be called once the list is valid
   public static Optional<ArrayList<UserProfile>> getFriends(Runnable onRecieve) {
@@ -77,7 +79,8 @@ public class PlayerData {
 
   public static void friendOnlineStatus(String username, boolean isOnline) {
     synchronized (friendsLock) {
-      friendsList.stream().filter(up -> up.getUserName().equals(username)).forEach(up -> up.setIsOnline(isOnline));
+      friendsList.stream().filter(up -> up.getUserName().equals(username))
+          .forEach(up -> up.setIsOnline(isOnline));
     }
   }
 

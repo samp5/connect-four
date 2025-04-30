@@ -229,8 +229,6 @@ public class GameLogic {
 
   }
 
-  // TODO: Make this a clever algorithm that detects stalemates for non-full
-  // boards
   public boolean staleMate() {
     for (int[] row : board) {
       for (int val : row) {

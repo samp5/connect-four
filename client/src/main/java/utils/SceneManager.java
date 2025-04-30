@@ -48,6 +48,8 @@ public class SceneManager {
     stage = primaryStage;
   }
 
+  // NOTE: Neat trick
+  //
   public static void showScene(SceneSelections selection) {
     try {
       FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/fxml/" + selection.toFileName()));
