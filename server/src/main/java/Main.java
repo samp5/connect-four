@@ -2,6 +2,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
 import network.ClientManager;
+import network.ServerSettings;
 import registry.PlayerRegistry;
 import registry.Leaderboard;
 
@@ -28,6 +29,7 @@ public class Main {
     }));
     PlayerRegistry.load();
     Leaderboard.load();
+    ServerSettings.load();
 
     ClientManager.connectToClients();
   }

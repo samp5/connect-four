@@ -23,8 +23,6 @@ import registry.PlayerRegistry.PlayerRegistrationInfo;
  */
 public class ClientManager {
   private static ServerSocketChannel socketChannel;
-  private static final int PORT = 8000;
-  private static final boolean VISUAL = false;
   private static Selector selector;
   private static HashSet<ServerClient> clients = new HashSet<>();
   private static HashSet<ServerClient> clientsInGame = new HashSet<>();
@@ -61,7 +59,7 @@ public class ClientManager {
    */
   public static void connectToClients() {
     // some base status prints
-    if (VISUAL) {
+    if (ServerSettings.showAnimation) {
       System.out.println("Player Registry tracking 0 players");
       System.out.println("0 players currently logged in");
       System.out.println("Currently listening to 0 clients");
@@ -82,7 +80,7 @@ public class ClientManager {
   private static void _connectToClients() throws IOException, InterruptedException {
     // create a server socket channel
     socketChannel = ServerSocketChannel.open();
-    socketChannel.bind(new InetSocketAddress(PORT));
+    socketChannel.bind(new InetSocketAddress(ServerSettings.PORT));
     socketChannel.configureBlocking(false);
 
     // open the selector for the connection socket
@@ -220,8 +218,7 @@ public class ClientManager {
 
   private static void sendFriends(ServerClient client) {
     try {
-      ArrayList<UserProfile> friends =
-          PlayerRegistry.getUsersFriendList(client.getPlayer().getID());
+      ArrayList<UserProfile> friends = PlayerRegistry.getUsersFriendList(client.getPlayer().getID());
       client.sendMessage(Message.forFriendListData(friends));
     } catch (IOException e) {
     }
@@ -306,8 +303,7 @@ public class ClientManager {
    */
   private static boolean attemptLogin(ServerClient client, Message msg) {
     // get the player associated with the username/password
-    PlayerRegistrationInfo loginInfo =
-        PlayerRegistry.getRegisteredPlayer(msg.getUsername(), msg.getPassword());
+    PlayerRegistrationInfo loginInfo = PlayerRegistry.getRegisteredPlayer(msg.getUsername(), msg.getPassword());
 
     try {
       if (loginInfo.isSuccess()) {
@@ -340,10 +336,11 @@ public class ClientManager {
   private static long lastFrame = System.currentTimeMillis();
   private static int frametime = 200; // ms
   private static int animationState = 0;
-  private static char animationFrames[] = new char[] {'\\', '|', '/', '-'};
+  private static char animationFrames[] = new char[] { '\\', '|', '/', '-' };
 
   private static void animateStatus() {
-    if (!VISUAL) return;
+    if (!ServerSettings.showAnimation)
+      return;
 
     if (System.currentTimeMillis() >= (lastFrame + frametime)) {
       // stats..

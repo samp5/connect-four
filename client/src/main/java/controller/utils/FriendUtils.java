@@ -201,40 +201,34 @@ public class FriendUtils {
 
   // NOTE: Power of streams
   public static void reenableInvite(VBox allFriends, String userName) {
-    // technically this is one line
-    // this is my monument to streams, call it a river
-    allFriends.getChildren().stream().map(n -> (HBox) n).filter(hb -> {
-      return hb.getChildren()
-          .stream()
-          .filter(TextFlow.class::isInstance)
-          .map(fl -> (TextFlow) fl)
-          .filter(fl -> fl.getChildren()
+    // technically this is only two lines
+    allFriends.getChildren().stream().map(n -> (HBox) n).filter(hb -> hb.getChildren()
+        .stream()
+        .filter(TextFlow.class::isInstance)
+        .map(fl -> (TextFlow) fl)
+        .filter(fl -> fl.getChildren()
+            .stream()
+            .filter(Text.class::isInstance)
+            .map(t -> (Text) t)
+            .filter(t -> t.getText().trim().equals(userName))
+            .findFirst()
+            .isPresent())
+        .findFirst()
+        .isPresent()).forEach(n -> {
+          n.getChildren()
               .stream()
-              .filter(Text.class::isInstance)
-              .map(t -> (Text) t)
-              .filter(t -> t.getText().trim().equals(userName))
-              .findFirst()
-              .isPresent())
-          .findFirst()
-          .isPresent();
-    }).forEach(n -> {
-      n.getChildren()
-          .stream()
-          .filter(HBox.class::isInstance)
-          .map(nd -> (HBox) nd)
-          .forEach(hb -> {
-            System.out.println("got here");
-            hb.getChildren()
-                .stream()
-                .filter(Button.class::isInstance)
-                .map(bt -> (Button) bt)
-                .filter(bt -> bt.getStyleClass().contains("invite-button"))
-                .forEach(bt -> {
-                  bt.setDisable(false);
-                  CursorManager.setHandCursor(bt);
-                });
-          });;
-    });
+              .filter(HBox.class::isInstance)
+              .map(nd -> (HBox) nd)
+              .forEach(hb -> hb.getChildren()
+                  .stream()
+                  .filter(Button.class::isInstance)
+                  .map(bt -> (Button) bt)
+                  .filter(bt -> bt.getStyleClass().contains("invite-button"))
+                  .forEach(bt -> {
+                    bt.setDisable(false);
+                    CursorManager.setHandCursor(bt);
+                  }));
+        });
   }
 
 }
