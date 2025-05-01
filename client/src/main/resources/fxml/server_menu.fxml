@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<Pane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/19.0.2.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerMenuController">
+<Pane fx:id="menuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerMenuController">
   <children>
     <ImageView fx:id="background" fitHeight="720.0" fitWidth="1080.0">
       <image>
@@ -117,9 +117,9 @@
         </HBox>
         <HBox alignment="CENTER">
           <children>
-            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="256.0">
+            <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="288.0">
               <children>
-                <ImageView fitHeight="32.0" fitWidth="256.0">
+                <ImageView fitHeight="32.0" fitWidth="288.0">
                   <image>
                     <Image url="@../assets/connection_info_background.png" />
                   </image>
@@ -134,7 +134,7 @@
                 </TextFlow>
               </children>
               <padding>
-                <Insets top="44.0" />
+                <Insets top="44.0"/>
               </padding>
             </StackPane>
           </children>

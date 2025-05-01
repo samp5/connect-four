@@ -24,6 +24,7 @@ import registry.PlayerRegistry.PlayerRegistrationInfo;
 public class ClientManager {
   private static ServerSocketChannel socketChannel;
   private static final int PORT = 8000;
+  private static final boolean VISUAL = false;
   private static Selector selector;
   private static HashSet<ServerClient> clients = new HashSet<>();
   private static HashSet<ServerClient> clientsInGame = new HashSet<>();
@@ -60,11 +61,15 @@ public class ClientManager {
    */
   public static void connectToClients() {
     // some base status prints
-    System.out.println("Player Registry tracking 0 players");
-    System.out.println("0 players currently logged in");
-    System.out.println("Currently listening to 0 clients");
-    System.out.println("Currently running 0 games");
-    System.out.println("Connecting to clients -");
+    if (VISUAL) {
+      System.out.println("Player Registry tracking 0 players");
+      System.out.println("0 players currently logged in");
+      System.out.println("Currently listening to 0 clients");
+      System.out.println("Currently running 0 games");
+      System.out.println("Connecting to clients -");
+    } else {
+      System.out.println("Currently Running...");
+    }
 
     try {
       _connectToClients();
@@ -338,6 +343,8 @@ public class ClientManager {
   private static char animationFrames[] = new char[] {'\\', '|', '/', '-'};
 
   private static void animateStatus() {
+    if (!VISUAL) return;
+
     if (System.currentTimeMillis() >= (lastFrame + frametime)) {
       // stats..
       // dont worry about it :)
